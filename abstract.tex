@@ -1,0 +1,18 @@
+% !TEX root = palettes-obt19.tex
+
+%% no citations in Abstract
+%%
+%% \cite{popl-paper}
+
+\begin{abstract}
+Dictionaries (\emph{aka} maps) are a core tool in any programming environment, serving many purposes.
+In proof assistants - where simplicity is important but performance isn't - a typical implementation
+involves a list of key-value pairs. Although easy to define and reason about, this approach has the disadvantage that keys
+can be duplicated, leading to the fact that many distinct lists represent the same semantic mapping.
+This many-one relationship creates various difficulties when used in practice, such as when proving
+contraction and exchange for a type-checking judgment.
+I introduce \emph{Skip-Zip}, a novel list-of-pair approach that uses a variant of delta encoding for
+the keys, in a way that ensures there is no key duplication within the list;
+each distinct list is semantically valid and represents a distinct semantic mapping. This yields
+contraction and exchange for free.
+\end{abstract}

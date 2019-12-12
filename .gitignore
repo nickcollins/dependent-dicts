@@ -1,0 +1,16 @@
+# output
+*.pdf
+
+# intermediate files
+*.aux
+*.bbl
+*.blg
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.ent
+
+# random junk
+.old/*
