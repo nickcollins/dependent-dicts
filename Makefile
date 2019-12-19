@@ -1,4 +1,4 @@
-MAIN=skip-zip
+MAIN=main
 
 all:
 	pdflatex $(MAIN)

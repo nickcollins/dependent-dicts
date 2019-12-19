@@ -1,0 +1,237 @@
+\PassOptionsToPackage{svgnames,dvipsnames,svgnames}{xcolor}
+
+\documentclass[nonacm]{acmart}
+\settopmatter{printfolios=true,printccs=false,printacmref=false}
+
+%% Conference information
+%% Supplied to authors by publisher for camera-ready submission;
+%% use defaults for review submission.
+%% ?
+
+%% Copyright information
+%% Supplied to authors (based on authors' rights management selection;
+%% see authors.acm.org) by publisher for camera-ready submission;
+%% use 'none' for review submission.
+\setcopyright{none}
+%\setcopyright{acmcopyright}
+%\setcopyright{acmlicensed}
+%\setcopyright{rightsretained}
+%\copyrightyear{2019}           %% If different from \acmYear
+
+%% Bibliography style
+\bibliographystyle{ACM-Reference-Format}
+%% Citation style
+%\citestyle{acmauthoryear}  %% For author/year citations
+%\citestyle{acmnumeric}     %% For numeric citations
+%\setcitestyle{nosort}      %% With 'acmnumeric', to disable automatic
+                            %% sorting of references within a single citation;
+                            %% e.g., \cite{Smith99,Carpenter05,Baker12}
+                            %% rendered as [14,5,2] rather than [2,5,14].
+%\setcitesyle{nocompress}   %% With 'acmnumeric', to disable automatic
+                            %% compression of sequential references within a
+                            %% single citation;
+                            %% e.g., \cite{Baker12,Baker14,Baker16}
+                            %% rendered as [2,3,4] rather than [2-4].
+
+
+%% Some recommended packages.
+\usepackage{booktabs}   %% For formal tables:
+                        %% http://ctan.org/pkg/booktabs
+\usepackage{subcaption} %% For complex figures with subfigures/subcaptions
+                        %% http://ctan.org/pkg/subcaption
+
+%% Cyrus packages
+\usepackage{microtype}
+\usepackage{mdframed}
+\usepackage{colortab}
+\usepackage{mathpartir}
+\usepackage{enumitem}
+\usepackage{bbm}
+\usepackage{stmaryrd}
+\usepackage{mathtools}
+\usepackage{leftidx}
+\usepackage{todonotes}
+\usepackage{xspace}
+\usepackage{wrapfig}
+
+\usepackage{listings}%
+\lstloadlanguages{ML}
+\lstset{tabsize=2, 
+basicstyle=\footnotesize\ttfamily, 
+% keywordstyle=\sffamily,
+commentstyle=\itshape\ttfamily\color{gray}, 
+stringstyle=\ttfamily\color{purple},
+mathescape=false,escapechar=\#,
+numbers=left, numberstyle=\scriptsize\color{gray}\ttfamily, language=ML, showspaces=false,showstringspaces=false,xleftmargin=10pt, 
+morekeywords={string, float, int},
+classoffset=0,belowskip=\smallskipamount, aboveskip=\smallskipamount,
+moredelim=**[is][\color{red}]{SSTR}{ESTR}
+}
+\newcommand{\li}[1]{\lstinline[basicstyle=\ttfamily\fontsize{9pt}{1em}\selectfont]{#1}}
+\newcommand{\lismall}[1]{\lstinline[basicstyle=\ttfamily\fontsize{9pt}{1em}\selectfont]{#1}}
+
+%% Joshua Dunfield macros
+\def\OPTIONConf{1}%
+\usepackage{joshuadunfield}
+
+%% Can remove this eventually
+\usepackage{blindtext}
+
+\usepackage{enumitem}
+
+% \newtheorem{theorem}{Theorem}[chapter]
+% \newtheorem{lemma}[theorem]{Lemma}
+% \newtheorem{corollary}[theorem]{Corollary}
+% \newtheorem{definition}[theorem]{Definition}
+% \newtheorem{assumption}[theorem]{Assumption}
+% \newtheorem{condition}[theorem]{Condition}
+
+\newtheoremstyle{slplain}% name
+  {.15\baselineskip\@plus.1\baselineskip\@minus.1\baselineskip}% Space above
+  {.15\baselineskip\@plus.1\baselineskip\@minus.1\baselineskip}% Space below
+  {\slshape}% Body font
+  {\parindent}%Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}%  Thm head font
+  {.}%       Punctuation after thm head
+  { }%      Space after thm head: " " = normal interword space;
+        %       \newline = linebreak
+  {}%       Thm head spec
+\theoremstyle{slplain}
+\newtheorem{thm}{Theorem}  % Numbered with the equation counter
+\numberwithin{thm}{section}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+% \newtheorem{cor}[section]{Corollary}     
+% \newtheorem{lem}[section]{Lemma}         
+% \newtheorem{prop}[section]{Proposition}  
+
+% \setlength{\abovedisplayskip}{0pt}
+% \setlength{\belowdisplayskip}{0pt}
+% \setlength{\abovedisplayshortskip}{0pt}
+% \setlength{\belowdisplayshortskip}{0pt}
+
+\fancyfoot{} % suppresses the footer (also need \thispagestyle{empty} after \maketitle below)
+
+\input{commands}
+\input{macros}
+
+%\setlength{\abovecaptionskip}{4pt plus 3pt minus 2pt} % Chosen fairly arbitrarily
+%\setlength{\belowcaptionskip}{-4pt plus 3pt minus 2pt} % Chosen fairly arbitrarily
+
+
+\begin{document}
+
+%% Title information
+\title{Data Structures for Dictionaries in Proof Assistants}
+
+%% Author information
+%% Contents and number of authors suppressed with 'anonymous'.
+%% Each author should be introduced by \author, followed by
+%% \authornote (optional), \orcid (optional), \affiliation, and
+%% \email.
+%% An author may have multiple affiliations and/or emails; repeat the
+%% appropriate command.
+%% Many elements are not rendered, but should be provided for metadata
+%% extraction tools.
+
+% ACM member number: ?
+% \author{?}
+% \authornote{with author1 note}          %% \authornote is optional;
+                                        %% can be repeated if necessary
+% \orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
+%\affiliation{
+%  \position{Graduate student}
+%  % \department{Department1}              %% \department is recommended
+%  \institution{University of Chicago}            %% \institution is required
+%  % \streetaddress{Street1 Address1}
+%  % \city{City1}
+%  % \state{State1}
+%  % \postcode{Post-Code1}
+%  % \country{Country1}
+%}
+%\email{nickmc@uchicago.edu}          %% \email is recommended
+
+%% Paper note
+%% The \thanks command may be used to create a "paper note" ---
+%% similar to a title note or an author note, but not explicitly
+%% associated with a particular element.  It will appear immediately
+%% above the permission/copyright statement.
+% \thanks{with paper note}                %% \thanks is optional
+                                        %% can be repeated if necesary
+                                        %% contents suppressed with 'anonymous'
+
+TODO TODO TODO remaining info, e.g. ACM member number and author info or whatev
+
+%% Abstract
+%% Note: \begin{abstract}...\end{abstract} environment must come
+%% before \maketitle command
+\input{abstract}
+\input{defs}
+
+%% Keywords
+%% comma separated list
+% \keywords{keyword1, keyword2, keyword3}  %% \keywords is optional
+% \keywords{..., ...}
+
+%% \maketitle
+%% Note: \maketitle command must come after title commands, author
+%% commands, abstract environment, Computing Classification System
+%% environment and commands, and keywords command.
+\maketitle
+\thispagestyle{empty} % suppresses the footer
+
+\section{Introduction}
+Conventionally, the design of data structures and algorithms is chiefly focused on performance.
+In proof assistants, however, much of the logic is never actually executed - such logic can afford
+to be arbitarily unperformant. This observation suggests a new tack in data structure design for
+the domain of proof assistants - long-solved problems are worth reconsidering from a perspective
+that prioritizes simplicity, elegance, or useful mathematical properties over performance.
+
+In this paper we reconsider the long-solved problem of representing dictionaries (a.k.a. finite maps).
+Dictionaries are a key
+mechanism for data storage and retrieval in almost any programming paradigm - although perhaps less
+ubiquitous in proof languages, they still serve critical roles such as representing contexts and
+environments in type checking and evaluation semantics (resp.). Thus, development of new approaches to
+dictionaries that are better suited to the unique needs of proof assistants can be highly profitable.
+
+In conventional languages,
+dictionaries are usually represented either with auto-balanced binary search trees or hashtables, which
+are performant but complicated and hard to prove correct. In proof assistants, it's more typical to
+use a list-of-pairs (i.e. associative array), which has $O(n)$ lookup performance but is very simple.
+Since the typical approach is already a paragon of simplicity at the expense of performance, what's left
+to reconsider? Its shortcoming is its mathematical awkwardness; in most use cases, dictionaries are
+expected to be canonically ordered (or order-agnostic) and have at most one mapping per key,
+properties which are upheld by BSTs and hashtables
+but which are abandoned by the ordering- and duplication-sensitive list-of-pairs. In particular,
+the \emph{structural properties} \emph{contraction} and \emph{exchange} of a type checking judgment (or
+other judgments parameterized by some sort of context) come "for free" if the context is represented by
+a set-like data structure that is agnostic to insertion order and which does not allow duplicate keys.
+This is a substantial benefit compared to deriving a separate proof of contraction and exchange for each
+judgment that takes a context parameter.
+
+To address this issue we introduce three (TODO ????) novel dictionary representations that are agnostic
+to insertion order and duplication - implicitly finite function, explicitly finite functions, and an
+alternative list-of-pairs approach that uses a variant of delta-encoding to maintain keys in sorted order
+while preventing duplication. As such, using one of these representations grants \emph{contraction} and
+\emph{exchange} for free, along with other benefits of their ordering- and duplication-agnostic properties
+(the delta-encoding approach, in particular, has the additional property that physical equality is
+equivalent to semantic equivalence). However, they are not panaceas - the typical list-of-pair data structure
+is much easier to destruct and iterate than the new approaches, and the delta-encoding approach is limited
+to key types that are easily mapped to and from the natural numbers. Altogether, we're left with a rich
+variety of options for representing dictionaries, each well-suited to some use-cases but not others. This
+situation is not so dissimilar to the one familiar to conventional programmers, who generally face the choice
+of either BSTs or hashtables - further refinement to the point of making such an easy choice between only two
+options is left to future work.
+
+TODO TODO TODO - REFERENCES
+
+\clearpage
+%\bibliography{references,all.short}
+\bibliography{references}
+
+% \clearpage
+% \appendix
+% \input{implementation-appendix}
+
+\end{document}
