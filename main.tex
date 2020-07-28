@@ -226,6 +226,24 @@ of either BSTs or hashtables - further refinement to the point of making such an
 options is left to future work.
 
 TODO TODO TODO - REFERENCES
+\\
+the second answer on this stack overflow suggests the finite partial function approach:
+\\
+https://stackoverflow.com/questions/47362451/creating-a-dictionary-map-in-coq
+\\
+oh hey appears that this is in software foundations too
+\\
+https://6826.csail.mit.edu/2019/lf/Maps.html
+\\
+Coq has list-based maps that retain sorted order, but not every list data is a valid mapping
+\\
+https://coq.inria.fr/library/Coq.FSets.FMapList.html
+\\
+Coq also has FMapPositive, which is a tree based on the binary representation
+\\
+This one seems to attach a canonicity proof to an ordinary list:
+\\
+http://www.cs.bc.edu/~tassarot/papers/iris-refinement/coqdoc/iris.prelude.natmap.html
 
 \clearpage
 %\bibliography{references,all.short}
