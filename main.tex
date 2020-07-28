@@ -205,7 +205,7 @@ expected to be canonically ordered (or order-agnostic) and have at most one mapp
 properties which are upheld by BSTs and hashtables
 but which are abandoned by the ordering- and duplication-sensitive list-of-pairs. In particular,
 the \emph{structural properties} \emph{contraction} and \emph{exchange} of a type checking judgment (or
-other judgments parameterized by some sort of context) come "for free" if the context is represented by
+other judgments parameterized by some sort of context) come almost "for free" if the context is represented by
 a set-like data structure that is agnostic to insertion order and which does not allow duplicate keys.
 This is a substantial benefit compared to deriving a separate proof of contraction and exchange for each
 judgment that takes a context parameter.
@@ -213,10 +213,11 @@ judgment that takes a context parameter.
 To address this issue we introduce three (TODO ????) novel dictionary representations that are agnostic
 to insertion order and duplication - implicitly finite function, explicitly finite functions, and an
 alternative list-of-pairs approach that uses a variant of delta-encoding to maintain keys in sorted order
-while preventing duplication. As such, using one of these representations grants \emph{contraction} and
-\emph{exchange} for free, along with other benefits of their ordering- and duplication-agnostic properties
-(the delta-encoding approach, in particular, has the additional property that physical equality is
-equivalent to semantic equivalence). However, they are not panaceas - the typical list-of-pair data structure
+while preventing duplication. As such, using one of these representations means \emph{contraction} and
+\emph{exchange} need be proven only once, for the dictionary itself, rather than a separate proof for each
+context-sensitive judgment. There are additional benefits of the ordering- and duplication-agnostic properties
+- the delta-encoding approach, in particular, has the additional property that physical equality is
+equivalent to semantic equivalence. However, they are not panaceas - the typical list-of-pair data structure
 is much easier to destruct and iterate than the new approaches, and the delta-encoding approach is limited
 to key types that are easily mapped to and from the natural numbers. Altogether, we're left with a rich
 variety of options for representing dictionaries, each well-suited to some use-cases but not others. This
