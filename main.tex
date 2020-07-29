@@ -40,7 +40,6 @@
 \usepackage{subcaption} %% For complex figures with subfigures/subcaptions
                         %% http://ctan.org/pkg/subcaption
 
-%% Cyrus packages
 \usepackage{microtype}
 \usepackage{mdframed}
 \usepackage{colortab}
@@ -53,6 +52,7 @@
 \usepackage{todonotes}
 \usepackage{xspace}
 \usepackage{wrapfig}
+\usepackage{float}
 
 \usepackage{listings}%
 \lstloadlanguages{ML}
@@ -69,6 +69,8 @@ moredelim=**[is][\color{red}]{SSTR}{ESTR}
 }
 \newcommand{\li}[1]{\lstinline[basicstyle=\ttfamily\fontsize{9pt}{1em}\selectfont]{#1}}
 \newcommand{\lismall}[1]{\lstinline[basicstyle=\ttfamily\fontsize{9pt}{1em}\selectfont]{#1}}
+\newcommand{\dd}{\emph{delta dict}}
+\newcommand{\mapP}{\{0 \rightarrow \text{"a"}, 1 \rightarrow \text{"b"}, 3 \rightarrow \text{"c"}, 6 \rightarrow \text{"d"}, 10 \rightarrow \text{"e"}\}}
 
 %% Joshua Dunfield macros
 \def\OPTIONConf{1}%
@@ -123,7 +125,7 @@ moredelim=**[is][\color{red}]{SSTR}{ESTR}
 \begin{document}
 
 %% Title information
-\title{Data Structures for Dictionaries in Proof Assistants}
+\title{A Deduped Dictionary Data Structure for Dependent Domains}
 
 %% Author information
 %% Contents and number of authors suppressed with 'anonymous'.
@@ -182,49 +184,202 @@ TODO TODO TODO remaining info, e.g. ACM member number and author info or whatev
 \thispagestyle{empty} % suppresses the footer
 
 \section{Introduction}
-Conventionally, the design of data structures and algorithms is chiefly focused on performance.
-In proof assistants, however, much of the logic is never actually executed - such logic can afford
-to be arbitarily unperformant. This observation suggests a new tack in data structure design for
-the domain of proof assistants - long-solved problems are worth reconsidering from a perspective
-that prioritizes simplicity, elegance, or useful mathematical properties over performance.
+Conventionally, the design of data structures and algorithms is chiefly focused on performance,
+which is of significantly diminished concern in proof assistants. As such, proof assistants often
+use entirely different data structures than those of conventional settings, with a focus on simplicity
+or useful mathematical properties. Dictionaries - which serve a broad range of purposes but are
+perhaps most familiar as implementations of type contexts and evaluation environments - are typically
+implemented in one of the following manners: (TODO source for each)
+\\\\
+\newcommand{\lameq}[1]{$\lambda$ $x$ . $x == {#1}$}
+\begin{tabular}{ l l }
+ Naive list-of-pairs         & [(3, "c"), (1, "b"), {\color{gray} (3, "q")}, (6, "d")] \\
+ Canonicalized list-of-pairs & [(1, "b"), (3, "c"), (6, "d")] \quad (insert function dedupes and preserves canonical order) \\
+ Finite partial function     & \lameq{3} ? "c" : (\lameq{1} ? "b" : (\lameq{3} ? {\color{gray} "q"} : (\lameq{6} ? "d" : None) x) x) x
+\end{tabular}
+\\
 
-In this paper we reconsider the long-solved problem of representing dictionaries (a.k.a. finite maps).
-Dictionaries are a key
-mechanism for data storage and retrieval in almost any programming paradigm - although perhaps less
-ubiquitous in proof languages, they still serve critical roles such as representing contexts and
-environments in type checking and evaluation semantics (resp.). Thus, development of new approaches to
-dictionaries that are better suited to the unique needs of proof assistants can be highly profitable.
+The naive list-of-pairs solution is perhaps the most common, being trivially simple. Furthermore:
+%\begin{itemize}
+ (1) any list-of-pairs that type-checks represents a valid mapping,
+       so there's no need to package the data with a proof term that asserts its validity,
+ (2) it's trivial to destruct and iterate,
+ (3) checking semantic equivalence of two dicts, while non-trivial, is decidable and not too difficult.
+%\end{itemize}
+ The major downside is that many distinct dicts
+represent the same semantic mapping - because dicts are sensitive to duplication and ordering
+of insertions, we cannot use equality primitives to check the semantic
+equality of two dicts:
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[nodes = {align = left}]
+      \node [scale=.45]
+      {\includegraphics{figs/unequal.eps}};
+    \end{tikzpicture}
+    \caption{Same semantic mapping represented by unequal list-of-pair dicts}
+    \label{fig:uneq}
+  \end{figure}
+This drawback is glaring when attempting to prove the \emph{structural properties} \emph{contraction}
+and \emph{exchange} of a type checking judgment (or other judgments parameterized by some sort of context).
+These properties correspond, respectively, to the irrelevance of duplication and reordering in a context
+with regards to the judgment's conclusions. With the naive list-of-pairs solution, a separate proof must
+be developed for each constructor in the language which actually uses the context (e.g. lets, lambdas,
+case branches, etc.) to show that duplication or reordering in the context will not affect the results
+of the judgment. Alternatively, if the data structure itself is insensitive to duplication and reordering
+of insertions, then analogs of \emph{contraction} and \emph{exchange} can be proven for the data structure
+itself. At this point the \emph{contraction} and \emph{exchange} of each judgment come "for free".
+  %{\huge
+  \begin{figure}[H]
+    $
+    \inferrule*[lab=\textbf{\large Contraction}]
+      {\Gamma, (x, a), (x, b) \vdash T}
+      {\Gamma, (x, b) \vdash T}
+    $
+    \quad\quad\quad\quad
+    $
+    \inferrule*[lab=\textbf{\large Exchange}]
+      {\Gamma, (x, a), (y, b) \vdash T \\ x \ne y}
+      {\Gamma, (y, b), (x, a) \vdash T}
+    $
+    \\\hfill\\\quad\quad
+    $
+      \Gamma, (x, a), (x, b) = \Gamma, (x, b)
+    $
+    \quad\quad
+    $
+      x \ne y \rightarrow \Gamma, (x, a), (y, b) = \Gamma, (y, b), (x, a)
+    $
+    \caption{Contraction and exchange theorems for type assignments $T$, as well as analogs for set-like data structures (TODO source for contraction and exchange)}
+    \label{fig:con-exch}
+  \end{figure}
+  %}
+Indeed, the other two conventional solutions (as well as ours) achieve the requisite set-like insensitivity
+to duplication and reordering, yielding \emph{contraction} and \emph{exchange} "for free" and ensuring that
+semantically equivalent dicts are also equal according to the built-in equality primitive\footnote{Finite partial
+functions require the additional postulate of \emph{functional extensionality}, which can be postulated
+at essentially no cost given that it's been proven consistent with the constructive calculi underlying most
+popular proof assistants (TODO SOURCE)}. However, the other two conventional solutions have other drawbacks.
+Canonicalized lists-of-pairs must retain a proof of validity to ensure that the dict is ordered and deduped.
+Anytime the dict is "manipulated", a theorem must be invoked to generate a proof of validity for the new dict,
+and this proof must be packaged with the new dict wherever it goes. This can be cumbersome, but an even bigger
+problem occurs when the dict is used as data. For example, an evaluation rule may take an environment $E$ and
+a lambda $\lambda x . e$ and produce a closure $[E] \lambda x . e$. Since $E$ must carry a proof term, it's no
+longer possible to check equality of closures using equality primitives, and decidability of semantic equality
+becomes problematic at best. With the finite partial function approach, equality is not decidable in the first
+place, since the function type does nothing to guarantee that the function is actually finite.
+Alternatively, the function could be packaged with a constructive proof that its support is finite, in which
+case equality should be decidable, but then we run into the same problems we had before with proof terms and
+proof relevance.
 
-In conventional languages,
-dictionaries are usually represented either with auto-balanced binary search trees or hashtables, which
-are performant but complicated and hard to prove correct. In proof assistants, it's more typical to
-use a list-of-pairs (i.e. associative array), which has $O(n)$ lookup performance but is very simple.
-Since the typical approach is already a paragon of simplicity at the expense of performance, what's left
-to reconsider? Its shortcoming is its mathematical awkwardness; in most use cases, dictionaries are
-expected to be canonically ordered (or order-agnostic) and have at most one mapping per key,
-properties which are upheld by BSTs and hashtables
-but which are abandoned by the ordering- and duplication-sensitive list-of-pairs. In particular,
-the \emph{structural properties} \emph{contraction} and \emph{exchange} of a type checking judgment (or
-other judgments parameterized by some sort of context) come almost "for free" if the context is represented by
-a set-like data structure that is agnostic to insertion order and which does not allow duplicate keys.
-This is a substantial benefit compared to deriving a separate proof of contraction and exchange for each
-judgment that takes a context parameter.
+Our solution, which we dub {\dd}s, addresses the aforementioned problems by using a delta to
+encode a key relative to its predecessor, instead of storing the key's literal value (details in section TODO(Mechanism)).
+\\
+\begin{tabular}{ l l }
+ \quad\quad Delta dict & [(1, "b"), (1, "c"), (2, "d")]
+\end{tabular}
 
-To address this issue we introduce three (TODO ????) novel dictionary representations that are agnostic
-to insertion order and duplication - implicitly finite function, explicitly finite functions, and an
-alternative list-of-pairs approach that uses a variant of delta-encoding to maintain keys in sorted order
-while preventing duplication. As such, using one of these representations means \emph{contraction} and
-\emph{exchange} need be proven only once, for the dictionary itself, rather than a separate proof for each
-context-sensitive judgment. There are additional benefits of the ordering- and duplication-agnostic properties
-- the delta-encoding approach, in particular, has the additional property that physical equality is
-equivalent to semantic equivalence. However, they are not panaceas - the typical list-of-pair data structure
-is much easier to destruct and iterate than the new approaches, and the delta-encoding approach is limited
-to key types that are easily mapped to and from the natural numbers. Altogether, we're left with a rich
-variety of options for representing dictionaries, each well-suited to some use-cases but not others. This
-situation is not so dissimilar to the one familiar to conventional programmers, who generally face the choice
-of either BSTs or hashtables - further refinement to the point of making such an easy choice between only two
-options is left to future work.
+Every list-of-pairs that type-checks is a valid \dd, and every unique \dd~ represents
+a unique semantic mapping. So no proof term is needed to establish validity, there is a bijection between
+\dd~ terms and finite maps, and the proof assistant's equality primitives, when applied to {\dd}s, correspond
+exactly to semantic mapping equivalence. These properties make {\dd}s very suitable for use as contexts for
+structural judgments or for use as data in the likes of closures.
 
+Naturally, {\dd}s have some drawbacks as well. The use of deltas requires that the key type not merely be
+ordered but also possess a difference operation and a least element. Our definition and implementation uses
+natural numbers for keys, and in section TODO we illustrate how to use bijections to the naturals as a way
+of supporting strings, integers, or other key types that can be bijected to the naturals without great
+difficulty. Although most types that are suitable for use as keys in the first place can be bijected to the
+naturals, for some types defining this bijection may be too awkward or cumbersome, in which case {\dd}s may
+be a poor choice.
+
+Another drawback is that destruction and iteration of {\dd}s is substantially more
+difficult than it is with the conventional list-of-pair solutions, for which these operations are trivial
+(finite partial functions cannot be properly destructed at all). Since the keys in a \dd~ are not represented
+by their literal values, encapsulation disallows (TODO should disallow??) destruction (or other operations,
+such as map) as though it were an ordinary list. Instead, destruction and deletion are offered only through
+library functions, which guarantee that any \dd~ is either empty or that it can be destructed into a single
+mapping and a \dd~ that when extended by that single mapping will equal the original \dd. Not only is it
+more awkward to use a function for destruction than to use pattern matching, it also risks breaking
+straightforward structural recursion, in some cases forcing the developer to establish termination manually.
+The difficulties of destruction, and techniques for alleviating these difficulties, are discussed further in
+section TODO. Analysis of the tradeoffs (in terms of lines-of-code required to prove metatheory) between more
+difficult destruction vs more verbose proofs of \emph{contraction} and \emph{exchange}, is discussed in section
+TODO(Evaluation), leading to soft recommendations about which solution best fits a particular scenario.
+
+Finally, because they guarantee the \emph{structural properties} \emph{contraction} and
+\emph{exchange}, {\dd}s are inherently inappropriate for substructural logics/judgments that reject one or
+both of those properties. In these cases, the naive solution's sensitivity to duplication and/or ordering is
+a feature, not a bug, and that solution becomes not only the natural solution but the morally correct one.
+Future work could explore the possibility of data structures that uphold one of these properties but not the
+other.
+
+\begin{figure}[H]
+  \begin{tabular}{ l | c | c | c | c | c | c}
+                               & Simple & Always valid & Injective & Decidable equality & Destruction & Key type requirement
+   \\\hline
+   Naive list-of-pairs         & +1     & Yes          & No        & Yes                & Trivial     & Decidable equality
+   \\\hline
+   Canonicalized list-of-pairs & 0      & No           & Yes       & Yes                & Trivial     & Orderable
+   \\\hline
+   Finite partial function     & 0      & *            & Yes       & No                 & No          & Decidable equality
+   \\\hline
+   Delta dict                  & -1     & Yes          & Yes       & Yes                & Hard        & Bijects to naturals
+  \end{tabular}
+  \caption{The pros, cons, and other high-level properties of each solution}
+  \label{fig:pros-cons}
+\end{figure}
+
+% something something "make impossible states impossible", and how this principle relates to refinements and
+% proof terms in the domain of proof assistants
+
+%ordering- and duplication-sensitive list-of-pairs: In particular,
+%the \emph{structural properties} \emph{contraction} and \emph{exchange} of a type checking judgment (or
+%other judgments parameterized by some sort of context) come almost "for free" if the context is represented by
+%a set-like data structure that is agnostic to insertion order and which does not allow duplicate keys.
+%This is a substantial benefit compared to deriving a separate proof of contraction and exchange for each
+%judgment that takes a context parameter.
+
+%alternative list-of-pairs approach that uses a variant of delta-encoding to maintain keys in sorted order
+%while preventing duplication. As such, using one of these representations means \emph{contraction} and
+%\emph{exchange} need be proven only once, for the dictionary itself, rather than a separate proof for each
+%context-sensitive judgment. There are additional benefits of the ordering- and duplication-agnostic properties
+%- the delta-encoding approach, in particular, has the additional property that physical equality is
+%equivalent to semantic equivalence. However, they are not panaceas - the typical list-of-pair data structure
+%is much easier to destruct and iterate than the new approaches, and the delta-encoding approach is limited
+%to key types that are easily mapped to and from the natural numbers.
+
+\section{Mechanism}
+List-of-pairs with ordered, "delta-encoded" keys;
+instead of storing the raw keys, we store
+the difference from the previous key, minus 1
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[nodes = {align = left}]
+    \node [scale=.45]
+    {\includegraphics{figs/mech-1.eps}};
+  \end{tikzpicture}
+  \caption{How do we represent the mapping $\mapP$ as a \dd?}
+  \label{fig:mech1}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[nodes = {align = left}]
+    \node [scale=.45]
+    {\includegraphics{figs/find-6.eps}};
+  \end{tikzpicture}
+  \caption{How do we find key $6$ in the \dd?}
+  \label{fig:find-6}
+\end{figure}
+
+TODO
+
+\section{Metatheory}
+TODO
+
+\section{Evaluation}
+TODO
+
+\section{References}
 TODO TODO TODO - REFERENCES
 \\
 the second answer on this stack overflow suggests the finite partial function approach:
