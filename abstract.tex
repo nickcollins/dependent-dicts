@@ -7,16 +7,16 @@
 \begin{abstract}
 Dictionaries (a.k.a. finite maps) are a core tool in any programming environment.
 Conventional languages implement dictionaries with hashtables or auto-balanced trees, but proof assistants
-- which favor simplicity and provability over performance - generally use lists of key-value pairs
+- which favor simplicity and provability over performance - generally use association lists
 (with or without canonical ordering) or finite partial functions. These solutions are suitable for many
 cases - however, each one has a drawback: unordered lists can contain duplicates or have arbitrary ordering,
-canonically ordered lists may be invalid and so must be packaged with a proof, and equality of finite partial
-functions is undecidable. Using a variant of delta-encoding, we develop a novel list-of-pairs solution that preserves
-canonical ordering while ensuring that every list-of-pairs is valid, eliminating the need to package them with proofs
-of validity. Our solution also establishes a one-to-one correspondence between dictionary terms and semantic mappings.
-We demonstrate the practical importance of these properties when developing large and complex program foundations
-metatheories, while acknowledging the drawbacks of our solution and the cases where one of the conventional solutions
-may be preferable. We prove the relevant metatheory in Agda.
+canonically ordered lists may be invalid and so must be refined with a proof of validity, and equality of finite partial
+functions is undecidable. Using a variant of delta-encoding, we develop a novel list-based solution that preserves
+canonical ordering while ensuring that every type-correct list is semantically valid, eliminating the need for refinement
+with a proof of validity. Our solution also establishes a one-to-one correspondence between dictionary terms and semantic
+mappings. We demonstrate the practical importance of these properties when developing metatheory for environment-based
+evaluation semantics, while acknowledging that drawbacks of our solution may make it inferior to one of the conventional
+solutions in some cases where that conventional solution is viable. We prove the relevant metatheory in Agda.
 %
 % Our solution is not suitable for all key types, and is harder to destruct or
 %iterate than other list-of-pair solutions, but is nonetheless better suited to many large, complex program
