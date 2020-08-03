@@ -486,7 +486,8 @@ explicitly tracks the dictionary length, we provide another theorem:
 Although possible, manually establishing termination is painful, especially given that it's not necessary
 for {\SAL}s or {\CAL}s. Thus {\dd}s fail at \EzDstr, although they are still better than {\FPF}s in this
 regard, seeing as it's not only hard but impossible to destruct {\FPF}s. Is it possible to have a data
-structure that possesses all four properties? Not likely - as mentioned above, \SemTot~ essentially
+structure that possesses all four properties? Not likely - as mentioned above, the combination of
+\SemInj~ and \SemTot~ essentially
 necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
 makes it dangerous for client code to mess with the raw data. As such, we believe we've uncovered an
 inherent trade-off between desirable properties. In our case, where \EqDec~ of results is critical,
