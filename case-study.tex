@@ -1,0 +1,165 @@
+%% \subsection{Practical Importance}
+%% \label{sec:Problem:pract}
+\section{Case Study}
+\label{sec:CaseStudy}
+To illustrate practical problems and solutions, we present a hypothetical case study of a developer working to
+prove evaluation metatheory using environment-based semantics. This case study closely resembles the actual process we went
+through on a real project, the difficulties of which created the necessity of inventing {\dd}s. Of course,
+because this case study involves a very particular situation, one which seems to be unusual (TODO sources?),
+the problems we run into and solutions we suggest may not generalize. Accordingly, we use the case study to
+present concrete illustrative examples, and follow each example with an argument of its applicability to more
+general situations.
+
+\newcommand{\eval}[3]{\ensuremath{{#1} \vdash {#2} \hspace{0.01in} \Rightarrow {#3}}}
+
+At the outset, we have an evaluation judgment \eval{E}{e}{r}~ which takes an environment $E$ and an expression $e$
+and "produces" a result $r$.
+%Many mechanizations use substitution rather than environments, but (TODO source)
+%explains why environment-based semantics are sometimes preferable. More generally, environments are only one use
+%case for dictionaries, which are a very general purpose data structure that is likely to be used for a wide
+%variety of other purposes.
+$E$ is a finite map from variable names in scope to the results that are bound to
+those variables. The question is "What data structure do we use to implement $E$?". The simple answer is a \sal,
+and as long as we don't run into any problems on account of \SAL's lack of certain useful properties, the simple
+answer is best.
+
+But if we consider it important to prove the \emph{structural properties} \emph{contraction}
+and \emph{exchange} (see \autoref{fig:con-exch}), we do run into a problem. These properties correspond,
+respectively, to the irrelevance of duplication and reordering in the environment with regard to the judgment's
+conclusions. The rule for lambda evaluation states that \mbox{\eval{E}{\lambda x . e}{[E]\lambda x . e}}, the result
+being a closure over $E$. Using {\SAL}s, \mbox{\eval{E, (x, a), (x, b)}{\lambda x . e}{[E, (x, a), (x, b)]\lambda x . e}}
+while \mbox{\eval{E, (x, b)}{\lambda x . e}{[E, (x, b)]\lambda x . e}}; $[E, (x, a), (x, b)]\lambda x . e \ne
+[E, (x, b)]\lambda x . e$, so \emph{contraction} is violated. \emph{Exchange} is violated similarly. Many mechanizations
+do not aim to prove \emph{contraction} and \emph{exchange} (TODO sources?), which makes our scenario somewhat
+particular - however, they are two of the defining properties of structural logics, and as such are of critical
+importance in many general cases (TODO source). Furthermore, inability to prove these theorems could be a red flag
+of a bug in the judgment, so proving them has practical value, even if the judgment doesn't need to be strictly
+structural.
+
+%  \begin{figure}[H]
+%    $
+%    \inferrule*
+%      {\eval{\lambda x . e}{}
+%      {E, (x, b) \vdash T}
+%    $
+%    \caption{Evaluation rule for lambdas}
+%    \label{fig:eval-lam}
+%  \end{figure}
+
+To address this problem, we need a data structure that possesses \SemInj. Since the semantics of dictionaries are
+insensitive to duplication or ordering of insertions, the data structure must be likewise insensitive, so
+that the language's equality primitive has the same meaning as semantic equality, and thus
+\mbox{$E, (x, a), (x, b) = E, (x, b)$}. Note that proving \SemInj~ not only makes it possible to prove
+\emph{contraction} and \emph{exchange}, but gives us these \emph{structural properties} essentially "for free".
+
+  \begin{figure}[H]
+    $
+    \inferrule*[lab=\textbf{\large Contraction}]
+      {\eval{E, (x, a), (x, b)}{e}{r}}
+      {\eval{E, (x, b)}{e}{r}}
+    $
+    \quad\quad\quad\quad
+    $
+    \inferrule*[lab=\textbf{\large Exchange}]
+      {\eval{E, (x, a), (y, b)}{e}{r} \\ x \ne y}
+      {\eval{E, (y, b), (x, a)}{e}{r}}
+    $
+    \\\hfill\\\quad\quad
+    $
+      D, (x, a), (x, b) = D, (x, b)
+    $
+    \quad\quad
+    $
+      x \ne y \rightarrow D, (x, a), (y, b) = D, (y, b), (x, a)
+    $
+    \caption{Contraction and exchange theorems for \emph{eval}, as well as analogs for dictionary data structures that possess \SemInj (TODO source for contraction and exchange)}
+    \label{fig:con-exch}
+  \end{figure}
+
+\newcommand{\refine}[2]{\ensuremath{{#1}\{\text{#2}\}}}
+
+This problem can be addressed by switching from {\SAL}s to {\cal}s or {\fpf}s, because the latter two possess
+\SemInj. Let's assume for the sake of discussion that we go with {\CAL}s. We run into another problem - {\CAL}s
+do not possess \SemTot, because an arbitrary association list that type-checks may not be a valid \CAL.
+An invalid association list can still be used in the same way a \SAL~ would, but we lose the
+\SemInj~ property. Thus, wherever the \CAL~ goes, it must be refined with a proof of its validity. The ability
+to refine ordinary types with proofs of validity is one of the most interesting and useful benefits of
+dependently-typed languages, and this power should be appreciated. However, refining with proof terms can
+come at a practical cost, so even in dependently-typed languages, there is high value in avoiding refinements
+whenever possible (or at least whenever profitable). The practical cost of refinements is that proof terms
+don't possess the properties \SemInj~ or \EqDec: due to \emph{proof relevance} (TODO source), two proofs of
+the same property may be unequal, and due to the fact that proof terms may contain functions, the equality of
+proof terms is not even decidable in the general case. With {\CAL}s, \mbox{$E, (x, a), (x, b) = E, (x, b)$},
+but with refinements such as \refine{E}{proof\_of\_validity},
+\mbox{$[\refine{(E, (x, a), (x, b))}{proof1}]\lambda x . e \ne [\refine{(E, (x, b))}{proof2}]\lambda x . e$},
+so \emph{contraction} is once again violated. Perhaps we can work around this problem by moving the proof term
+outside of the closure, to get \mbox{\refine{([E, (x, a), (x, b)]\lambda x . e)}{proof1}}, then defining a
+special notion of equality for evaluation results, that treats closures specially by erasing the proof term
+before checking equality with the built-in primitive, then definining \emph{contraction} and \emph{exchange}
+in terms of this special notion of equality. However, this is all very cumbersome. We are no longer able to
+use primitive equality when working with results, our special notion of equality should be decidable, but
+not trivially so, and whenever we make any "modification" to an environment we must use theorems
+to appropriately update the proof term and then repackage the new proof term with the new environment.
+These sorts of pain points can crop up in any case where a refined object is being used as data, or must be
+tested for equality with another refined object. Thus \SemTot, which obviates the need for refinement, has
+a lot of practical value in many general cases.
+
+{\FPF}s, sans refinement, do not technically satisfy \SemTot, because a type-correct function may not
+actually be finite. However, since we can't iterate, destruct, or query the size of {\FPF}s, the code
+that works with dictionaries doesn't actually need to ensure that those dictionaries are finite. Lookup
+and insertion will work just the same on finite and infinite partial functions, so there's generally no
+practical need to refine them with proofs of finititude. Thus we can avoid the problems of validity refinement
+by switching from {\CAL}s to {\FPF}s. But doing so creates new problems, since unlike the association lists,
+{\FPF}s don't possess \EqDec. We can prove that
+\mbox{$[E, (x, a), (x, b))]\lambda x . e = [E, (x, b)]\lambda x . e$}, and thus prove \emph{contraction} and
+\emph{exchange}, but there's no way to determine whether two arbitrary results are equal or unequal.
+The ability to decide equality has very general utility; in our particular case, we had an
+\mbox{$\texttt{assert}~ e_1 = e_2$} form which would evaluate $e_1$ and $e_2$ and then check if the results
+were equal, naturally requiring that equality of results be decidable. Additionally, as aforementioned,
+it's not possible to iterate, destruct, or query the size of {\FPF}s, a critical limitation if there's
+ever a need to inspect the environment or delete a mapping from it.
+
+At this point it was necessary to invent a dictionary data structure that had all three critical properties:
+\SemTot, \SemInj, and \EqDec. \EqDec~ ruled out function-based techniques, \SemInj~ required canonical
+ordering and deduplication, and \SemTot~ meant that the canonical order and deduplication had to come from
+how the data was interpreted rather than how it was organized. These requirements essentially defined the
+mechanism of {\dd}s. Of course, the non-literal way in which the data is interpreted means that it is not
+safe for client code to work with the raw data directly, rather all interaction with the data must be
+encapsulated in library functions. Unfortunately, this includes \emph{destruction}; an interaction which
+normally goes through the very natural, elegant, and well-supported mechanism of pattern matching is now
+only available through a library theorem:
+
+\texttt{destruct-dd : (A : Type) (D : dd A) $\rightarrow \\
+\phantom{xxxxxxxxxxxxxxxx} D = \emptyset \quad \lor \\
+\phantom{xxxxxxxxxxxxxxxx} \exists~(n, a, D')~\left\{~ D = D' , (n, a) \quad \land \quad n \notin D' ~\right\}$}
+
+Just as a list can be destructed with a case expression whose first branch matches nil and whose second branch
+decomposes the list into a single item (particularly the head) and the remainder of the list, a \dd~ can be
+destructed by matching the result of \texttt{destruct-dd} with a case expression whose left branch handles the
+nil dictionary and whose right branch is provided a single item from the dictionary (the mapping $(n, a)$)
+and the remainder of the dictionary ($D'$), as well as a proof that $D'$ really is $D$ minus the $(n, a)$
+mapping.
+
+This function achieves the same purpose as typical pattern matching (albeit more awkwardly), but because it
+doesn't harness the primitive notions of pattern matching and structure, it doesn't establish structural
+decrease on the dictionary object, which may break out-of-the-box structural recursion in the likely case
+of recursion on $D'$. To enable manual establishment of structural recursion, via an extra parameter that
+explicitly tracks the dictionary length, we provide another theorem:
+
+\texttt{dd-extend-length : (A : Type) (D : dd A) (n : Nat) (a : A) $\rightarrow \\
+\phantom{xxxxxxxxxxxxxxxxxxxxx} n \notin D \rightarrow \\
+\phantom{xxxxxxxxxxxxxxxxxxxxx} |D, (n, a)| = 1 + |D|$}
+
+Although possible, manually establishing termination is painful, especially given that it's not necessary
+for {\SAL}s or {\CAL}s. Thus {\dd}s fail at \EzDstr, although they are still better than {\FPF}s in this
+regard, seeing as it's not only hard but impossible to destruct {\FPF}s. Is it possible to have a data
+structure that possesses all four properties? Not likely - as mentioned above, the combination of
+\SemInj~ and \SemTot~ essentially
+necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
+makes it dangerous for client code to mess with the raw data. As such, we believe we've uncovered an
+inherent trade-off between desirable properties. In our case, where \EqDec~ of results is critical,
+and the need to destruct dictionaries is occasional but rare, {\dd}s seem to be a clear winner over
+{\CAL}s ({\SAL}s and {\FPF}s are unviable for our requirements), but in cases where dictionaries are
+not used as data
+(e.g. as a subcomponent of a closure) or at least not data that needs to be tested with equality, and
+where dictionaries sometimes need to be inspected or destructed, {\CAL}s may be a preferable.
