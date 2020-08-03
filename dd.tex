@@ -1,0 +1,33 @@
+\section{Mechanism}
+\label{sec:Mechanism}
+List-of-pairs with ordered, "delta-encoded" keys;
+instead of storing the raw keys, we store
+the difference from the previous key, minus 1
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[nodes = {align = left}]
+    \node [scale=.45]
+    {\includegraphics{figs/mech-1.eps}};
+  \end{tikzpicture}
+  \caption{How do we represent the mapping $\mapP$ as a \dd?}
+  \label{fig:mech1}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[nodes = {align = left}]
+    \node [scale=.45]
+    {\includegraphics{figs/find-6.eps}};
+  \end{tikzpicture}
+  \caption{How do we find key $6$ in the \dd?}
+  \label{fig:find-6}
+\end{figure}
+
+TODO
+
+\section{Metatheory}
+\label{sec:Metatheory}
+TODO
+
+%\section{Evaluation}
+%\label{sec:Evaluation}
+% TODO delete? or keep?
