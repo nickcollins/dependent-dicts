@@ -437,25 +437,64 @@ These sorts of pain points can crop up in any case where a refined object is bei
 tested for equality with another refined object. Thus \SemTot, which obviates the need for refinement, has
 a lot of practical value in many general cases.
 
-TODO finish this section
+{\FPF}s, sans refinement, do not technically satisfy \SemTot, because a type-correct function may not
+actually be finite. However, since we can't iterate, destruct, or query the size of {\FPF}s, the code
+that works with dictionaries doesn't actually need to ensure that those dictionaries are finite. Lookup
+and insertion will work just the same on finite and infinite partial functions, so there's generally no
+practical need to refine them with proofs of finititude. Thus we can avoid the problems of validity refinement
+by switching from {\CAL}s to {\FPF}s. But doing so creates new problems, since unlike the association lists,
+{\FPF}s don't possess \EqDec. We can prove that
+\mbox{$[E, (x, a), (x, b))]\lambda x . e = [E, (x, b)]\lambda x . e$}, and thus prove \emph{contraction} and
+\emph{exchange}, but there's no way to determine whether two arbitrary results are equal or unequal.
+The ability to decide equality has very general utility; in our particular case, we had an
+\mbox{$\texttt{assert}~ e_1 = e_2$} form which would evaluate $e_1$ and $e_2$ and then check if the results
+were equal, naturally requiring that equality of results be decidable. Additionally, as aforementioned,
+it's not possible to iterate, destruct, or query the size of {\FPF}s, a critical limitation if there's
+ever a need to inspect the environment or delete a mapping from it.
 
-%With the finite partial function approach, equality is not decidable in the first
-%place, since the function type does nothing to guarantee that the function is actually finite.
-%Alternatively, the function could be packaged with a constructive proof that its support is finite, in which
-%case equality should be decidable, but then we run into the same problems we had before with proof terms and
-%proof relevance.
+At this point it was necessary to invent a dictionary data structure that had all three critical properties:
+\SemTot, \SemInj, and \EqDec. \EqDec~ ruled out function-based techniques, \SemInj~ required canonical
+ordering and deduplication, and \SemTot~ meant that the canonical order and deduplication had to come from
+how the data was interpreted rather than how it was organized. These requirements essentially defined the
+mechanism of {\dd}s. Of course, the non-literal way in which the data is interpreted means that it is not
+safe for client code to work with the raw data directly, rather all interaction with the data must be
+encapsulated in library functions. Unfortunately, this includes \emph{destruction}; an interaction which
+normally goes through the very natural, elegant, and well-supported mechanism of pattern matching is now
+only available through a library theorem:
 
-%Since the keys in a \dd~ are not represented
-%by their literal values, encapsulation disallows (TODO should disallow??) destruction (or other operations,
-%such as map) as though it were an ordinary list. Instead, destruction and deletion are offered only through
-%library functions, which guarantee that any \dd~ is either empty or that it can be destructed into a single
-%mapping and a \dd~ that when extended by that single mapping will equal the original \dd. Not only is it
-%more awkward to use a function for destruction than to use pattern matching, it also risks breaking
-%straightforward structural recursion, in some cases forcing the developer to establish termination manually.
-%The difficulties of destruction, and techniques for alleviating these difficulties, are discussed further in
-%section TODO. Analysis of the tradeoffs (in terms of lines-of-code required to prove metatheory) between more
-%difficult destruction vs more verbose proofs of \emph{contraction} and \emph{exchange}, is discussed in section
-%\nameref{sec:Evaluation}, leading to soft recommendations about which solution best fits a particular scenario.
+\texttt{destruct-dd : (A : Type) (D : dd A) $\rightarrow \\
+\phantom{xxxxxxxxxxxxxxxx} D = \emptyset \quad \lor \\
+\phantom{xxxxxxxxxxxxxxxx} \exists~(n, a, D')~\left\{~ D = D' , (n, a) \quad \land \quad n \notin D' ~\right\}$}
+
+Just as a list can be destructed with a case expression whose first branch matches nil and whose second branch
+decomposes the list into a single item (particularly the head) and the remainder of the list, a \dd~ can be
+destructed by matching the result of \texttt{destruct-dd} with a case expression whose left branch handles the
+nil dictionary and whose right branch is provided a single item from the dictionary (the mapping $(n, a)$)
+and the remainder of the dictionary ($D'$), as well as a proof that $D'$ really is $D$ minus the $(n, a)$
+mapping.
+
+This function achieves the same purpose as typical pattern matching (albeit more awkwardly), but because it
+doesn't harness the primitive notions of pattern matching and structure, it doesn't establish structural
+decrease on the dictionary object, which may break out-of-the-box structural recursion in the likely case
+of recursion on $D'$. To enable manual establishment of structural recursion, via an extra parameter that
+explicitly tracks the dictionary length, we provide another theorem:
+
+\texttt{dd-extend-length : (A : Type) (D : dd A) (n : Nat) (a : A) $\rightarrow \\
+\phantom{xxxxxxxxxxxxxxxxxxxxx} n \notin D \rightarrow \\
+\phantom{xxxxxxxxxxxxxxxxxxxxx} |D, (n, a)| = 1 + |D|$}
+
+Although possible, manually establishing termination is painful, especially given that it's not necessary
+for {\SAL}s or {\CAL}s. Thus {\dd}s fail at \EzDstr, although they are still better than {\FPF}s in this
+regard, seeing as it's not only hard but impossible to destruct {\FPF}s. Is it possible to have a data
+structure that possesses all four properties? Not likely - as mentioned above, \SemTot~ essentially
+necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
+makes it dangerous for client code to mess with the raw data. As such, we believe we've uncovered an
+inherent trade-off between desirable properties. In our case, where \EqDec~ of results is critical,
+and the need to destruct dictionaries is occasional but rare, {\dd}s seem to be a clear winner over
+{\CAL}s ({\SAL}s and {\FPF}s are unviable for our requirements), but in cases where dictionaries are
+not used as data
+(e.g. as a subcomponent of a closure) or at least not data that needs to be tested with equality, and
+where dictionaries sometimes need to be inspected or destructed, {\CAL}s may be a preferable.
 
 \begin{figure}[H]
   \begin{tabular}{ l | c | c | c | c || c | c}
