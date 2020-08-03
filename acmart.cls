@@ -37,7 +37,7 @@
 %%   Right brace   \}     Tilde         \~}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{acmart}
-[2019/10/19 v1.65 Typesetting articles for the Association for Computing Machinery]
+[2020/04/30 v1.71 Typesetting articles for the Association for Computing Machinery]
 \def\@classname{acmart}
 \InputIfFileExists{acmart-preload-hook.tex}{%
   \ClassWarning{\@classname}{%
@@ -45,6 +45,7 @@
     for any problems from now on.}}{}
 \RequirePackage{xkeyval}
 \RequirePackage{xstring}
+\RequirePackage{iftex}
 \define@choicekey*+{acmart.cls}{format}[\ACM@format\ACM@format@nr]{%
   manuscript, acmsmall, acmlarge, acmtog, sigconf, siggraph,
   sigplan, sigchi, sigchi-a}[manuscript]{}{%
@@ -167,9 +168,29 @@
 \newif\if@ACM@journal@bibstrip
 \newif\if@ACM@sigchiamode
 \ifnum\ACM@format@nr=5\relax % siggraph
-  \ClassWarning{\@classname}{The format siggraph is now obsolete.
-    I am switching to sigconf.}
+\ClassWarning{\@classname}{%
+  The format siggraph is now obsolete.\MessageBreak
+  I am switching to sigconf.}
   \setkeys{acmart.cls}{format=sigconf}
+\fi
+\ifnum\ACM@format@nr=7\relax % sigchi
+\ClassWarning{\@classname}{%
+  The format sigchi is now obsolete.\MessageBreak
+  I am switching to sigconf.}
+  \setkeys{acmart.cls}{format=sigconf}
+\fi
+\ifnum\ACM@format@nr=8\relax % sigchi
+\ClassWarning{\@classname}{%
+  ACM SIGCHI has retired the SIGCHI-A template\MessageBreak
+  effective immediately. ACM is keeping this template\MessageBreak
+  option available to authors who are working on legacy\MessageBreak
+  documents only. ACM will not, under any circumstances,\MessageBreak
+  accept documents in this format for publication and\MessageBreak
+  will not offer technical support to the authors who use\MessageBreak
+  this template.\MessageBreak
+  ACM SIGCHI is directing Conference leaders and\MessageBreak
+  authors to publish their articles using the SIGCONF\MessageBreak
+  template call.}
 \fi
 \ifnum\ACM@format@nr=0\relax
   \@ACM@manuscripttrue
@@ -220,7 +241,7 @@
    \or % sigplan
     \def\ACM@fontsize{10pt}%
    \or % sigchi
-    \def\ACM@fontsize{10pt}%
+    \def\ACM@fontsize{9pt}%
   \or % sigchi-a
     \def\ACM@fontsize{10pt}%
   \fi
@@ -439,7 +460,7 @@
 }
 \def\l@section{\@tocline{1}{0pt}{1pc}{2pc}{}}
 \def\l@subsection{\@tocline{2}{0pt}{1pc}{3pc}{}}
-\def\l@subsubsection{\@tocline{2}{0pt}{1pc}{5pc}{}}
+\def\l@subsubsection{\@tocline{3}{0pt}{1pc}{5pc}{}}
 \def\@makefntext{\noindent\@makefnmark}
 \if@ACM@sigchiamode
 \long\def\@footnotetext#1{\marginpar{%
@@ -547,6 +568,17 @@
   \SetWatermarkText{\parbox{12em}{\centering
       Unpublished working draft.\\
       Not for distribution.}}
+\else
+  \if@ACM@sigchiamode
+    \if@ACM@nonacm\else
+      \RequirePackage{draftwatermark}
+      \SetWatermarkFontSize{0.5in}
+      \SetWatermarkColor[gray]{.9}
+      \SetWatermarkText{\parbox{12em}{\centering
+          Legacy document. \\
+          Not for publication in an ACM venue}}
+    \fi
+  \fi
 \fi
 \RequirePackage{geometry}
 \ifcase\ACM@format@nr
@@ -692,14 +724,19 @@
     TeX}\@ACM@newfontsfalse}
 \if@ACM@newfonts
   \RequirePackage[T1]{fontenc}
-\ifxetex
-  \RequirePackage[tt=false]{libertine}
-  \setmonofont{inconsolata}
-\else
-  \RequirePackage[tt=false, type1=true]{libertine}
-\fi
-\RequirePackage[varqu]{zi4}
-\RequirePackage[libertine]{newtxmath}
+  \ifxetex
+    \RequirePackage[tt=false]{libertine}
+    \setmonofont[StylisticSet=3]{inconsolata}
+  \else
+    \ifluatex
+      \RequirePackage[tt=false]{libertine}
+      \setmonofont[StylisticSet=3]{inconsolata}
+    \else
+       \RequirePackage[tt=false, type1=true]{libertine}
+       \RequirePackage[varqu]{zi4}
+    \fi
+  \fi
+  \RequirePackage[libertine]{newtxmath}
 \fi
 \let\liningnums\@undefined
 \AtEndPreamble{%
@@ -730,6 +767,15 @@
   \let\@vspacer\@vspacer@orig}
 \AtBeginEnvironment{table*}{\let\@vspace\@vspace@orig
   \let\@vspacer\@vspacer@orig}
+\AtBeginEnvironment{algorithm}{\let\@vspace\@vspace@orig
+  \let\@vspacer\@vspacer@orig}
+\AtBeginEnvironment{algorithm*}{\let\@vspace\@vspace@orig
+  \let\@vspacer\@vspacer@orig}
+\AtBeginEnvironment{lstlisting}{\let\@vspace\@vspace@orig
+  \let\@vspacer\@vspacer@orig}
+\AtBeginEnvironment{lstlisting*}{\let\@vspace\@vspace@orig
+  \let\@vspacer\@vspacer@orig}
+
 \RequirePackage{caption, float}
 \captionsetup[table]{position=top}
 \if@ACM@journal
@@ -1033,8 +1079,8 @@
 \or % TCPS
   \def\@journalName{ACM Transactions on Cyber-Physical Systems}%
 \or % TDS
-  \def\@journalName{ACM Transactions on Data Science}%
-  \def\@journalNameShort{ACM Trans. Data Sci.}%
+  \def\@journalName{ACM/IMS Transactions on Data Science}%
+  \def\@journalNameShort{ACM/IMS Trans. Data Sci.}%
   \def\@permissionCodeOne{2577-3224}%
 \or % TEAC
   \def\@journalName{ACM Transactions on Economics and Computation}%
@@ -1379,7 +1425,12 @@
 \def\terms#1{\ClassWarning{\@classname}{The command \string\terms{} is
     obsolete.  I am going to ignore it}}
 \def\keywords#1{\def\@keywords{#1}}
-\keywords{}
+\let\@keywords\@empty
+\AtEndDocument{\if@ACM@nonacm\else\ifx\@keywords\@empty
+  \ifnum\getrefnumber{TotPages}>2\relax
+  \ClassWarningNoLine{\@classname}{ACM keywords are mandatory
+    for papers over two pages}%
+  \fi\fi\fi}
 \renewenvironment{abstract}{\Collect@Body\@saveabstract}{}
 \long\def\@saveabstract#1{\if@ACM@maketitle@typeset
   \ClassError{\@classname}{Abstract must be defined before maketitle
@@ -1399,6 +1450,11 @@
   \else
     \ClassInfo{\@classname}{Suppressing bibformat}%
   \fi}{\ClassError{\@classname}{The option printacmref can be either true or false}}
+\AtEndDocument{\if@ACM@nonacm\else\if@ACM@printacmref\else
+  \ifnum\getrefnumber{TotPages}>1\relax
+  \ClassWarningNoLine{\@classname}{ACM reference format is mandatory
+    for papers over one page}%
+  \fi\fi\fi}
 \define@boolkey+{@ACM@topmatter@}[@ACM@]{printfolios}[true]{%
   \if@ACM@printfolios
     \ClassInfo{\@classname}{Printing folios}%
@@ -1446,7 +1502,7 @@
 \newcounter{@concepts}
 \newcommand\ccsdesc[2][100]{%
   \ccsdesc@parse#1~#2~~\ccsdesc@parse@end}
-\RequirePackage{textcomp}
+\def\textrightarrow{$\rightarrow$}
 \def\ccsdesc@parse#1~#2~#3~{%
   \stepcounter{@concepts}%
   \expandafter\ifx\csname CCS@General@#2\endcsname\relax
@@ -1468,6 +1524,11 @@
      #3\fi\fi\ifnum\value{@concepts}=0.\else; \fi}%
   \fi
 \ccsdesc@parse@finish}
+\AtEndDocument{\if@ACM@nonacm\else\ifx\@concepts\@empty\relax
+  \ifnum\getrefnumber{TotPages}>2\relax
+  \ClassWarningNoLine{\@classname}{CCS concepts are mandatory
+    for papers over two pages}%
+  \fi\fi\fi}
 \def\ccsdesc@parse@finish#1\ccsdesc@parse@end{}
 \newif\if@printcopyright
 \@printcopyrighttrue
@@ -1608,10 +1669,10 @@
    source.
   \or % usgovmixed
    ACM acknowledges that this contribution was authored or co-authored
-   by an employee, contractor, or affiliate of the United States government. As such,
-   the United States government retains a nonexclusive, royalty-free right to
-   publish or reproduce this article, or to allow others to do so, for
-   government purposes only.
+   by an employee, contractor, or affiliate of the United States
+   government. As such, the United States government retains a
+   nonexclusive, royalty-free right to publish or reproduce this
+   article, or to allow others to do so, for government purposes only.
   \or % cagov
    This article was authored by employees of the Government of Canada.
    As such, the Canadian government retains all interest in the
@@ -1799,7 +1860,7 @@
   \if@ACM@printccs
   \ifx\@concepts\@empty\else\bgroup
       {\@specialsection{CCS Concepts}%
-         \@concepts\par}\egroup
+         \noindent\@concepts\par}\egroup
      \fi
    \fi
    \ifx\@keywords\@empty\else\bgroup
@@ -1808,7 +1869,7 @@
        \else
          \@specialsection{Keywords}%
        \fi
-         \@keywords}\par\egroup
+         \noindent\@keywords}\par\egroup
    \fi
   \andify\authors
   \andify\shortauthors
@@ -1848,12 +1909,13 @@
   \or % siggraph
     \section*{#1}%
   \or % sigplan
-    \paragraph*{#1}%
+     \noindentparagraph*{#1:~}%
   \or % sigchi
     \section*{#1}%
   \or % sigchi-a
     \section*{#1}%
-    \fi}
+    \fi
+}
 \def\@printtopmatter{%
   \ifx\@startPage\@empty
      \gdef\@startPage{1}%
@@ -2261,6 +2323,11 @@
   \def\email##1##2{\unskip, \nolinkurl{##2}}%
   \addresses
   \egroup}
+\AtEndDocument{\if@ACM@nonacm\else\if@ACM@journal
+  \ifx\@authorsaddresses\@empty
+  \ClassWarningNoLine{\@classname}{Authors'
+    addresses are mandatory for ACM journals}%
+  \fi\fi\fi}
 \def\@setaddresses{}
 \def\@authornotemark{\g@addto@macro\@currentauthors{\footnotemark\relax}}
 \def\@@authornotemark#1{\g@addto@macro\@currentauthors{\footnotemark[#1]}}
@@ -2321,11 +2388,13 @@
   \fi
   \ifx\@acmDOI\@empty\else\@formatdoi{\@acmDOI}\fi
 \par\egroup}
-\def\@printendtopmatter{\bgroup
+\def\@printendtopmatter{%
   \let\@vspace\@vspace@orig
   \let\@vspacer\@vspacer@orig
   \par\bigskip
-  \egroup}
+  \let\@vspace\@vspace@acm
+  \let\@vspacer\@vspacer@acm
+  }
 \def\@setthanks{\long\def\thanks##1{\par##1\@addpunct.}\thankses}
 \def\@setauthorsaddresses{\@authorsaddresses\unskip\@addpunct.}
 \RequirePackage{fancyhdr}
@@ -2362,10 +2431,29 @@
   \fi}
 \def\ACM@linecountR{%
   \if@ACM@review
-  \ACM@mk@linecount
-  \begin{picture}(0,0)%
-    \put(20,-22){\usebox{\ACM@linecount@bx}}%
-  \end{picture}%
+    \ifcase\ACM@format@nr
+    \relax % manuscript
+         \relax
+       \or % acmsmall
+         \relax
+       \or % acmlarge
+         \relax
+       \or % acmtog
+          \ACM@mk@linecount
+       \or % sigconf
+          \ACM@mk@linecount
+       \or % siggraph
+          \ACM@mk@linecount
+       \or % sigplan
+          \ACM@mk@linecount
+       \or % sigchi
+          \ACM@mk@linecount
+       \or % sigchi-a
+          \ACM@mk@linecount
+    \fi
+    \begin{picture}(0,0)%
+      \put(20,-22){\usebox{\ACM@linecount@bx}}%
+     \end{picture}%
   \fi}
 \if@ACM@timestamp
   % Subtracting 30 from \time gives us the effect of rounding down despite
@@ -2625,6 +2713,11 @@
   {-.5\baselineskip \@plus -2\p@ \@minus -.2\p@}%
   {-3.5\p@}%
   {\ACM@NRadjust{\@parfont\@adddotafter}}}
+\newcommand\noindentparagraph{\@startsection{paragraph}{4}{\z@}%
+  {-.5\baselineskip \@plus -2\p@ \@minus -.2\p@}%
+  {-3.5\p@}%
+  {\ACM@NRadjust{\@parfont}}}
+
 \renewcommand\part{\@startsection{part}{9}{\z@}%
   {-10\p@ \@plus -4\p@ \@minus -2\p@}%
   {4\p@}%
@@ -2656,20 +2749,8 @@
 \or % sigplan
  \def\@secfont{\bfseries\Large\section@raggedright}
  \def\@subsecfont{\bfseries\section@raggedright}
- \renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
-   {-.75\baselineskip \@plus -2\p@ \@minus -.2\p@}%
-   {.25\baselineskip}%
-   {\@subsubsecfont}}
  \def\@subsubsecfont{\bfseries\section@raggedright}
- \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
-   {-.5\baselineskip \@plus -2\p@ \@minus -.2\p@}%
-   {-3.5\p@}%
-   {\@parfont\@addspaceafter}}
  \def\@parfont{\bfseries\itshape}
- \renewcommand\subparagraph{\@startsection{subparagraph}{5}{\z@}%
-   {-.5\baselineskip \@plus -2\p@ \@minus -.2\p@}%
-   {-3.5\p@}%
-   {\@subparfont\@addspaceafter}}
  \def\@subparfont{\itshape}
 \or % sigchi
  \setcounter{secnumdepth}{1}
@@ -2855,7 +2936,7 @@
   \ifx\@tempa\@empty\def\@tempa{arxiv}\fi
   \def\@tempb{arxiv}%
   \ifx\@tempa\@tempb
-     arXiv:\href{http://arxiv.org/abs/#2}{#2}\else arXiv:#2%
+     arXiv:\href{https://arxiv.org/abs/#2}{#2}\else arXiv:#2%
   \fi}
 \let\@vspace@orig=\@vspace
 \let\@vspacer@orig=\@vspacer
@@ -2865,6 +2946,8 @@
 \apptocmd{\@vspacer}{\ClassWarning{\@classname}{\string\vspace\space should
     only be used to provide space above/below surrounding
     objects}}{}{}
+\let\@vspace@acm=\@vspace
+\let\@vspacer@acm=\@vspacer
 \let\ACM@origbaselinestretch\baselinestretch
 \AtEndDocument{\ifx\baselinestretch\ACM@origbaselinestretch\else
   \ClassError{\@classname}{An attempt to redefine
