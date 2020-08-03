@@ -8,12 +8,17 @@ perhaps most familiar in some implementations of type contexts and evaluation en
 implemented in one of the following manners: (TODO source for each)
 \\\\
 \newcommand{\lameq}[1]{$\lambda$ $x$ . $x == {#1}$}
+
+\begin{figure*}
 \begin{tabular}{ l l }
  Simple Association List (SAL)        & [(3, "c"), (1, "b"), {\color{gray} (3, "q")}, (6, "d")] \\
  Canonicalized Association List (CAL) & [(1, "b"), (3, "c"), (6, "d")] \quad (insert function dedupes and preserves canonical order) \\
  Finite Partial Function (FPF)        & \lameq{3} ? "c" : (\lameq{1} ? "b" : (\lameq{3} ? {\color{gray} "q"} : (\lameq{6} ? "d" : None) x) x) x
 \end{tabular}
-\\
+\caption{blah}
+\end{figure*}
+
+%% \\
 
 The \sal~ (\SAL) solution is perhaps the most common, being trivially simple. Furthermore:
 %\begin{itemize}
@@ -25,7 +30,8 @@ The \sal~ (\SAL) solution is perhaps the most common, being trivially simple. Fu
  The major downside is that many distinct dicts
 represent the same semantic mapping - because dicts are sensitive to duplication and ordering
 of insertions, semantically equivalent dicts may not be reflexively equal:
-  \begin{figure}[H]
+  %% \begin{figure}[H]
+  \begin{figure*}
     \centering
     \begin{tikzpicture}[nodes = {align = left}]
       \node [scale=.45]
@@ -33,7 +39,8 @@ of insertions, semantically equivalent dicts may not be reflexively equal:
     \end{tikzpicture}
     \caption{Same semantic mapping represented by unequal {\SAL}s}
     \label{fig:uneq}
-  \end{figure}
+  \end{figure*}
+  %% \end{figure}
 Developing proofs is challenging, so any stumbling block, such as the inability to use a built-in equality
 primitive to establish semantic equivalence of two objects, or the awkwardness of packaging
 proof terms with data (noting the difficulties that arise from proof relevance), can cause exorbitant
