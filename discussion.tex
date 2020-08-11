@@ -6,11 +6,17 @@ the second answer on this stack overflow suggests the finite partial function ap
 \\
 https://stackoverflow.com/questions/47362451/creating-a-dictionary-map-in-coq
 \\
-oh hey appears that this is in software foundations too
+oh hey appears that this is in software foundations too (mention of extensionality here as well)
 \\
 https://6826.csail.mit.edu/2019/lf/Maps.html
 \\
-Coq has list-based maps that retain sorted order, but not every list data is a valid mapping
+A comprehensive, extensionality-aware hybrid of CAL and FPF is at
+\\
+https://github.com/arthuraa/extructures/blob/master/theories/fmap.v
+\\
+(also try to make sense of https://github.com/arthuraa/coq-utils/blob/master/theories/nominal.v )
+\\
+Coq also has CALs
 \\
 https://coq.inria.fr/library/Coq.FSets.FMapList.html
 \\
@@ -21,5 +27,7 @@ This one seems to attach a canonicity proof to an ordinary list:
 http://www.cs.bc.edu/~tassarot/papers/iris-refinement/coqdoc/iris.prelude.natmap.html
 \\
 something something explicit substitutions, Abadi et al. POPL 1990.
+\\
+Look deeper into TDD with Idris
 
 \citep{HazelnutPOPL}
