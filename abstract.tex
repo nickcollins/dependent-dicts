@@ -12,21 +12,19 @@ General-purpose languages implement dictionaries with hash tables or balanced tr
 %
 Though suitable for many uses, each solution has drawbacks:
 %
-association lists allow arbitrary order and may contain duplicates,
+association lists allow arbitrary order and may contain duplicates (unless refined with an explicit proof about validity), and
 %
-canonically-ordered association lists must be refined an explicit proof of validity, and
+partial functions cannot be compared for equality
 %
-partial functions cannot be compared for equality.
+nor easily destructed.
 
 We develop a novel list-based representation, called \emph{delta dictionaries}, that simultaneously achieves benefits of the conventional representations.
 %
 Delta dictionaries are \emph{total} (every type-correct list is semantically valid),
 %
-\emph{injective} (there is a one-to-one correspondence between lists and semantic mappings), and
+\emph{extensional} (there is a one-to-one correspondence between lists and semantic mappings), and
 %
-\emph{comparable} (lists can be distinguished by primitive equality).
-%
-Unlike partial functions, delta dictionaries are also \emph{destructible} (the internal representation can be inspected as needed).
+\emph{destructible} (the internal representation can be inspected as needed).
 %
 We present the implementation of delta dictionaries and relevant metatheory---formalized in Agda---and we discuss when delta dictionaries may or may not be preferable to conventional solutions.
 
