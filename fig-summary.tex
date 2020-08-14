@@ -28,18 +28,20 @@
 
 %% \begin{figure}[H]
 \begin{figure*}
-  \begin{tabular}{ l | c | c | c | c || c | c}
-            & \total & \injective & \comparable & \destructible & Simple       & Key Type K %% requirement
+  \begin{tabular}{ l || c | c | c | c | c || c}
+            & \multicolumn{5}{c||}{Client Usage}                             & Implementation
    \\ \hline
-   \Sal     & \yes   & \no        & \yes        & \yes          & \verySimple  & \eq
+            & \total & \injective & \comparable & \destructible & Key Type K & Simple
+   \\ \hline
+   \Sal     & \yes   & \no        & \yes        & \yes          & \eq        & \verySimple
    \\ %% \hline
-   \Cal     & \no    & \yes       & \yes        & \yes          & \simple      & \ord
+   \Cal     & \no    & \yes       & \yes        & \yes          & \ord       & \simple
    \\ %% \hline
-   \Fpf     & \no(TODO)   & \yes  & \no         & \no           & \verySimple  & \eq
+   \Fpf     & \no(TODO)   & \yes  & \no         & \no           & \eq        & \verySimple
    \\ %% \hline
-   \Cfpf    & ...    & ...        & ...         & ...           & \simple      & \ord
+   \Cfpf    & ...    & ...        & ...         & ...           & \ord       & \simple
    \\ %% \hline
-   \Dd      & \yes   & \yes       & \yes        & \yesBut       & \hard        & \isoNat
+   \Dd      & \yes   & \yes       & \yes        & \yesBut       & \isoNat    & \hard
   \end{tabular}
   \caption{Properties of dictionary representations.}
   \label{fig:prop-summary}
