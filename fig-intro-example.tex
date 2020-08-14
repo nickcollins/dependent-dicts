@@ -1,0 +1,11 @@
+%% \begin{teaserfigure}
+\begin{figure*}
+\newcommand{\lameq}[1]{$\lambda$ $x$ . $x == {#1}$}
+\begin{tabular}{ l l }
+ Simple Association List (SAL)        & [(3, "c"), (1, "b"), {\color{gray} (3, "q")}, (6, "d")] \\
+ Canonicalized Association List (CAL) & [(1, "b"), (3, "c"), (6, "d")] \quad (insert function dedupes and preserves canonical order) \\
+ Finite Partial Function (FPF)        & \lameq{3} ? "c" : (\lameq{1} ? "b" : (\lameq{3} ? {\color{gray} "q"} : (\lameq{6} ? "d" : None) x) x) x \\
+\end{tabular}
+\caption{Summary of conventional ways to implement a dictionary in proof assistants. TODO all or just convetional?}
+\end{figure*}
+%% \end{teaserfigure}
