@@ -3,10 +3,10 @@
   {}
 \newcommand{\yes}
   %% {Yes}
-  {\cmark}
+  {\phantom{*}\cmark\phantom{*}}
 \newcommand{\yesBut}
   %% {Yes*}
-  {\cmark*}
+  {\phantom{*}\cmark*}
 \newcommand{\eq}
   %% {Decidable equality}
   {Eq K}
@@ -16,19 +16,28 @@
 \newcommand{\isoNat}
   %% {Bijects to naturals}
   {K $\leftrightarrow$ Nat}
+\newcommand{\verySimple}
+  %% {+1}
+  {\cmark\!\!\cmark}
+\newcommand{\simple}
+  %% {0}
+  {\cmark}
+\newcommand{\hard}
+  %% {-1}
+  {}
 
 %% \begin{figure}[H]
 \begin{figure*}
   \begin{tabular}{ l | c | c | c | c || c | c}
-            & \total & \injective & \comparable & \destructible & Simple & Key type %% requirement
+            & \total & \injective & \comparable & \destructible & Simple       & Key type %% requirement
    \\ \hline
-   \Sal     & \yes   & \no        & \yes        & \yes          & +1     & \eq
+   \Sal     & \yes   & \no        & \yes        & \yes          & \verySimple  & \eq
    \\ %% \hline
-   \Cal     & \no    & \yes       & \yes        & \yes          & 0      & \ord
+   \Cal     & \no    & \yes       & \yes        & \yes          & \simple      & \ord
    \\ %% \hline
-   \Fpf     & \no(TODO)   & \yes  & \no         & \no           & 0      & \eq
+   \Fpf     & \no(TODO)   & \yes  & \no         & \no           & \simple      & \eq
    \\ %% \hline
-   \Dd      & \yes   & \yes       & \yes        & \yesBut       & -1     & \isoNat
+   \Dd      & \yes   & \yes       & \yes        & \yesBut       & \hard        & \isoNat
   \end{tabular}
   \caption{Properties of dictionary representations.}
   \label{fig:prop-summary}
