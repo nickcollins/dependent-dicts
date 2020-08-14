@@ -1,5 +1,8 @@
 \section{Introduction}
 \label{sec:Introduction}
+
+\rkc{Part 1.1: Motivation and SAL/CAL/FPF. Editing TBD.}
+
 Conventionally, the design of data structures and algorithms is chiefly focused on performance,
 which is of significantly diminished concern in proof assistants. As such, proof assistants often
 use entirely different data structures than those of conventional settings, with a focus on simplicity
@@ -9,7 +12,6 @@ implemented in one of the following manners: (TODO source for each)
 \\\\
 
 \input{fig-intro-example}
-\input{fig-summary}
 
 %% \\
 
@@ -53,6 +55,23 @@ If used as data, a \CAL~ must be refined with a proof of validity to ensure that
 while equality is not decidable for {\FPF}s. In the \nameref{sec:Problem} section we discuss the difficulties
 that arise from these drawbacks.
 
+\rkc{Part 1.2: Summary of Design Goals. Editing TBD.}
+
+\input{fig-summary}
+
+\begin{enumerate}
+  \item \SemTot: Every term in the type is semantically valid, i.e. the mapping from
+                 terms to their semantic meanings is total.
+  \item \SemInj: Two unequal terms have different semantic meanings, i.e. the mapping
+                 from terms to their semantic meanings is injective.
+  \item \EqDec: Equality, in the sense primitive to the language at hand (particularly,
+                reflexive equality rather than semantic equivalence) is decidable for the type.
+  \item \EzDstr: The ease with which the data structure can be decomposed into its atomic
+                 parts, to facilitate inspection or unrestricted non-additive manipulation.
+\end{enumerate}
+
+\rkc{Part 1.3: Delta Dicts. Editing TBD.}
+
 Our solution, which we dub {\dd}s, addresses the aforementioned problems by using a delta to
 encode a key relative to its predecessor; instead of storing the key's literal value, we store the difference
 from the previous key, minus 1 (details in section \nameref{sec:DD}).
@@ -82,12 +101,15 @@ discussed further in the \nameref{sec:Problem} section.
 TODO something something remaining sections, esp. Metatheory, Related Work, Conclusion, Discussion, or
 whatever we wind up having.
 
+{\color{gray}
+
+\subsection{\rkc{Grab Bag of Text}}
 
 %% \section{Problem}
-\subsection{Problem}
-\label{sec:Problem}
+%% \subsection{Problem}
+%% \label{sec:Problem}
 
-\rkc{Fold this into Intro.}
+\rkc{1}
 
 Data structures can possess or lack a wide range of properties that make them easier or harder to work with
 when proving metatheory. Naturally, when possible, data structures should be chosen that posess those
@@ -99,22 +121,14 @@ this context, we identify, according to both conceptual and practical considerat
 discriminating properties that a dictionary implementation may or may not possess:
 TODO there's a good chance some of these properties have been named somewhere else. We should make sure we
 don't try and coin terms for anything that's already been defined somewhere.
-\begin{enumerate}
-  \item \SemTot: Every term in the type is semantically valid, i.e. the mapping from
-                 terms to their semantic meanings is total.
-  \item \SemInj: Two unequal terms have different semantic meanings, i.e. the mapping
-                 from terms to their semantic meanings is injective.
-  \item \EqDec: Equality, in the sense primitive to the language at hand (particularly,
-                reflexive equality rather than semantic equivalence) is decidable for the type.
-  \item \EzDstr: The ease with which the data structure can be decomposed into its atomic
-                 parts, to facilitate inspection or unrestricted non-additive manipulation.
-\end{enumerate}
 
 % TODO we may decide that the conceptual and practical benefits of decidable equality are so obvious or
 % self-evident that we don't need any further discussion of that property
 
-\subsection{Conceptual Importance}
-\label{sec:Problem:concept}
+%% \subsection{Conceptual Importance}
+%% \label{sec:Problem:concept}
+
+\rkc{2}
 
 In \autoref{sec:Problem:pract}, we illustrate practical problems and benefits under the particular context
 of choosing an implementation for dictionaries. But first, it's worth exploring conceptual aspects that
@@ -149,3 +163,5 @@ this case the conceptual value largely boils down to the practical value.
 %a feature, not a bug, and that solution becomes not only the natural solution but the morally correct one.
 %Future work could explore the possibility of data structures that uphold one of these properties but not the
 %other.
+
+}
