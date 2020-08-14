@@ -2,8 +2,6 @@ MAIN=main
 
 all:
 	pdflatex $(MAIN)
-	pdflatex $(MAIN)
-	pdflatex $(MAIN)
 
 bib:
 	pdflatex $(MAIN)

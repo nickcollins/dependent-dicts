@@ -1,17 +1,36 @@
+\newcommand{\no}
+  %% {No}
+  {}
+\newcommand{\yes}
+  %% {Yes}
+  {\cmark}
+\newcommand{\yesBut}
+  %% {Yes*}
+  {\cmark*}
+\newcommand{\eq}
+  %% {Decidable equality}
+  {Eq K}
+\newcommand{\ord}
+  %% {Orderable}
+  {Ord K}
+\newcommand{\isoNat}
+  %% {Bijects to naturals}
+  {K $\leftrightarrow$ Nat}
+
 %% \begin{figure}[H]
 \begin{figure*}
   \begin{tabular}{ l | c | c | c | c || c | c}
-            & Sem. Total & Sem. Inj. & Dec. eq. & Destr.  & Simple & Key type requirement
-   \\\hline
-   \sal     & Yes        & No        & Yes      & Trivial & +1     & Decidable equality
-   \\\hline
-   \cal     & No         & Yes       & Yes      & Trivial & 0      & Orderable
-   \\\hline
-   \fpf     & No(TODO)   & Yes       & No       & No      & 0      & Decidable equality
-   \\\hline
-   \dd      & Yes        & Yes       & Yes      & Hard    & -1     & Bijects to naturals
+            & \total & \injective & \comparable & \destructible & Simple & Key type %% requirement
+   \\ \hline
+   \Sal     & \yes   & \no        & \yes        & \yes          & +1     & \eq
+   \\ %% \hline
+   \Cal     & \no    & \yes       & \yes        & \yes          & 0      & \ord
+   \\ %% \hline
+   \Fpf     & \no(TODO)   & \yes  & \no         & \no           & 0      & \eq
+   \\ %% \hline
+   \Dd      & \yes   & \yes       & \yes        & \yesBut       & -1     & \isoNat
   \end{tabular}
-  \caption{Summary of the various data structures and which properties they possess}
+  \caption{Properties of dictionary representations.}
   \label{fig:prop-summary}
 \end{figure*}
 %% \end{figure}
