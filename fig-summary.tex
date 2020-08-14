@@ -12,7 +12,7 @@
   {Eq K}
 \newcommand{\ord}
   %% {Orderable}
-  {Ord K}
+  {Eq K, Ord K}
 \newcommand{\isoNat}
   %% {Bijects to naturals}
   {K $\leftrightarrow$ Nat}
@@ -29,7 +29,7 @@
 %% \begin{figure}[H]
 \begin{figure*}
   \begin{tabular}{ l | c | c | c | c || c | c}
-            & \total & \injective & \comparable & \destructible & Simple       & Key type %% requirement
+            & \total & \injective & \comparable & \destructible & Simple       & Key Type K %% requirement
    \\ \hline
    \Sal     & \yes   & \no        & \yes        & \yes          & \verySimple  & \eq
    \\ %% \hline
@@ -37,7 +37,7 @@
    \\ %% \hline
    \Fpf     & \no(TODO)   & \yes  & \no         & \no           & \verySimple  & \eq
    \\ %% \hline
-   \Cfpf    & ...    & ...        & ...         & ...           & \simple      & \eq, \ord
+   \Cfpf    & ...    & ...        & ...         & ...           & \simple      & \ord
    \\ %% \hline
    \Dd      & \yes   & \yes       & \yes        & \yesBut       & \hard        & \isoNat
   \end{tabular}
