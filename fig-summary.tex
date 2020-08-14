@@ -14,13 +14,18 @@
   {\phantom{$^-$}\cmark$^-$}
 \newcommand{\eq}
   %% {Decidable equality}
-  {Eq K}
+  %% {Eq K}
+  %% {(=) : (K,K) -> Bool}
+  {(=)}
 \newcommand{\ord}
   %% {Orderable}
-  {Eq K, Ord K}
+  %% {Eq K, Ord K}
+  %% {(=),(<) : (K,K) -> Bool}
+  {(=), (<)}
 \newcommand{\isoNat}
   %% {Bijects to naturals}
-  {K $\leftrightarrow$ Nat}
+  %% {K $\leftrightarrow$ Nat}
+  {f : K $\leftrightarrow$ Nat}
 \newcommand{\verySimple}
   %% {+1}
   %% {\cmark\!\!\cmark}
@@ -36,16 +41,22 @@
   %% {}
   {\no}
 
+\newcommand{\header}[1]
+  {\makebox[0.67in]{#1}}
+\newcommand{\headers}[6]
+  {&\header{#1}&\header{#2}&\header{#3}&\header{#4}&\header{#5}&\header{#6}}
+
 %% \begin{figure}[H]
 \begin{figure*}
   \begin{tabular}{ l || c | c | c | c | c || c}
-         & \multicolumn{5}{c||}{Client Usage}                              & Implementation \\ \hline
-         & \total & \extensional & \decidable & \destructible & Key Type K & Simple         \\ \hline
-   \Sal  & \yes   & \no          & \yes        & \yes          & \eq        & \verySimple   \\ %% \hline
-   \Cal  & \no    & \yes         & \yes        & \yes          & \ord       & \simple       \\ %% \hline
-   \Fpf  & \noBut & \yes         & \no         & \no           & \eq        & \verySimple   \\ %% \hline
-   \Fpfk & \no    & \yes         & \yes        & \yes          & \ord       & \simple       \\ %% \hline
-   \Dd   & \yes   & \yes         & \yes        & \yesBut       & \isoNat    & \hard
+           & \multicolumn{5}{c||}{\footnotesize Client Usage}
+           & {\footnotesize Implementation} \\ \hline
+   \headers{\total}{\extensional}{\decidable}{\destructible}{Key Type K}{Simple}      \\ \hline
+   \Sal    & \yes   & \no        & \yes      & \yes         & \eq       & \verySimple \\ %% \hline
+   \Cal    & \no    & \yes       & \yes      & \yes         & \ord      & \simple     \\ %% \hline
+   \Fpf    & \noBut & \yes       & \no       & \no          & \eq       & \verySimple \\ %% \hline
+   \Fpfk   & \no    & \yes       & \yes      & \yes         & \ord      & \simple     \\ %% \hline
+   \Dd     & \yes   & \yes       & \yes      & \yesBut      & \isoNat   & \hard
   \end{tabular}
   \caption{Properties of dictionary representations.}
   \label{fig:prop-summary}
