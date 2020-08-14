@@ -1,5 +1,9 @@
-\section{Delta Dictionaries}
+%% \section{Delta Dictionaries}
+\section{Implementation}
 \label{sec:DD}
+
+\subsection{Delta Indexing}
+
 Borrowing from association lists, {\dd}s use a list-of-pairs, where the first item in each list represents
 a key and the second is the literal value that is mapped to the represented key. Unlike association lists,
 the natural number that represents the key is not its literal value. In order to maintain canonical order,
@@ -42,7 +46,23 @@ value.
   \label{fig:find-6}
 \end{figure}
 
-\subsection{Basic functionality}
+%% \subsection{Bijections to the naturals}
+%% \label{sec:DD:bij}
+\parahead{Bijections to the naturals}
+Note that the above definitions are in terms of a seemingly arbitrary key type,
+and use a function \texttt{convert} to convert terms of that type into naturals.
+In Agda, our \dd~ module accepts two parameters - the first is the key type \texttt{Key},
+and the second is a type-class \texttt{bij}, whose three members are a \texttt{convert}
+function that takes \texttt{Key}s to naturals, and proofs that \texttt{convert} is
+injective and surjective. Thus, any key type can be used, as long as the developer
+can define a function that converts it to a natural, and prove that that function is
+bijective. As an example, we define a \texttt{bij} instance for integers. Other common
+key types, such as other numeric types or strings, should be reasonably straightforward
+to support. TODO further discussion about how this might be onerous for other key types,
+like trees or ADTs. TODO discussion about how this won't work for finite types, like
+characters, because we need a true bijection.
+
+\subsection{Core Operations}
 \label{sec:DD:basics}
 The basic functionality of dictionaries are lookup and insertion - they are defined as follows
 (TODO):
@@ -52,12 +72,29 @@ The core theorems for lookup and insertion are as follows (TODO):
 Our Agda mechanization also defines key deletion, union, map, and to/from-list operations, along
 with appropriate metatheory (not reproduced here).
 
-\subsection{Core properties}
+\subsection{Destruction}
+
+\rkc{move a bunch of that material from Case Study to here}
+
+
+%% \subsection{Core properties}
+\section{Properties}
 \label{sec:DD:props}
+
+\subsection{Design Goals}
+
 The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to \emph{contraction} and
 \emph{exchange} are defined below, and proven in Agda. \SemTot~ cannot be formally defined - rather
 its truth is apparent from the fact that the other theorems do not require their \dd~ arguments to
 be refined with validity premises.
+
+\begin{proposition}[\SemTot]
+
+\breakAndIndent
+%
+\rkc{Blah}
+
+\end{proposition}
 
 \begin{theorem}[\SemInj]
 \label{thm:SemInj}
@@ -107,6 +144,10 @@ s.t. $D = D' , (k, v)$.
 
 \end{theorem}
 
+\subsection{Contraction and Exchange}
+
+\rkc{Two common properties for PL metatheory.}
+
 \begin{theorem}[Dictionary Contraction]
 \label{thm:cont-dicts}
 
@@ -130,18 +171,3 @@ if $k_1 \ne k_2$, then
 $D, (k_1, v_1), (k_2, v_2) = D, (k_2, v_2), (k_1, v_1)$.
 
 \end{theorem}
-
-\subsection{Bijections to the naturals}
-\label{sec:DD:bij}
-Note that the above definitions are in terms of a seemingly arbitrary key type,
-and use a function \texttt{convert} to convert terms of that type into naturals.
-In Agda, our \dd~ module accepts two parameters - the first is the key type \texttt{Key},
-and the second is a type-class \texttt{bij}, whose three members are a \texttt{convert}
-function that takes \texttt{Key}s to naturals, and proofs that \texttt{convert} is
-injective and surjective. Thus, any key type can be used, as long as the developer
-can define a function that converts it to a natural, and prove that that function is
-bijective. As an example, we define a \texttt{bij} instance for integers. Other common
-key types, such as other numeric types or strings, should be reasonably straightforward
-to support. TODO further discussion about how this might be onerous for other key types,
-like trees or ADTs. TODO discussion about how this won't work for finite types, like
-characters, because we need a true bijection.
