@@ -62,6 +62,10 @@ to support. TODO further discussion about how this might be onerous for other ke
 like trees or ADTs. TODO discussion about how this won't work for finite types, like
 characters, because we need a true bijection.
 
+Although most types that are suitable for use as keys in the first place can be bijected to the
+naturals, for some types defining this bijection may be too awkward or cumbersome, in which case {\dd}s may
+be a poor choice.
+
 \subsection{Lookup and Insertion}
 \label{sec:DD:basics}
 The basic functionality of dictionaries are lookup and insertion - they are defined as follows

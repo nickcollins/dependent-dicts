@@ -46,7 +46,6 @@
 \usepackage{mdframed}
 \usepackage{colortab}
 \usepackage{mathpartir}
-\usepackage{enumitem}
 \usepackage{bbm}
 \usepackage{stmaryrd}
 \usepackage{mathtools}
@@ -60,6 +59,16 @@
 \usepackage{pifont}% http://ctan.org/pkg/pifont
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
+
+% https://tex.stackexchange.com/questions/8549/how-can-i-draw-a-horizontal-line-spanning-only-some-of-the-table-cells
+\usepackage{multirow}
+
+\usepackage{enumitem}
+\setlist
+  { leftmargin = 5.5mm
+  , itemsep = 3pt
+  , topsep = 4pt
+  }
 
 \input{commands}
 
