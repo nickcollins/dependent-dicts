@@ -6,7 +6,7 @@
  \Sal{} & [(3, "c"), (1, "b"), {\color{gray} (3, "q")}, (6, "d")] \\
  \Cal{} & [(1, "b"), (3, "c"), (6, "d")] \\ %% \quad (insert function dedupes and preserves canonical order)
  \Fpf{} & \lameq{3} ? "c" : (\lameq{1} ? "b" : (\lameq{3} ? {\color{gray} "q"} : (\lameq{6} ? "d" : $\bot$) $x$) $x$) $x$ \\
- \Fpfk{} & ((\lameq{3} ? "c" : (\lameq{1} ? "b" : (\lameq{3} ? {\color{gray} "q"} : (\lameq{6} ? "d" : $\bot$) $x$) $x$) $x$), [1, 3, 6])  \\
+ %% \Fpfk{} & ((\lameq{3} ? "c" : (\lameq{1} ? "b" : (\lameq{3} ? {\color{gray} "q"} : (\lameq{6} ? "d" : $\bot$) $x$) $x$) $x$), [1, 3, 6])  \\
  \Dd{}  & [(1, "b"), (1, "c"), (2, "d")]
 \end{tabular}
 \caption{Dictionary representations which result from adding the sequence of keys 6, 3, 1, and 3 (again).}

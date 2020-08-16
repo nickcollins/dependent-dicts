@@ -47,7 +47,7 @@ However, a plain function type does not rule out the possibility of the term bei
 %
 Worse is the fact that, unlike either association list representation, (extensional) equality of partial functions is not decidable.
 %
-The function type could be refined with its domain---\ie{}~a canonical list of keys, as depicted on the fourth line of \autoref{fig:intro-example}---but would then suffer the drawbacks of manipulating validity proofs \`{a} la canonical association lists.
+The function type could be refined with its domain---\ie{}~a canonical list of keys---but would then suffer the drawbacks of manipulating validity proofs \`{a} la canonical association lists.
 
 In isolation, each of the aforementioned drawbacks is minor and can be worked around.
 %
@@ -124,6 +124,8 @@ Thus, our final design goal:
 \designGoal{\EzDstr}
 %
 The ability to decompose a data structure into atomic parts, to facilitate inspection or unrestricted non-additive manipulation.
+%
+\nick{Something about keysOf.}
 
 \end{enumerate}
 

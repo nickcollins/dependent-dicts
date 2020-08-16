@@ -3,15 +3,20 @@
   %% {}
   {\color{lightgray}\phantom{$^*$}\xmark\phantom{$^*$}}
 \newcommand{\noBut}
-  {\color{lightgray}\phantom{$^*$}\xmark$^*$}
+  %% {\color{lightgray}\phantom{$^*$}\xmark$^*$}
+  {\phantom{$^*$}\xmark$^*$}
 \newcommand{\yes}
   %% {Yes}
   %% {\phantom{*}\cmark\phantom{*}}
   {\phantom{$^-$}\cmark\phantom{$^-$}}
-\newcommand{\yesBut}
+\newcommand{\yesMinus}
   %% {Yes*}
   %% {\phantom{*}\cmark*}
   {\phantom{$^-$}\cmark$^-$}
+\newcommand{\yesPlus}
+  %% {Yes*}
+  %% {\phantom{*}\cmark*}
+  {\phantom{$^-$}\cmark$^+$}
 \newcommand{\eq}
   %% {Decidable equality}
   %% {Eq K}
@@ -26,20 +31,6 @@
   %% {Bijects to naturals}
   %% {K $\leftrightarrow$ Nat}
   {f : K $\leftrightarrow$ Nat}
-\newcommand{\verySimple}
-  %% {+1}
-  %% {\cmark\!\!\cmark}
-  %% {\phantom{$^+$}\cmark$^+$}
-  {\yes}
-\newcommand{\simple}
-  %% {0}
-  %% {\cmark}
-  %% {\phantom{$^+$}\cmark\phantom{$^+$}}
-  {\yesBut}
-\newcommand{\hard}
-  %% {-1}
-  %% {}
-  {\no}
 
 \newcommand{\header}[1]
   {\makebox[0.67in]{#1}}
@@ -52,12 +43,12 @@
   \multirow{2}{*}{}
            & \multicolumn{5}{c||}{\footnotesize Client Usage}
            & {\footnotesize Implementation} \\ \cline{2-7}
-   \headers{\total}{\extensional}{\decidable}{\destructible}{Key Type K}{Simple}      \\ \hline
-   \Sal    & \yes   & \no        & \yes      & \yes         & \eq       & \verySimple \\ %% \hline
-   \Cal    & \no    & \yes       & \yes      & \yes         & \ord      & \simple     \\ %% \hline
-   \Fpf    & \noBut & \yes       & \no       & \no          & \eq       & \verySimple \\ %% \hline
-   \Fpfk   & \no    & \yes       & \yes      & \yes         & \ord      & \simple     \\ \hline
-   \Dd     & \yes   & \yes       & \yes      & \yesBut      & \isoNat   & \hard
+   \headers{\total}{\extensional}{\decidable}{\destructible}{Key Type K}{Simple}    \\ \hline
+   \Sal    & \yes   & \no        & \yes      & \yes         & \eq       & \yesPlus  \\ %% \hline
+   \Cal    & \no    & \yes       & \yes      & \yes         & \ord      & \yesMinus \\ %% \hline
+   \Fpf    & \noBut & \yes       & \no       & \no          & \eq       & \yes      \\ \hline
+   %% \Fpfk   & \no    & \yes       & \yes      & \yes         & \ord      & \simple     \\ \hline
+   \Dd     & \yes   & \yes       & \yes      & \yesMinus    & \isoNat   & \no
   \end{tabular}
   \caption{Properties of dictionary representations.}
   \label{fig:prop-summary}
