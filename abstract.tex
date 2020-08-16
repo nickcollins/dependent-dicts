@@ -14,17 +14,17 @@ Though suitable for many uses, each solution has drawbacks:
 %
 association lists allow arbitrary order and may contain duplicates (unless refined with an explicit proof about validity), and
 %
-partial functions cannot be compared for equality
-%
-nor easily destructed.
+partial functions cannot be destructed and their equality is not decidable.
 
 We develop a novel list-based representation, called \emph{delta dictionaries}, that simultaneously achieves benefits of the conventional representations.
 %
 Delta dictionaries are \emph{total} (every type-correct list is semantically valid),
 %
-\emph{extensional} (there is a one-to-one correspondence between lists and semantic mappings), and
+\emph{extensional} (there is a one-to-one correspondence between lists and semantic mappings),
 %
-\emph{destructible} (the internal representation can be inspected as needed).
+\emph{destructible} (the internal representation can be inspected as needed), and
+%
+have \emph{decidable equality}.
 %
 We present an implementation of delta dictionaries and relevant metatheory in Agda, and we discuss when delta dictionaries may or may not be preferable to conventional solutions.
 

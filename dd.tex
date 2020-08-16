@@ -4,7 +4,7 @@
 
 \subsection{Delta Indexing}
 
-Borrowing from association lists, {\dd}s use a list-of-pairs, where the first item in each list represents
+Borrowing from association lists, \dds~ use a list-of-pairs, where the first item in each list represents
 a key and the second is the literal value that is mapped to the represented key. Unlike association lists,
 the natural number that represents the key is not its literal value. In order to maintain canonical order,
 while ensuring that every natural number is valid as the first item in a pair, that number must represent
@@ -39,7 +39,7 @@ like trees or ADTs. TODO discussion about how this won't work for finite types, 
 characters, because we need a true bijection.
 
 Although most types that are suitable for use as keys in the first place can be bijected to the
-naturals, for some types defining this bijection may be too awkward or cumbersome, in which case {\dd}s may
+naturals, for some types defining this bijection may be too awkward or cumbersome, in which case \dds~ may
 be a poor choice.
 
 \subsection{Lookup and Insertion}
@@ -86,7 +86,7 @@ be refined with validity premises.
 
 \breakAndIndent
 %
-For any {\dd}s $D_1$ and $D_2$,
+For any \dds~ $D_1$ and $D_2$,
 %
 if for all $k$, $D_1[k] = D_2[k]$,
 %
@@ -99,7 +99,7 @@ then $D_1 = D_2$.
 
 \breakAndIndent
 %
-For any {\dd}s $D_1$ and $D_2$ whose values are of type $V$,
+For any \dds~ $D_1$ and $D_2$ whose values are of type $V$,
 %
 given a function that decides equality for type $V$,
 %

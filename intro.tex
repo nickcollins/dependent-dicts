@@ -8,7 +8,7 @@ Conventionally, the design of data structures and algorithms is chiefly focused 
 %
 As such, proof assistants often use entirely different data structures than those of conventional settings, with a focus on simplicity or useful proof-theoretic properties.
 
-Consider dictionaries, which---among a broad range of purposes---are used pervasively for implementing type contexts and evaluation environments.
+Consider dictionaries, which---among a broad range of purposes---are often used for implementing type contexts and evaluation environments.
 %
 The most basic representation for a dictionary, an \emph{\sal}, comprises a list of key-value pairs~\citep{XXX,XXX,XXX}.
 %
@@ -22,9 +22,9 @@ For example, the association lists on the first two lines of \autoref{fig:intro-
 
 \input{fig-summary} %% here to force layout on p.2
 
-To establish a one-to-one correspondence between association lists and semantic mappings, a common solution~\citet{XXX,XXX,XXX} is to maintain a \emph{canonical} form that is semantically valid and unique, namely, a list in which there are no duplicate keys and, furthermore, where keys are in sorted order.
+To establish a one-to-one correspondence between association lists and semantic mappings, one solution~\citet{XXX,XXX,XXX} is to maintain a \emph{canonical} form that is semantically valid and unique, namely, a list in which there are no duplicate keys and, furthermore, where keys are in sorted order.
 %
-The second association list described above is one such example.
+The second association list described in \autoref{fig:intro-example} is one such example.
 %
 This approach allows proofs with canonical association lists to use built-in equality for comparison, at the expense of extending the underlying list type---which allows arbitrary, possibly invalid lists---with a proof of validity that refines the coarser type.
 
@@ -37,6 +37,7 @@ Assuming the additional postulate of \emph{functional extensionality}~\cite{XXX}
 The postulate is consistent with the constructive calculi underlying most popular proof assistants~\citep{XXX}.
 %
 }
+(TODO clarify how funext ensures that semantically equivalent functions are primitively equal, regardless of how you construct the function)
 %
 However, a plain function type does not rule out the possibility of the term being a \emph{non-}finite map, thus requiring additional proofs of validity as with canonical association lists.\footnote{\hspace{0.01in}%
 %
@@ -108,6 +109,7 @@ Two unequal terms have different semantic meanings, \ie{}~the mapping from terms
 \designGoal{\EqDec}
 %
 Equality, in the sense primitive to the metalanguage (\ie{}~reflexive equality rather than semantic equivalence) is decidable for the type.
+(TODO s/reflexiv/primitiv/g , or something)
 
 \end{enumerate}
 
@@ -125,7 +127,7 @@ The ability to decompose a data structure into atomic parts, to facilitate inspe
 
 \end{enumerate}
 
-\autoref{fig:prop-summary} summarizes the preceding discussion along these dimensions; note that all representations except partial functions (without keys) can be easily destructed.
+\autoref{fig:prop-summary} summarizes the preceding discussion along these dimensions; note that all conventional representations except partial functions (without keys) can be easily destructed.
 %
 None of the conventional representations satisfies both \SemTot{} and \SemInj{}, let alone the additional properties.
 
@@ -135,7 +137,7 @@ None of the conventional representations satisfies both \SemTot{} and \SemInj{},
 
 \parahead{A New Representation}
 %
-We offer a solution, dubbed \emph{\dds{}}, which (at least partially) achieves the four desired properties. 
+We offer a solution, dubbed \emph{\dds{}}, which achieves the first three of the desired properties, and partially achieves the fourth. 
 %
 A \dd{} is similar to a canonical association list, but instead of storing each literal key value, it stores the \emph{difference} from the previous key, minus 1.
 %
@@ -153,11 +155,11 @@ For example, compare the canonical association list and \dd{} for the \autoref{f
 
 Every well-typed list-of-pairs is a valid \dd{} (\SemTot), thus no proof term is needed to establish validity.
 %
-Every unique \dd{} represents a unique semantic mapping, thus built-in equality may be used (\SemInj).
+Every unique \dd{} represents a unique semantic mapping, thus built-in equality may be used for semantic equivalence (\SemInj).
 %
 %% there is a bijection between \dd{} terms and finite maps,
 %
-Furthermore, if two \dds{} are semantically equal, they must also be reflexively equal (\EqDec).
+Furthermore, we can (and do) define a function which determines whether or not two \dds{} are equal (\EqDec).
 
 As summarized in \autoref{fig:prop-summary}, delta dictionaries strike a new balance in this design space.
 %
@@ -177,10 +179,10 @@ Lastly, though not a concern from a client's perspective, the implementation of 
 
 %% than it is with the {\SAL}s or {\CAL}s, for which these operations are trivial ({\FPF}s cannot be properly destructed at all).
 
-%% Naturally, {\dd}s have some drawbacks as well.
+%% Naturally, \dds~ have some drawbacks as well.
 
 %% Although most types that are suitable for use as keys in the first place can be bijected to the
-%% naturals, for some types defining this bijection may be too awkward or cumbersome, in which case {\dd}s may
+%% naturals, for some types defining this bijection may be too awkward or cumbersome, in which case \dds~ may
 %% be a poor choice.
 
 %% As with the drawbacks of the other solutions, this one is
@@ -254,7 +256,7 @@ Our implementation and proofs are formalized in Agda and available in the anonym
 %% this case the conceptual value largely boils down to the practical value.
 %% 
 %% %Finally, because they guarantee the \emph{structural properties} \emph{contraction} and
-%% %\emph{exchange}, {\dd}s are inherently inappropriate for substructural logics/judgments that reject one or
+%% %\emph{exchange}, \dds~ are inherently inappropriate for substructural logics/judgments that reject one or
 %% %both of those properties. In these cases, the naive solution's sensitivity to duplication and/or ordering is
 %% %a feature, not a bug, and that solution becomes not only the natural solution but the morally correct one.
 %% %Future work could explore the possibility of data structures that uphold one of these properties but not the

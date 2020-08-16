@@ -4,7 +4,7 @@
 \label{sec:CaseStudy}
 To illustrate practical problems and solutions, we present a hypothetical case study of a developer working to
 prove evaluation metatheory using environment-based semantics. This case study closely resembles the actual process we went
-through on a real project, the difficulties of which created the necessity of inventing {\dd}s. Of course,
+through on a real project, the difficulties of which created the necessity of inventing \dds. Of course,
 because this case study involves a very particular situation, one which seems to be unusual (TODO sources?),
 the problems we run into and solutions we suggest may not generalize. Accordingly, we use the case study to
 present concrete illustrative examples, and follow each example with an argument of its applicability to more
@@ -104,7 +104,8 @@ These sorts of pain points can crop up in any case where a refined object is bei
 tested for equality with another refined object. Thus \SemTot, which obviates the need for refinement, has
 a lot of practical value in many general cases.
 
-{\FPF}s, sans refinement, do not technically satisfy \SemTot, because a type-correct function may not
+{\FPF}s, sans refinement (TODO more discussion about the possibility of refinement?), do not technically
+satisfy \SemTot, because a type-correct function may not
 actually be finite. However, since we can't iterate, destruct, or query the size of {\FPF}s, the code
 that works with dictionaries doesn't actually need to ensure that those dictionaries are finite. Lookup
 and insertion will work just the same on finite and infinite partial functions, so there's generally no
@@ -123,7 +124,7 @@ At this point it was necessary to invent a dictionary data structure that had al
 \SemTot, \SemInj, and \EqDec. \EqDec~ ruled out function-based techniques, \SemInj~ required canonical
 ordering and deduplication, and \SemTot~ meant that the canonical order and deduplication had to come from
 how the data was interpreted rather than how it was organized. These requirements essentially defined the
-mechanism of {\dd}s. Of course, the non-literal way in which the data is interpreted means that it is not
+mechanism of \dds. Of course, the non-literal way in which the data is interpreted means that it is not
 safe for client code to work with the raw data directly, rather all interaction with the data must be
 encapsulated in library functions. Unfortunately, this includes \emph{destruction}; an interaction which
 normally goes through the very natural, elegant, and well-supported mechanism of pattern matching is now
@@ -151,14 +152,14 @@ explicitly tracks the dictionary length, we provide another theorem:
 \phantom{xxxxxxxxxxxxxxxxxxxxx} |D, (n, a)| = 1 + |D|$}
 
 Although possible, manually establishing termination is painful, especially given that it's not necessary
-for {\SAL}s or {\CAL}s. Thus {\dd}s fail at \EzDstr, although they are still better than {\FPF}s in this
+for {\SAL}s or {\CAL}s. Thus \dds~ fail at \EzDstr, although they are still better than {\FPF}s in this
 regard, seeing as it's not only hard but impossible to destruct {\FPF}s. Is it possible to have a data
 structure that possesses all four properties? Not likely - as mentioned above, the combination of
 \SemInj~ and \SemTot~ essentially
 necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
 makes it dangerous for client code to mess with the raw data. As such, we believe we've uncovered an
 inherent trade-off between desirable properties. In our case, where \EqDec~ of results is critical,
-and the need to destruct dictionaries is occasional but rare, {\dd}s seem to be a clear winner over
+and the need to destruct dictionaries is occasional but rare, \dds~ seem to be a clear winner over
 {\CAL}s ({\SAL}s and {\FPF}s are unviable for our requirements), but in cases where dictionaries are
 not used as data
 (e.g. as a subcomponent of a closure) or at least not data that needs to be tested with equality, and
