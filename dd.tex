@@ -16,35 +16,11 @@ whereas a delta of $2$ indicates an offset of $3$. The head of the list does not
 rule, so the very first "delta" is interpreted literally, i.e. it represents a key of its exact
 value.
 
-\begin{figure}[H]
-  \centering
-  \begin{tikzpicture}[nodes = {align = left}]
-    \node [scale=.45]
-    {\includegraphics{figs/mech-2.eps}};
-  \end{tikzpicture}
-  \caption{What mapping is represented by the \dd~ $\dictP$?}
-  \label{fig:mech1}
-\end{figure}
 
-\begin{figure}[H]
-  \centering
-  \begin{tikzpicture}[nodes = {align = left}]
-    \node [scale=.4]
-    {\includegraphics{figs/find-6.eps}};
-  \end{tikzpicture}
-  \caption{How do we find key $6$ in the \dd?}
-  \label{fig:find-6}
-\end{figure}
+\input{fig-dd-example}
+\input{fig-dd-example-find}
+\input{fig-dd-example-insert}
 
-\begin{figure}[H]
-  \centering
-  \begin{tikzpicture}[nodes = {align = left}]
-    \node [scale=.4]
-    {\includegraphics{figs/insert-8.eps}};
-  \end{tikzpicture}
-  \caption{How do we insert a mapping from key $8$ to value "q"?}
-  \label{fig:find-6}
-\end{figure}
 
 %% \subsection{Bijections to the naturals}
 %% \label{sec:DD:bij}
