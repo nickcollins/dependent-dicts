@@ -2,29 +2,36 @@
 \section{Implementation}
 \label{sec:DD}
 
-\subsection{Delta Indexing}
-
-Borrowing from association lists, \dds~ use a list-of-pairs, where the first item in each list represents
-a key and the second is the literal value that is mapped to the represented key. Unlike association lists,
-the natural number that represents the key is not its literal value. In order to maintain canonical order,
-while ensuring that every natural number is valid as the first item in a pair, that number must represent
-the non-negative difference between the key it represents and the previous key. We call this a "delta",
-alluding to the technique of \emph{delta encoding} which is more commonly harnessed for performance
-optimization (TODO source). If the number is $0$, we get duplicate keys - to prevent this, the offset is
-actually the delta plus $1$, so that a delta of $0$ indicates an offset (from the previous key) of $1$,\
-whereas a delta of $2$ indicates an offset of $3$. The head of the list does not follow the "plus $1$"
-rule, so the very first "delta" is interpreted literally, i.e. it represents a key of its exact
-value.
-
-
 \input{fig-dd-example}
 \input{fig-dd-example-find}
 \input{fig-dd-example-insert}
 
+%% \subsection{Delta Indexing}
+%% \subsection{Key Types and Deltas}
+\subsection{Deltas and Key Types}
+
+Borrowing from association lists, \dds{} use a list-of-pairs, where the first item in each list represents a key and the second is the literal value that is mapped to the represented key.
+%
+Unlike association lists, the natural number that represents the key is not its literal value.
+
+In order to maintain canonical order, while ensuring that every natural number is valid as the first item in a pair, that number must represent the non-negative difference between the key it represents and the previous key.
+%
+We call this number a \emph{delta}, alluding to the \emph{delta encoding} technique more commonly harnessed for performance optimization~\citep{XXX}.
+%
+As described so far, a $0$ offset would correspond to a duplicate key.
+%
+To prevent duplicate keys from being represented, a delta is actually the difference plus $1$: a delta of $0$ indicates an offset (from the previous key) of $1$, a delta of $2$ indicates an offset of $3$, and so on.
+%
+The head of the list, however, does not follow the "plus $1$" rule: so the first ``delta'' is interpreted literally, \ie{}~it represents the key value exactly.
+
+\autoref{fig:dd-example} depicts the delta dictionary corresponding to the example from \autoref{sec:Introduction}.
 
 %% \subsection{Bijections to the naturals}
 %% \label{sec:DD:bij}
-\parahead{Bijections to the naturals}
+\parahead{Bijections to Natural Numbers}
+
+\rkc{TODO}
+
 Note that the above definitions are in terms of a seemingly arbitrary key type,
 and use a function \texttt{convert} to convert terms of that type into naturals.
 In Agda, our \dd~ module accepts two parameters - the first is the key type \texttt{Key},
@@ -44,12 +51,24 @@ be a poor choice.
 
 \subsection{Lookup and Insertion}
 \label{sec:DD:basics}
-The basic functionality of dictionaries are lookup and insertion - they are defined as follows
-(TODO):
 
 \input{fig-haskell}
 
-The core theorems for lookup and insertion are as follows (TODO):
+\autoref{fig:dd-example-find} and \autoref{fig:dd-example-insert} illustrate example \texttt{find} and \texttt{lookup} operations.
+%
+These proceed largely as they would for association lists, but working indirectly with keys encoded as natural numbers and, furthermore, differences between these numbers.
+
+\autoref{fig:haskell} presents concrete implementations for \texttt{find} and \texttt{lookup} in Haskell (rather than Agda) for clarity of presentation.
+%
+Having to treat the first delta differently than the rest (literally rather than relatively) is the source of the somewhat technical---through simple---details.
+
+The \verb+lookup+ function identifies the first number \verb+base+ to serve as the initial ``counter'' used by \verb+lookup_iter+ to iterate over the list; this number is replaced by \verb+0+, allowing \verb+lookup_iter+ to work with lists that \emph{only} include true (\ie{}~relative) deltas.
+%
+When recursing, \verb+lookup_iter+ increases the counter to \texttt{cur + delta + 1} to account for the implicit ``plus $1$.''
+
+The \verb+insert+ function \rkc{blah blah blah...}
+
+\nick{The core theorems for lookup and insertion are as follows:}
 
 \subsection{Destruction}
 
@@ -57,8 +76,10 @@ The core theorems for lookup and insertion are as follows (TODO):
 
 \subsection{Additional Operations}
 
+\rkc{
 Our Agda mechanization also defines key deletion, union, map, and to/from-list operations, along
 with appropriate metatheory (not reproduced here).
+}
 
 
 
