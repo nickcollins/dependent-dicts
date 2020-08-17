@@ -5,16 +5,14 @@ import DD
 
 x |> f = f x
 
-test1 =
-  let
-    d :: Dict Nat String
-    d =
-      empty
-        |> insert 6 "d"
-        |> insert 3 "q"
-        |> insert 1 "b"
-        |> insert 3 "c"
-  in
-  do
-    putStrLn $ show d
-    mapM_ (\n -> putStrLn $ show $ (toInt n, DD.lookup n d)) [0..10]
+dict1 :: Dict Nat String
+dict1 =
+  empty
+    |> insert 6 "d"
+    |> insert 3 "q"
+    |> insert 1 "b"
+    |> insert 3 "c"
+
+test1 = do
+  putStrLn $ show dict1
+  mapM_ (\n -> putStrLn $ show $ (toInt n, DD.lookup n dict1)) [0..10]
