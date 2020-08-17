@@ -6,6 +6,10 @@
 \input{fig-dd-example-find}
 \input{fig-dd-example-insert}
 
+Our implementation of delta dictionaries and corresponding proofs are formalized in Agda and available in the anonymous supplementary materials.
+%
+\rkc{But maybe we show Haskell code (rather than Agda) for clarity in explaining the algorithms but their proofs.}
+
 %% \subsection{Delta Indexing}
 %% \subsection{Key Types and Deltas}
 \subsection{Deltas and Key Types}
@@ -74,6 +78,8 @@ The \verb+insert+ function \rkc{blah blah blah...}
 
 \rkc{move a bunch of that material from Case Study to here}
 
+\rkc{mainly discuss the implementation here. then discuss the difficulties with the library function's type in the properties section below.}
+
 \subsection{Additional Operations}
 
 \rkc{
@@ -84,10 +90,12 @@ with appropriate metatheory (not reproduced here).
 
 
 %% \subsection{Core properties}
-\section{Properties}
+%% \section{Properties}
+\subsection{Properties}
 \label{sec:DD:props}
 
-\subsection{Design Goals}
+%% \subsection{Design Goals}
+\parahead{Design Goals}
 
 The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to \emph{contraction} and
 \emph{exchange} are defined below, and proven in Agda. \SemTot~ cannot be formally defined - rather
@@ -151,7 +159,8 @@ s.t. $D = D' , (k, v)$.
 
 \end{theorem}
 
-\subsection{Contraction and Exchange}
+%% \subsection{Contraction and Exchange}
+\parahead{Contraction and Exchange}
 
 \rkc{Two common properties for PL metatheory.}
 
