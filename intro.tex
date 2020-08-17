@@ -149,7 +149,9 @@ None of the conventional representations satisfies both \SemTot{} and \SemInj{},
 %
 We offer a solution, dubbed \emph{\dds{}}, which achieves the first three of the desired properties, and partially achieves the fourth. 
 %
-A \dd{} is similar to a canonical association list, but instead of storing each literal key value, it stores the \emph{difference} from the previous key, minus 1.
+%% A \dd{} is similar to a canonical association list, but instead of storing each literal key value, it stores the \emph{difference} from the previous key, minus 1.
+%
+A \dd{} can be described as a ``canonical-by-construction'' association list: instead of storing each literal key value, it stores the \emph{difference} from the previous key, minus 1.
 %
 For example, compare the canonical association list and \dd{} for the \autoref{fig:intro-example} example:
 
