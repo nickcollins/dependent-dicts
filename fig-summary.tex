@@ -21,16 +21,16 @@
   %% {Decidable equality}
   %% {Eq K}
   %% {(=) : (K,K) -> Bool}
-  {(=)}
+  {$(=)$}
 \newcommand{\ord}
   %% {Orderable}
   %% {Eq K, Ord K}
   %% {(=),(<) : (K,K) -> Bool}
-  {(=), (<)}
+  {$(=), (<)$}
 \newcommand{\isoNat}
   %% {Bijects to naturals}
   %% {K $\leftrightarrow$ Nat}
-  {f : K $\leftrightarrow$ Nat}
+  {$f\hspace{0.02in}\!:\!\hspace{0.02in}K \leftrightarrow \textit{Nat}$}
 
 \newcommand{\header}[1]
   {\makebox[0.67in]{#1}}
@@ -43,7 +43,7 @@
   \multirow{2}{*}{}
            & \multicolumn{5}{c||}{\footnotesize Client Usage}
            & {\footnotesize Implementation} \\ \cline{2-7}
-   \headers{\total}{\extensional}{\decidable}{\destructible}{Key Type K}{Simple}    \\ \hline
+   \headers{\total}{\extensional}{\decidable}{\destructible}{Key Type $K$}{Simple}    \\ \hline
    \Sal    & \yes   & \no        & \yes      & \yes         & \eq       & \yesPlus  \\ %% \hline
    \Cal    & \no    & \yes       & \yes      & \yes         & \ord      & \yesMinus \\ %% \hline
    \Fpf    & \noBut & \yes       & \no       & \no          & \eq       & \yes      \\ \hline
