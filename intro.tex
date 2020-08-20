@@ -49,11 +49,11 @@ However, a plain function type does not rule out the possibility of the term bei
 %
 }
 %
-Worse is the fact that, unlike either association list representation, (extensional) equality of partial functions is not decidable.
+Worse is the fact that, unlike either association list representation, equality of partial functions is not decidable.
 %
 The function type could be refined with its domain---\ie{}~a canonical list of keys---but would then suffer the drawbacks of manipulating validity proofs \`{a} la canonical association lists.
 
-In isolation, each of the aforementioned drawbacks is minor and can be worked around.
+In some cases, the aforementioned drawbacks are minor and or can be worked around.
 %
 But developing large proofs is challenging, so any stumbling block---the inability to use built-in equality to establish semantic equivalence of two objects, or the awkwardness of packaging proof terms with data (noting the difficulties that arise from proof relevance)---can cause exorbitant increases in verbosity, time, effort, and accidental complexity.
 
@@ -117,7 +117,7 @@ Equality, in the sense primitive to the metalanguage (\ie{}~reflexive equality r
 
 \end{enumerate}
 
-Furthermore, in addition to properties about the external interface of the data structure, it is often useful to retain the ability to inspect, iterate, and manipulate the internal representation.
+Furthermore, in addition to properties about the external interface of the data structure, it is often useful to retain the ability to inspect, iterate, and manipulate sub-dictionaries.
 %
 Thus, our final design goal:
 
