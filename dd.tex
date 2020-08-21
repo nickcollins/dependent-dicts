@@ -66,11 +66,13 @@ These proceed largely as they would for association lists, but working indirectl
 %
 %Having to treat the first delta differently than the rest (literally rather than relatively) is the source of the somewhat technical---through simple---details.
 
-The \verb+lookup+ function identifies the first number \verb+base+ to serve as the initial ``counter'' used by \verb+lookup_iter+ to iterate over the list; this number is replaced by \verb+0+, allowing \verb+lookup_iter+ to work with lists that \emph{only} include true (\ie{}~relative) deltas.
-%
-When recursing, \verb+lookup_iter+ increases the counter to \texttt{cur + delta + 1} to account for the implicit ``plus $1$.''
+First, we define a helper function \verb+delta+ which computes the delta, \ie{} the offset minus $1$, between two numbers (assuming the second is larger).
 
-The \verb+insert+ function \rkc{blah blah blah...}
+Given that, \verb+lookup+ is straightfoward. The \verb+insert+ function is also fairly straightforward - if the first pair is an exact match, then we simply
+%
+replace the old value with the new one. If the delta to insert is less than delta of the first pair, then we place the delta to insert as the first pair of the new list, and
+%
+the original first pair will be the second pair of the new list, but using the delta between its original value and the inserted delta.
 
 \nick{The core theorems for lookup and insertion are as follows:}
 
