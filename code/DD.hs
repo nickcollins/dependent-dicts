@@ -1,5 +1,5 @@
 module DD
-  (DD, empty, lookup, insert, uncons) where
+  (DD, empty, lookup, insert, destruct) where
 
 import Prelude hiding (lookup)
 import Nat  -- exposes Bij class
@@ -13,14 +13,14 @@ delta :: Nat -> Nat -> Nat
 delta x y = y - x - 1
 
 lookup :: Bij k => DD k v -> k -> Maybe v
-lookup (DD dd) k = look dd (toNat k)
+lookup (DD dd) k = lkup dd (toNat k)
   where
-    look :: [(Nat, v)] -> Nat -> Maybe v
-    look [] _ = Nothing
-    look ((hx, hv) : t) x
+    lkup :: [(Nat, v)] -> Nat -> Maybe v
+    lkup [] _ = Nothing
+    lkup ((hx, hv) : t) x
       | x < hx  = Nothing
       | x == hx = Just hv
-      | True    = look t (delta hx x)
+      | True    = lkup t (delta hx x)
 
 insert :: Bij k => DD k v -> (k, v) -> DD k v
 insert (DD dd) (k, v) = DD (ins dd (toNat k, v))
@@ -32,8 +32,8 @@ insert (DD dd) (k, v) = DD (ins dd (toNat k, v))
       | x == hx = (x, v) : t
       | True    = (hx, hv) : ins t (delta hx x, v)
 
-uncons :: Bij k => DD k v -> Maybe ((k, v), DD k v)
-uncons (DD []) = Nothing
-uncons (DD [(x, v)]) = Just ((fromNat x, v), DD [])
-uncons (DD ((x, v1) : (y, v2) : t)) =
+destruct :: Bij k => DD k v -> Maybe ((k, v), DD k v)
+destruct (DD []) = Nothing
+destruct (DD [(x, v)]) = Just ((fromNat x, v), DD [])
+destruct (DD ((x, v1) : (y, v2) : t)) =
   Just ((fromNat x, v1), DD ((x + y + 1, v2) : t))
