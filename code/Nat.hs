@@ -27,10 +27,10 @@ instance Enum Nat where
   toEnum i = fromInteger (fromIntegral i)
   fromEnum = toInt
 
-class NatLike a where
+class Bij a where
   toNat :: a -> Nat
   fromNat :: Nat -> a
 
-instance NatLike Nat where
+instance Bij Nat where
   toNat = id
   fromNat = id

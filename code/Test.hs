@@ -7,7 +7,7 @@ x |> f = f x
 
 ins k v d = DD.insert d (k, v)
 
-dict1 :: Dict Nat String
+dict1 :: DD Nat String
 dict1 =
   empty
     |> ins 6 "d"

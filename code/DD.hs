@@ -1,41 +1,39 @@
-module DD (Dict, empty, lookup, insert, destruct) where
+module DD
+  (DD, empty, lookup, insert, uncons) where
 
 import Prelude hiding (lookup)
-import Nat
+import Nat  -- exposes Bij class
 
-empty    :: Dict k v
-lookup   :: NatLike k => Dict k v -> k -> Maybe v
-insert   :: NatLike k => Dict k v -> (k, v) -> Dict k v
-destruct :: NatLike k => Dict k v -> Maybe ((k, v), Dict k v)
+newtype DD k v = DD [(Nat, v)] deriving (Show)
 
-newtype Dict k v = DD (DeltaList v) deriving (Show)
-type DeltaList v = [(Nat, v)]
-
+empty :: DD k v
 empty = DD []
 
 delta :: Nat -> Nat -> Nat
 delta x y = y - x - 1
 
-lookup (DD dd) k = lookup' dd (toNat k)
+lookup :: Bij k => DD k v -> k -> Maybe v
+lookup (DD dd) k = look dd (toNat k)
   where
-    lookup' :: [(Nat, v)] -> Nat -> Maybe v
-    lookup' [] _ = Nothing
-    lookup' ((hx, hv) : t) x
-      | x < hx    = Nothing
-      | x == hx   = Just hv
-      | otherwise = lookup' t (delta hx x)
+    look :: [(Nat, v)] -> Nat -> Maybe v
+    look [] _ = Nothing
+    look ((hx, hv) : t) x
+      | x < hx  = Nothing
+      | x == hx = Just hv
+      | True    = look t (delta hx x)
 
-insert (DD dd) (k, v) = DD (insert' dd (toNat k, v))
+insert :: Bij k => DD k v -> (k, v) -> DD k v
+insert (DD dd) (k, v) = DD (ins dd (toNat k, v))
   where
-    insert' :: [(Nat, v)] -> (Nat, v) -> [(Nat, v)]
-    insert' [] (x, v) = [(x, v)]
-    insert' ((hx, hv) : t) (x, v)
-      | x < hx    = (x, v) : (delta x hx, hv) : t
-      | x == hx   = (x, v) : t
-      | otherwise = (hx, hv) : insert' t (delta hx x, v)
+    ins :: [(Nat, v)] -> (Nat, v) -> [(Nat, v)]
+    ins [] (x, v) = [(x, v)]
+    ins ((hx, hv) : t) (x, v)
+      | x < hx  = (x, v) : (delta x hx, hv) : t
+      | x == hx = (x, v) : t
+      | True    = (hx, hv) : ins t (delta hx x, v)
 
-destruct (DD [])                              = Nothing
-destruct (DD [(base, v1)])                    = Just ((fromNat base, v1), DD [])
-destruct (DD ((base, v1) : (delta, v2) : dl)) = Just (kv1, DD (kv2 : dl))
-                                                  where kv1 = (fromNat base, v1)
-                                                        kv2 = (base + delta + 1, v2)
+uncons :: Bij k => DD k v -> Maybe ((k, v), DD k v)
+uncons (DD []) = Nothing
+uncons (DD [(x, v)]) = Just ((fromNat x, v), DD [])
+uncons (DD ((x, v1) : (y, v2) : t)) =
+  Just ((fromNat x, v1), DD ((x + y + 1, v2) : t))
