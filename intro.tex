@@ -30,20 +30,20 @@ To establish a one-to-one correspondence between association lists and semantic 
 %
 The second association list described in \autoref{fig:intro-example} is one such example.
 %
-This approach allows proofs with canonical association lists to use built-in equality for comparison, at the expense of extending the underlying list type---which allows arbitrary, possibly invalid lists---with a proof of validity that refines the coarser type.
+This approach allows proofs with canonical association lists to use built-in equality for semantic equivalence, at the expense of extending the underlying list type---which allows arbitrary, possibly invalid lists---with a proof of validity that refines the coarser type.
 
 A third conventional solution is to represent dictionaries as finite partial functions~\citep{XXX,XXX,XXX}.
 %
 The third line of \autoref{fig:intro-example} depicts a nested lambda-expression that serves as the ``lookup table.'' 
 %
-Assuming the additional postulate of \emph{functional extensionality}~\cite{XXX}, this representation allows for the use of built-in equality.\footnote{\hspace{0.01in}%
+Assuming the additional postulate of \emph{functional extensionality}~\cite{XXX}, this representation allows for the use of built-in equality for semantic equivalence.\footnote{\hspace{0.01in}%
 %
 The postulate is consistent with the constructive calculi underlying most popular proof assistants~\citep{XXX}.
 %
 }
 \nick{Clarify how funext ensures that semantically equivalent functions are primitively equal, regardless of how you construct the function.}
 %
-However, a plain function type does not rule out the possibility of the term being a \emph{non-}finite map, thus requiring additional proofs of validity as with canonical association lists.\footnote{\hspace{0.01in}%
+However, a plain function type does not rule out the possibility of the term being a \emph{non-}finite map, possibly requiring additional proofs of validity as with canonical association lists.\footnote{\hspace{0.01in}%
 %
 \rkc{Explain why maybe this isn't so bad...}
 %
@@ -51,9 +51,9 @@ However, a plain function type does not rule out the possibility of the term bei
 %
 Worse is the fact that, unlike either association list representation, equality of partial functions is not decidable.
 %
-The function type could be refined with its domain---\ie{}~a canonical list of keys---but would then suffer the drawbacks of manipulating validity proofs \`{a} la canonical association lists.
+The function type could be refined with its domain---\ie{}~a canonical list of keys---but would then suffer the drawbacks of manipulating validity proofs \`{a} la canonical association lists while being needlessly complicated.
 
-In some cases, the aforementioned drawbacks are minor and or can be worked around.
+In some cases, the aforementioned drawbacks are minor or can be worked around.
 %
 But developing large proofs is challenging, so any stumbling block---the inability to use built-in equality to establish semantic equivalence of two objects, or the awkwardness of packaging proof terms with data (noting the difficulties that arise from proof relevance)---can cause exorbitant increases in verbosity, time, effort, and accidental complexity.
 
@@ -106,14 +106,13 @@ Every term in the representation type is semantically valid, \ie{}~the mapping f
 %
 \designGoal{\SemInj}
 %
-Two unequal terms have different semantic meanings, \ie{}~the mapping from terms to their semantic meanings is injective.
+Built-in equality corresponds to semantic equivalence, \ie{} two unequal terms have different semantic meanings.
 
 \item
 %
 \designGoal{\EqDec}
 %
-Equality, in the sense primitive to the metalanguage (\ie{}~reflexive equality rather than semantic equivalence) is decidable for the type.
-\\ \nick{s/reflexiv/primitiv/g , or something}
+Built-in equality is decidable for the type.
 
 \end{enumerate}
 
@@ -133,7 +132,7 @@ The ability to decompose a data structure into atomic parts, to facilitate inspe
 
 \end{enumerate}
 
-\autoref{fig:prop-summary} summarizes the preceding discussion along these dimensions; note that all conventional representations except partial functions (without keys) can be easily destructed.
+\autoref{fig:prop-summary} summarizes the preceding discussion along these dimensions; note that all conventional representations except partial functions can be easily destructed.
 %
 %% None of the conventional representations satisfies both \SemTot{} and \SemInj{}, let alone the additional properties.
 %
