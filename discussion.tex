@@ -1,40 +1,73 @@
-\section{Discussion}
+\section{Discussion and Related Work}
 \label{sec:Discussion}
 
-\nick{Part 1: Citations/discussions organized around summary table.}
+Due to their simplicity, {\SAL}s are perhaps the most typical implementation for dictionaries.
+%
+However, \SemInj{} is of such importance in simplifying proofs that {\FPF}s, despite requiring a bit of extra overhead, also see significant use,
+%
+including in key works such as \emph{Software Foundations} \cite[Maps]{Pierce:SF1}.
+%
+{\CAL}s seem to get little use, perhaps because working with refinement proofs might add more hassle than \SemInj{} alleviates.
+%
+{\CAL}s are defined in the Coq standard library as \texttt{FMapList} \citep{XXX,XXX,XXX}; a Github search for \texttt{FMapList} shows $304$ results,
+%
+whereas a search for \texttt{FMapAVL} shows $474$ results, suggesting that {\CAL}s have been found to be less useful than high-performance implementations.
+%
+A search for \texttt{FunctionalExtensionality}, on the other hand, turns up $4916$ results, though most of these are probably unrelated to dictionaries.
+%
+\citep{XXX,XXX,XXX} \nick{Amorim ref} provides a more comprehensive treatment of {\CAL}s, augmenting them with a functional interface so that the client can
+%
+use them as though they were {\FPF}s.
 
-\nick{Part 2: Limitations, when plain dictionaries are enough to model order-sensitive type environments.}
+% github searches
+% funext        : 4916
+% FMapInterface : 504
+% FMapAVL       : 474
+% FMapList      : 304
 
-\nick{Part 3: Future design of more complex data structures that satisfy desirable properties like those considered for dictionaries in this paper. Blah.}
+Sometimes, dictionaries are not used at all. When the order of bindings doesn't matter, dictionaries are a natural choice for type contexts,
+%
+but if types defined "later", or in inner scopes, can refer to to types defined in earlier/outer scopes, then order-insensitive dictionaries
+%
+are inherently inappropriate. This is the case with languages that support subtyping, notably the subject of the POPLMark challenge. Linear logics, on the other hand,
+%
+require sensitivity to duplicate insertions, so duplication-insensitive dictionaries are inappropriate for them as well. In these cases, {\SAL}s remain the most
+%
+natural choice, though future work could explore the possibility of data structures that are sensitive to ordering but not duplication, or vice versa.
+%
+Dictionary use is also avoided in many systems that use substitution rather than environments. For these reasons, many existing mechanizations make little use of
+%
+order-and-duplication-insensitive dictionaries. However, as mechanization becomes increasingly popular, for an ever-broadening scope of applications,
+%
+it seems inevitable that a programming utility as fundamental as dictionaries will eventually become ubiquitous, at which point it will be important to have the
+%
+best implementations at our disposal.
 
-TODO TODO TODO - REFERENCES
-\\
-the second answer on this stack overflow suggests the finite partial function approach:
-\\
-https://stackoverflow.com/questions/47362451/creating-a-dictionary-map-in-coq
-\\
-oh hey appears that this is in software foundations too (mention of extensionality here as well)
-\\
-https://6826.csail.mit.edu/2019/lf/Maps.html
-\\
-A comprehensive, extensionality-aware hybrid of CAL and FPF is at
-\\
-https://github.com/arthuraa/extructures/blob/master/theories/fmap.v
-\\
-(also try to make sense of https://github.com/arthuraa/coq-utils/blob/master/theories/nominal.v )
-\\
-Coq also has CALs
-\\
-https://coq.inria.fr/library/Coq.FSets.FMapList.html
-\\
-Coq also has FMapPositive, which is a tree based on the binary representation
-\\
-This one seems to attach a canonicity proof to an ordinary list:
-\\
-http://www.cs.bc.edu/~tassarot/papers/iris-refinement/coqdoc/iris.prelude.natmap.html
-\\
-something something explicit substitutions, Abadi et al. POPL 1990.
-\\
-Look deeper into TDD with Idris
 
-\citep{HazelnutPOPL}
+It was noted above that AVL implementations are apparently more popular than {\CAL}s, and as more software is mechanized, performance is likely to become an
+%
+even greater concern than it is today. In cases where there is no extraction step, and the proof language is also the language that will be executed,
+%
+there may be no choice but to use implementations that are high-performance but theoretically unwieldy. However, it seems more appropriate, especially with
+%
+fundamental utilities such as dictionaries, to either extract or transpile the mechanization into an implementation language that defines these utilities natively
+%
+by way of highly efficient implementations such as hashtables or red-black trees. This extraction may not be completely fidelitous, since it will be using a
+%
+different data structure in the implementation than was used in the proofs, but presumably the implementation's version of dictionaries is well-tested and bug-free,
+%
+and its definition of equality is, at least for fundamental utilities such as dictionaries, extensional and decidable. Regardless, even if unperformant implementations
+%
+cannot be used for code that will be run, they may be useful for parts of the code which are only used for proofs and will not be executed.
+
+
+This paper discusses the important properties \SemTot, \SemInj, \EqDec, and \EzDstr, and offers an implementation for dictionaries that (mostly) fulfills these properties.
+%
+Future work could consider implementations for other key utilities, such as trees or graphs, that satisfy these properties. Doing so could be highly valuable,
+%
+but also far more challenging. It is relatively easy to simultaneously satisfy \SemTot{} and \SemInj{} for list-like structures such as dictionaries,
+%
+but much more awkward to do so for highly structural data such as graphs. For graphs in particular, establishing a one-to-one correspondence between terms and
+%
+semantic meanings requires understanding of the graph isomorphism problem, which besides being NP-hard, involves complex algebra.
+
