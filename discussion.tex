@@ -1,23 +1,36 @@
 \section{Discussion and Related Work}
 \label{sec:Discussion}
 
-Due to their simplicity, {\SAL}s are perhaps the most typical implementation for dictionaries.
+\vspace{0.05in} %% SPACE HACK
+
+%% \parahead{Association Lists and Partial Functions}
+%% \parahead{Conventional Dictionary Representations}
+
+\parahead{Conventional Representations}
 %
-However, \SemInj{} is of such importance in simplifying proofs that {\FPF}s, despite requiring a bit of extra overhead, also see significant use,
+Due to their simplicity, {\sal}s are perhaps the most typical implementation for dictionaries.
 %
-including in key works such as \emph{Software Foundations} \cite[Maps]{Pierce:SF1}.
+But because \SemInj{} is so important in simplifying proofs, {\FPF}s also see significant use---in key works such as \emph{Software Foundations}~\cite[Maps]{Pierce:SF1}---despite requiring a bit of extra overhead.
+
+%% TODO macro?
+
+\Cals{} seem to get little use, perhaps because working with refinement proofs might add more hassle than \SemInj{} alleviates.
 %
-{\CAL}s seem to get little use, perhaps because working with refinement proofs might add more hassle than \SemInj{} alleviates.
+\Cals{} are defined in the Coq standard library as \texttt{FMapList} \citep{XXX,XXX,XXX}; a GitHub search for \texttt{FMapList} shows $304$ results,
 %
-{\CAL}s are defined in the Coq standard library as \texttt{FMapList} \citep{XXX,XXX,XXX}; a Github search for \texttt{FMapList} shows $304$ results,
+whereas a search for \texttt{FMapAVL} shows $474$ results, suggesting that {\cal}s have been found to be less useful than high-performance implementations.
 %
-whereas a search for \texttt{FMapAVL} shows $474$ results, suggesting that {\CAL}s have been found to be less useful than high-performance implementations.
+A search for \texttt{FunctionalExtensionality}, on the other hand, turns up $4916$ results, though most of these are probably unrelated to dictionaries.\footnote{
 %
-A search for \texttt{FunctionalExtensionality}, on the other hand, turns up $4916$ results, though most of these are probably unrelated to dictionaries.
+\rkc{URLs for the searches?}
 %
-\citep{XXX,XXX,XXX} \nick{Amorim ref} provides a more comprehensive treatment of {\CAL}s, augmenting them with a functional interface so that the client can
+Accessed August 23, 2020.
 %
-use them as though they were {\FPF}s.
+}
+%
+\citep{XXX,XXX,XXX} \nick{Amorim ref} provides a more comprehensive treatment of {\cal}s, augmenting them with a functional interface so that the client can
+%
+use them as though they were {\fpf}s.
 
 % github searches
 % funext        : 4916
@@ -25,26 +38,35 @@ use them as though they were {\FPF}s.
 % FMapAVL       : 474
 % FMapList      : 304
 
-Sometimes, dictionaries are not used at all. When the order of bindings doesn't matter, dictionaries are a natural choice for type contexts,
+\parahead{Dictionaries vs. Custom Datatypes}
+
+Dictionaries are not always used to represent environments in mechanizations of programming language theory.
+
+When the order of bindings does not matter, dictionaries are a natural choice for type contexts.
 %
-but if types defined "later", or in inner scopes, can refer to to types defined in earlier/outer scopes, then order-insensitive dictionaries
+But if types defined ``later,'' or in inner scopes, can refer to types defined ``earlier,'' or in outer scopes, then order-insensitive dictionaries are inherently inappropriate.
 %
-are inherently inappropriate. This is the case with languages that support subtyping, notably the subject of the POPLMark challenge. Linear logics, on the other hand,
+This is the case for languages that support subtyping (notably, the subject of the POPLMark challenge~\citep{XXX}).
 %
-require sensitivity to duplicate insertions, so duplication-insensitive dictionaries are inappropriate for them as well. In these cases, {\SAL}s remain the most
+Linear logics, on the other hand, require sensitivity to duplicate insertions, so duplication-insensitive dictionaries are inappropriate for them as well.
 %
-natural choice, though future work could explore the possibility of data structures that are sensitive to ordering but not duplication, or vice versa.
+Though {\sal}s remain the most natural choice in these cases, future work could explore data structures that are sensitive to ordering but not duplication, or vice versa.
+
+The use of dictionaries is furthermore avoided in many systems that use substitution rather than environments
 %
-Dictionary use is also avoided in many systems that use substitution rather than environments. For these reasons, many existing mechanizations make little use of
+in defining the dynamic semantics of a language.
+
+For these reasons, many existing mechanizations make little use of order-and-duplication-insensitive dictionaries. 
 %
-order-and-duplication-insensitive dictionaries. However, as mechanization becomes increasingly popular, for an ever-broadening scope of applications,
+However, as mechanization becomes increasingly popular, for an ever-broadening scope of applications,
 %
 it seems inevitable that a programming utility as fundamental as dictionaries will eventually become ubiquitous, at which point it will be important to have the
 %
 best implementations at our disposal.
 
-
-It was noted above that AVL implementations are apparently more popular than {\CAL}s, and as more software is mechanized, performance is likely to become an
+\parahead{Performance Concerns}
+%
+It was noted above that AVL implementations are apparently more popular than {\cal}s, and as more software is mechanized, performance is likely to become an
 %
 even greater concern than it is today. In cases where there is no extraction step, and the proof language is also the language that will be executed,
 %
@@ -60,12 +82,15 @@ and its definition of equality is, at least for fundamental utilities such as di
 %
 cannot be used for code that will be run, they may be useful for parts of the code which are only used for proofs and will not be executed.
 
-
+\parahead{Conclusion}
+%
 This paper discusses the important properties \SemTot, \SemInj, \EqDec, and \EzDstr, and offers an implementation for dictionaries that (mostly) fulfills these properties.
 %
-Future work could consider implementations for other key utilities, such as trees or graphs, that satisfy these properties. Doing so could be highly valuable,
+Future work could consider implementations for other key utilities, such as trees or graphs, that satisfy these properties.
 %
-but also far more challenging. It is relatively easy to simultaneously satisfy \SemTot{} and \SemInj{} for list-like structures such as dictionaries,
+Doing so could be far more challenging.
+%
+It is relatively easy to simultaneously satisfy \SemTot{} and \SemInj{} for list-like structures such as dictionaries,
 %
 but much more awkward to do so for highly structural data such as graphs. For graphs in particular, establishing a one-to-one correspondence between terms and
 %
