@@ -1,8 +1,13 @@
 module DD
-  (DD, empty, lookup, insert, destruct) where
+  ( DD, Key(..)
+  , empty, lookup, insert, destruct ) where
 
 import Prelude hiding (lookup)
-import Nat  -- exposes Bij class
+import Nat
+
+class Key a where
+  toNat   :: a -> Nat
+  fromNat :: Nat -> a
 
 newtype DD k v = DD [(Nat, v)] deriving (Show)
 
@@ -12,7 +17,7 @@ empty = DD []
 delta :: Nat -> Nat -> Nat
 delta x y = y - x - 1
 
-lookup :: Bij k => DD k v -> k -> Maybe v
+lookup :: Key k => DD k v -> k -> Maybe v
 lookup (DD dd) k = lkup dd (toNat k)
   where
     lkup :: [(Nat, v)] -> Nat -> Maybe v
@@ -22,7 +27,7 @@ lookup (DD dd) k = lkup dd (toNat k)
       | x == hx = Just hv
       | True    = lkup t (delta hx x)
 
-insert :: Bij k => DD k v -> (k, v) -> DD k v
+insert :: Key k => DD k v -> (k, v) -> DD k v
 insert (DD dd) (k, v) = DD (ins dd (toNat k, v))
   where
     ins :: [(Nat, v)] -> (Nat, v) -> [(Nat, v)]
@@ -32,7 +37,7 @@ insert (DD dd) (k, v) = DD (ins dd (toNat k, v))
       | x == hx = (x, v) : t
       | True    = (hx, hv) : ins t (delta hx x, v)
 
-destruct :: Bij k => DD k v -> Maybe ((k, v), DD k v)
+destruct :: Key k => DD k v -> Maybe ((k, v), DD k v)
 destruct (DD []) = Nothing
 destruct (DD [(x, v)]) = Just ((fromNat x, v), DD [])
 destruct (DD ((x, v1) : (y, v2) : t)) =

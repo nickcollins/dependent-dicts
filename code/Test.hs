@@ -5,6 +5,10 @@ import DD
 
 x |> f = f x
 
+instance Key Nat where
+  toNat = id
+  fromNat = id
+
 ins k v d = DD.insert d (k, v)
 
 dict1 :: DD Nat String

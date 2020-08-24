@@ -27,6 +27,7 @@ instance Enum Nat where
   toEnum i = fromInteger (fromIntegral i)
   fromEnum = toInt
 
+{-
 class Bij a where
   toNat :: a -> Nat
   fromNat :: Nat -> a
@@ -34,3 +35,4 @@ class Bij a where
 instance Bij Nat where
   toNat = id
   fromNat = id
+-}
