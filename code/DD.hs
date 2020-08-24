@@ -25,7 +25,7 @@ lookup (DD dd) k = lkup dd (toNat k)
     lkup ((hx, hv) : t) x
       | x < hx  = Nothing
       | x == hx = Just hv
-      | True    = lkup t (delta hx x)
+      | x > hx  = lkup t (delta hx x)
 
 insert :: Key k => DD k v -> (k, v) -> DD k v
 insert (DD dd) (k, v) = DD (ins dd (toNat k, v))
@@ -35,10 +35,11 @@ insert (DD dd) (k, v) = DD (ins dd (toNat k, v))
     ins ((hx, hv) : t) (x, v)
       | x < hx  = (x, v) : (delta x hx, hv) : t
       | x == hx = (x, v) : t
-      | True    = (hx, hv) : ins t (delta hx x, v)
+      | x > hx  = (hx, hv) : ins t (delta hx x, v)
 
 destruct :: Key k => DD k v -> Maybe ((k, v), DD k v)
 destruct (DD []) = Nothing
-destruct (DD [(x, v)]) = Just ((fromNat x, v), DD [])
+destruct (DD [(x, v1)]) =
+  Just ((fromNat x, v1), DD [])
 destruct (DD ((x, v1) : (y, v2) : t)) =
   Just ((fromNat x, v1), DD ((x + y + 1, v2) : t))
