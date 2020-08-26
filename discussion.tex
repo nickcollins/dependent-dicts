@@ -16,7 +16,7 @@ But because \SemInj{} is so important in simplifying proofs, {\FPF}s also see si
 
 \Cals{} seem to get little use, perhaps because working with refinement proofs might add more hassle than \SemInj{} alleviates.
 %
-\Cals{} are defined in the Coq standard library as \texttt{FMapList} \citep{XXX,XXX,XXX}; a GitHub search for \texttt{FMapList} shows $304$ results,
+\Cals{} are defined in the Coq standard library as \texttt{FMapList} \citep{FMapList}; a GitHub search for \texttt{FMapList} shows $304$ results,
 %
 whereas a search for \texttt{FMapAVL} shows $474$ results, suggesting that {\cal}s have been found to be less useful than high-performance implementations.
 %
@@ -28,7 +28,7 @@ Accessed August 23, 2020.
 %
 }
 %
-\citep{XXX,XXX,XXX} \nick{Amorim ref} provides a more comprehensive treatment of {\cal}s, augmenting them with a functional interface so that the client can
+\citep{Amorim:fmap} provides a more comprehensive treatment of {\cal}s, augmenting them with a functional interface so that the client can
 %
 use them as though they were {\fpf}s.
 
@@ -96,3 +96,8 @@ but much more awkward to do so for highly structural data such as graphs. For gr
 %
 semantic meanings requires understanding of the graph isomorphism problem, which besides being NP-hard, involves complex algebra.
 
+% Other things to consider mentioning, but probably not
+% - try to make sense of https://github.com/arthuraa/coq-utils/blob/master/theories/nominal.v
+% - Coq also has FMapPositive, which is a tree based on the binary representation
+% - something something explicit substitutions, Abadi et al. POPL 1990.
+% - Look deeper into TDD with Idris
