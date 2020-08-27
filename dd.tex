@@ -6,7 +6,7 @@
 
 Our implementation of delta dictionaries and corresponding proofs are formalized in Agda and available in the anonymous supplementary materials.
 %
-\rkc{But maybe we show Haskell code (rather than Agda) for clarity in explaining the algorithms but their proofs.}
+In the paper, we use Haskell, which is simpler and more familiar.
 
 %% \subsection{Delta Indexing}
 %% \subsection{Key Types and Deltas}
@@ -90,10 +90,8 @@ so we do not prove any of the theorems pertaining to ordering (\ie{} those that 
 
 \subsection{Additional Operations}
 
-\rkc{
 Our Agda mechanization also defines key deletion, union, map, and to/from-list operations, along
 with appropriate metatheory (not reproduced here).
-}
 
 
 
@@ -110,13 +108,13 @@ The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to \emph{c
 its truth is apparent from the fact that the other theorems do not require their \dd~ arguments to
 be refined with validity premises.
 
-\begin{proposition}[\SemTot]
-
-\breakAndIndent
+%\begin{proposition}[\SemTot]
 %
-\rkc{Blah}
-
-\end{proposition}
+%\breakAndIndent
+%%
+%\rkc{Blah}
+%
+%\end{proposition}
 
 \begin{theorem}[\SemInj]
 \label{thm:SemInj}
@@ -168,9 +166,9 @@ s.t. $D = D' , (k, v)$.
 \end{theorem}
 
 %% \subsection{Contraction and Exchange}
-\parahead{Contraction and Exchange}
+\parahead{Contraction and Exchange for Dictionaries}
 
-\rkc{Two common properties for PL metatheory.}
+%\rkc{Two common properties for PL metatheory.}
 
 \begin{theorem}[Dictionary Contraction]
 \label{thm:cont-dicts}
