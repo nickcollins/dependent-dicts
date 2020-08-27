@@ -7,6 +7,7 @@ import Nat
 
 class Key a where
   toNat   :: a -> Nat
+  -- in Agda, fromNat is defined indirectly
   fromNat :: Nat -> a
 
 newtype DD k v = DD [(Nat, v)] deriving (Show)
