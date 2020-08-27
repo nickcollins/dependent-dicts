@@ -72,7 +72,15 @@ replace the old value with the new one. If the delta to insert is less than delt
 %
 the original first pair will be the second pair of the new list, but using the delta between its original value and the inserted delta.
 
-\nick{The core theorems for lookup and insertion are as follows:}
+\cite[Facts about weak maps]{FMapFacts} lists key metatheory about dictionaries, including that for \verb+lookup+, \verb+insert+, and \verb+destruct+.
+%
+Our Agda mechanization proves the relevant subset of this metatheory. Some of the metatheory in the Coq treatment involves concepts not relevant to our treatment,
+%
+especially multiple distinct notions of equality. Also, although our implementation maintains a strict ordering, this order is dependent on a bijection
+%
+with the naturals, and thus may be arbitrary or meaningless. Accordingly, the order of elements is not exposed through our interface,
+%
+so we do not prove any of the theorems pertaining to ordering (\ie{} those that are not ``weak'').
 
 \subsection{Destruction}
 
