@@ -38,14 +38,15 @@ The third line of \autoref{fig:intro-example} depicts a nested lambda-expression
 %
 Assuming the additional postulate of \emph{functional extensionality}~\cite{XXX}, this representation allows for the use of built-in equality for semantic equivalence.\footnote{\hspace{0.01in}%
 %
-The postulate is consistent with the constructive calculi underlying most popular proof assistants~\citep{XXX}.
+This postulate is consistent with the constructive calculi underlying most popular proof assistants~\citep{XXX}.
 %
 }
-\nick{Clarify how funext ensures that semantically equivalent functions are primitively equal, regardless of how you construct the function.}
 %
 However, a plain function type does not rule out the possibility of the term being a \emph{non-}finite map, possibly requiring additional proofs of validity as with canonical association lists.\footnote{\hspace{0.01in}%
 %
-\rkc{Explain why maybe this isn't so bad...}
+This often isn't a problem in practice -- in cases where the dictionary is not iterated or otherwise destructed, an infinite dictionary will generally work just as well as a finite one,
+%
+so it's not actually necessary to retain a proof that the dictionary is finite.
 %
 }
 %
