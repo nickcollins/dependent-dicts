@@ -231,7 +231,7 @@ structure that possesses all four properties? Not likely - as mentioned above, t
 \SemInj~ and \SemTot~ essentially
 necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
 makes it dangerous for client code to mess with the raw data. As such, we believe we've uncovered an
-inherent trade-off between desirable properties. In cases where \EqDec{} is critical,
-and the need to destruct dictionaries is occasional but rare, \dds{} seem to be a clear winner over
-the conventional solutions. But in cases where dictionaries that don't require \EqDec,
-but do require inspection or destruction, {\CAL}s may be a preferable.
+inherent trade-off between desirable properties. In cases where \SemTot{} and \EqDec{} are critical,
+and there is little to no need to destruct dictionaries, \dds{} seem to be a clear winner over
+the conventional solutions. But in cases where \SemTot{} is not so important,
+but inspection or destruction are, {\CAL}s may be a preferable.
