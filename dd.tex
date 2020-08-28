@@ -18,7 +18,7 @@ Unlike association lists, the natural number that represents the key is not its 
 
 In order to allow multiple key types, while relying on useful properties of natural numbers under the hood, \dds{} accept a typeclass argument representing a bijection
 %
-between the key type and the naturals, and use this bijection to convert keys to and from naturals. This is discussed further in \textbf{Bijections to Natural Numbers}.
+between the key type and the naturals, and use this bijection to convert keys to and from naturals. This is discussed further in \emph{\textbf{Bijections to Natural Numbers}}.
 
 In order to maintain canonical order, while ensuring that every natural number is valid as the first item in a pair, that number must represent the non-negative difference between the key it represents and the previous key.
 %
@@ -104,7 +104,7 @@ with appropriate metatheory (not reproduced here).
 \subsection{Properties}
 \label{sec:DD:props}
 
-The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to \emph{contraction} and \emph{exchange} are defined below, and proven in Agda.
+The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \emph{structural properties} \emph{contraction} and \emph{exchange} are defined below, and proven in Agda.
 
 %% \subsection{Design Goals}
 %% \parahead{Design Goals}
