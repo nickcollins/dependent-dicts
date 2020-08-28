@@ -54,7 +54,7 @@ Though {\sal}s remain the most natural choice in these cases, future work could 
 
 The use of dictionaries is furthermore avoided in many systems that use substitution rather than environments
 %
-in defining the dynamic semantics of a language.
+in defining the dynamic semantics of a language, as well as the many systems that avoid named variables altogether by using De Bruijn indices \cite{XXX,XXX,XXX} or comparable techniques.
 
 For these reasons, many existing mechanizations make little use of order-and-duplication-insensitive dictionaries. 
 %
@@ -92,7 +92,7 @@ Doing so could be far more challenging.
 %
 It is relatively easy to simultaneously satisfy \SemTot{} and \SemInj{} for list-like structures such as dictionaries,
 %
-but much more awkward to do so for highly structural data such as graphs. For graphs in particular, establishing a one-to-one correspondence between terms and
+but much more awkward to do so for highly structural data such as graphs. For unlabeled graphs in particular, establishing a one-to-one correspondence between terms and
 %
 semantic meanings requires understanding of the graph isomorphism problem, which besides being NP-hard, involves complex algebra.
 
