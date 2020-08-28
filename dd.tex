@@ -81,7 +81,9 @@ the original first pair will be the second pair of the new list, but using the d
 %
 \verb+destruct+ simply pops the head off the list, and then augments the next key by the offset.
 
-\cite[Facts about weak maps]{FMapFacts} lists key metatheory about dictionaries, including that for \verb+lookup+, \verb+insert+, and \verb+destruct+.
+%% \cite[Facts about weak maps]{FMapFacts}
+%
+The Coq Standard \citet[Facts about weak maps]{FMapFacts} lists key metatheory about dictionaries, including that for \verb+lookup+, \verb+insert+, and \verb+destruct+.
 %
 Our Agda mechanization proves the relevant subset of this metatheory. Some of the metatheory in the Coq treatment involves concepts not relevant to our treatment,
 %
@@ -102,21 +104,16 @@ with appropriate metatheory (not reproduced here).
 \subsection{Properties}
 \label{sec:DD:props}
 
+The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to \emph{contraction} and \emph{exchange} are defined below, and proven in Agda.
+
 %% \subsection{Design Goals}
-\parahead{Design Goals}
+%% \parahead{Design Goals}
 
-The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to \emph{contraction} and
-\emph{exchange} are defined below, and proven in Agda. \SemTot~ cannot be formally defined - rather
-its truth is apparent from the fact that the other theorems do not require their \dd~ arguments to
-be refined with validity premises.
-
-%\begin{proposition}[\SemTot]
+\begin{remark}[\SemTot]
 %
-%\breakAndIndent
-%%
-%\rkc{Blah}
+\textnormal{This property cannot be formally defined---rather its truth is apparent from the fact that the other theorems do not require their \dd~ arguments to be refined with validity premises.}
 %
-%\end{proposition}
+\end{remark}
 
 \begin{theorem}[\SemInj]
 \label{thm:SemInj}
@@ -168,7 +165,7 @@ s.t. $D = D' , (k, v)$.
 \end{theorem}
 
 %% \subsection{Contraction and Exchange}
-\parahead{Contraction and Exchange for Dictionaries}
+%% \parahead{Contraction and Exchange for Dictionaries}
 
 %\rkc{Two common properties for PL metatheory.}
 
@@ -228,8 +225,8 @@ explicitly tracks the dictionary length, we provide another theorem:
 \phantom{xxxxxxx} |D, (k, v)| = 1 + |D|$}
 
 Although possible, manually establishing termination is painful, especially given that it's not necessary
-for {\SAL}s or {\CAL}s. Thus \dds~ fail at \EzDstr, although they are still better than {\FPF}s in this
-regard, seeing as it's not only hard but impossible to destruct {\FPF}s. Is it possible to have a data
+for {\sal}s or {\cal}s. Thus \dds~ fail at \EzDstr, although they are still better than {\fpf}s in this
+regard, seeing as it's not only hard but impossible to destruct {\fpf}s. Is it possible to have a data
 structure that possesses all four properties? Not likely - as mentioned above, the combination of
 \SemInj~ and \SemTot~ essentially
 necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
