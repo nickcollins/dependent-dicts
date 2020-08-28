@@ -58,7 +58,7 @@ ordering of the key type. As such, we do not expose the ordering to the client -
 %
 in arbitrary order, and so from the client's perspective, the \dd{} is unordered.
 
-\subsection{Lookup and Insertion}
+\subsection{Lookup, Insertion, and Destruction}
 \label{sec:DD:basics}
 
 \input{fig-haskell}
@@ -67,7 +67,7 @@ in arbitrary order, and so from the client's perspective, the \dd{} is unordered
 %
 These proceed largely as they would for association lists, but working indirectly with keys encoded as natural numbers and, furthermore, differences between these numbers.
 
-\autoref{fig:haskell} presents concrete implementations for \texttt{lookup} and \texttt{insert} in Haskell (rather than Agda) for clarity of presentation.
+\autoref{fig:haskell} presents concrete implementations for \texttt{lookup}, \texttt{insert}, and \texttt{destruct} in Haskell (rather than Agda) for clarity of presentation.
 %
 %Having to treat the first delta differently than the rest (literally rather than relatively) is the source of the somewhat technical---through simple---details.
 
@@ -78,6 +78,8 @@ Given that, \verb+lookup+ is straightfoward. The \verb+insert+ function is also 
 replace the old value with the new one. If the delta to insert is less than delta of the first pair, then we place the delta to insert as the first pair of the new list, and
 %
 the original first pair will be the second pair of the new list, but using the delta between its original value and the inserted delta.
+%
+\verb+destruct+ simply pops the head off the list, and then augments the next key by the offset.
 
 \cite[Facts about weak maps]{FMapFacts} lists key metatheory about dictionaries, including that for \verb+lookup+, \verb+insert+, and \verb+destruct+.
 %
@@ -87,11 +89,6 @@ especially multiple distinct notions of equality. Also, since we don't expose ma
 %
 we do not prove any of the theorems pertaining to ordering (\ie{} those that are not ``weak'').
 
-\subsection{Destruction}
-
-\rkc{move a bunch of that material from Case Study to here}
-
-\rkc{mainly discuss the implementation here. then discuss the difficulties with the library function's type in the properties section below.}
 
 \subsection{Additional Operations}
 
@@ -198,3 +195,46 @@ if $k_1 \ne k_2$, then
 $D, (k_1, v_1), (k_2, v_2) = D, (k_2, v_2), (k_1, v_1)$.
 
 \end{theorem}
+
+\parahead{The Difficulty of Destruction}
+
+\SemInj{} requires canonical ordering and deduplication, and \SemTot{} means that the canonical order and deduplication have to come from
+how the data is interpreted rather than how it's organized. The non-literal way in which key data is interpreted means that it's not
+safe for client code to work with the raw data directly -- rather, all interaction with the data must be
+encapsulated in library functions. Unfortunately, this includes \emph{destruction}; an interaction which
+normally goes through the very natural, elegant, and well-supported mechanism of pattern matching is now
+only available through a library function. The Agda definition of \verb+destruct+ is embellished with proof terms:
+
+\texttt{destruct : (V : Type) (D : dd V) $\rightarrow \\
+\phantom{xxxxxxxxxxxxx} D = \emptyset \quad \lor \\
+\phantom{xxxxxxxxxxxxx} \exists~(k, v, D')~\left\{~ D = D' , (k, v) \quad \land \quad k \notin D' ~\right\}$}
+
+Just as a list can be destructed with a case expression whose first branch matches nil and whose second branch
+decomposes the list into a single item (particularly the head) and the remainder of the list, a \dd~ can be
+destructed by matching the result of \verb+destruct+ with a case expression whose left branch handles the
+nil dictionary and whose right branch is provided a single item from the dictionary (the mapping $(k, v)$)
+and the remainder of the dictionary ($D'$), as well as a proof that $D'$ really is $D$ minus the $(k, v)$
+mapping.
+
+This function achieves the same purpose as typical pattern matching (albeit more awkwardly), but because it
+doesn't harness the primitive notions of pattern matching and structure, it doesn't establish structural
+decrease on the dictionary object, which may break out-of-the-box structural recursion in the likely case
+of recursion on $D'$. To enable manual establishment of structural recursion, via an extra parameter that
+explicitly tracks the dictionary length, we provide another theorem:
+
+\texttt{dd-extend-length :\\
+\phantom{xxxxx} (V : Type) (D : dd V) (k : Key) (v : V) $\rightarrow \\
+\phantom{xxxxxxx} k \notin D \rightarrow \\
+\phantom{xxxxxxx} |D, (k, v)| = 1 + |D|$}
+
+Although possible, manually establishing termination is painful, especially given that it's not necessary
+for {\SAL}s or {\CAL}s. Thus \dds~ fail at \EzDstr, although they are still better than {\FPF}s in this
+regard, seeing as it's not only hard but impossible to destruct {\FPF}s. Is it possible to have a data
+structure that possesses all four properties? Not likely - as mentioned above, the combination of
+\SemInj~ and \SemTot~ essentially
+necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
+makes it dangerous for client code to mess with the raw data. As such, we believe we've uncovered an
+inherent trade-off between desirable properties. In cases where \EqDec{} is critical,
+and the need to destruct dictionaries is occasional but rare, \dds{} seem to be a clear winner over
+the conventional solutions. But in cases where dictionaries that don't require \EqDec,
+but do require inspection or destruction, {\CAL}s may be a preferable.
