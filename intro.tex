@@ -26,7 +26,12 @@ are two ways (among many others) to represent a dictionary with three particular
 
 \input{fig-summary} %% here to force layout on p.2
 
-To establish a one-to-one correspondence between association lists and semantic mappings, one solution~\citet{XXX,XXX,XXX} is to maintain a \emph{canonical} form that is semantically valid and unique, namely, a list in which there are no duplicate keys and, furthermore, where keys are in sorted order.
+To establish a one-to-one correspondence between association lists and semantic mappings, one solution~\citep{XXX,XXX,XXX} is to maintain a \emph{canonical}
+%
+\footnote{
+  Some treatments, including the Coq standard library \citep{XXX,XXX,XXX}, describe non-canonicalized \sal{}s as ``weak'', implying that \cal{}s are ``strong''.
+}
+form that is semantically valid and unique, namely, a list in which there are no duplicate keys and, furthermore, where keys are in sorted order.
 %
 The second association list described in \autoref{fig:intro-example} is one such example.
 %
