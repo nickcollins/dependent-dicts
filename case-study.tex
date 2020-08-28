@@ -35,9 +35,9 @@ answer is best.
 But if we consider it important to prove the \emph{structural properties} \emph{contraction}
 and \emph{exchange} (see \autoref{fig:con-exch}), we do run into a problem. These properties correspond,
 respectively, to the irrelevance of duplication and reordering in the environment with regard to the judgment's
-conclusions. The rule for lambda evaluation states that \mbox{\eval{E}{\lambda x . e}{[E]\lambda x . e}}, the result
-being a closure over $E$. Using {\SAL}s, \mbox{\eval{E, (x, a), (x, b)}{\lambda x . e}{[E, (x, a), (x, b)]\lambda x . e}}
-while \mbox{\eval{E, (x, b)}{\lambda x . e}{[E, (x, b)]\lambda x . e}}; $[E, (x, a), (x, b)]\lambda x . e \ne
+conclusions. The rule for lambda evaluation states that \eval{E}{\lambda x . e}{[E]\lambda x . e}, the result
+being a closure over $E$. Using {\SAL}s, \eval{E, (x, a), (x, b)}{\lambda x . e}{[E, (x, a), (x, b)]\lambda x . e}
+while \eval{E, (x, b)}{\lambda x . e}{[E, (x, b)]\lambda x . e}; $[E, (x, a), (x, b)]\lambda x . e \ne
 [E, (x, b)]\lambda x . e$, so \emph{contraction} is violated. \emph{Exchange} is violated similarly. Many mechanizations
 do not aim to prove \emph{contraction} and \emph{exchange} (TODO sources?), which makes our scenario somewhat
 particular - however, they are two of the defining properties of structural logics, and as such are of critical
@@ -100,9 +100,9 @@ don't possess the properties \SemInj~ or \EqDec: due to \emph{proof relevance} (
 the same property may be unequal, and due to the fact that proof terms may contain functions, the equality of
 proof terms is not even decidable in the general case. With {\CAL}s, \mbox{$E, (x, a), (x, b) = E, (x, b)$},
 but with refinements such as \refine{E}{proof\_of\_validity},
-\mbox{$[\refine{(E, (x, a), (x, b))}{proof1}]\lambda x . e \ne [\refine{(E, (x, b))}{proof2}]\lambda x . e$},
+$[\refine{(E, (x, a), (x, b))}{proof1}]$ $\lambda x . e \ne [\refine{(E, (x, b))}{proof2}]\lambda x . e$,
 so \emph{contraction} is once again violated. Perhaps we can work around this problem by moving the proof term
-outside of the closure, to get \mbox{\refine{([E, (x, a), (x, b)]\lambda x . e)}{proof1}}, then defining a
+outside of the closure, to get \\ \refine{([E, (x, a), (x, b)]\lambda x . e)}{proof1}, then defining a
 special notion of equality for evaluation results, that treats closures specially by erasing the proof term
 before checking equality with the built-in primitive, then definining \emph{contraction} and \emph{exchange}
 in terms of this special notion of equality. However, this is all very cumbersome. We are no longer able to
@@ -113,8 +113,7 @@ These sorts of pain points can crop up in any case where a refined object is bei
 tested for equality with another refined object. Thus \SemTot, which obviates the need for refinement, has
 a lot of practical value in many general cases.
 
-{\FPF}s, sans refinement (TODO more discussion about the possibility of refinement?), do not technically
-satisfy \SemTot, because a type-correct function may not
+{\FPF}s, sans refinement, do not technically satisfy \SemTot, because a type-correct function may not
 actually be finite. However, since we can't iterate, destruct, or query the size of {\FPF}s, the code
 that works with dictionaries doesn't actually need to ensure that those dictionaries are finite. Lookup
 and insertion will work just the same on finite and infinite partial functions, so there's generally no
