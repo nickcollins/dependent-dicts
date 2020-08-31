@@ -35,7 +35,7 @@ form that is semantically valid and unique, namely, a list in which there are no
 %
 The second association list described in \autoref{fig:intro-example} is one such example.
 %
-This approach allows proofs with canonical association lists to use built-in equality for semantic equivalence, at the expense of extending the underlying list type---which allows arbitrary, possibly invalid lists---with a proof of validity that refines the coarser type.
+This approach allows proofs with canonical association lists to use built-in equality for semantic equivalence, at the expense of extending the underlying list type---which allows arbitrary, possibly invalid lists---with a proof of validity that refines the coarser type. The downsides of having to use validity proofs are discussed further in \autoref{sec:CaseStudy}.
 
 A third conventional solution is to represent dictionaries as finite partial functions~\cite[Maps]{Pierce:SF1}.
 %
@@ -56,7 +56,7 @@ so it's not actually necessary to retain a proof that the dictionary is finite.
 %
 }
 %
-Worse is the fact that, unlike either association list representation, equality of partial functions is not decidable.
+Worse is the fact that, unlike either association list representation, partial functions lack decidable equality.
 %
 The function type could be refined with its domain---\ie{}~a canonical list of keys---but would then suffer the drawbacks of manipulating validity proofs \`{a} la canonical association lists while being needlessly complicated.
 
@@ -183,7 +183,7 @@ Compared to \cal{}s, \dds{} enjoy \SemTot{}---the lone property among those we i
 %
 However, destruction and iteration for \dds{} is substantially more difficult.
 %
-Furthermore, unlike all of the conventional representations, \dds{} require a bijection to the naturals, not merely an ordering, for their key types.
+Furthermore, unlike all of the conventional representations, \dds{} require a bijection to the naturals, not merely decidable equality or ordering, for their key types.
 %
 %% Our definition and implementation uses natural numbers for keys, and we illustrate how to use bijections to the naturals as a way of supporting strings, integers, or other key types that can be bijected to the naturals without great difficulty.
 %

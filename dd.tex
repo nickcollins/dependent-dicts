@@ -22,7 +22,7 @@ between the key type and the naturals, and use this bijection to convert keys to
 
 In order to maintain canonical order, while ensuring that every natural number is valid as the first item in a pair, that number must represent the non-negative difference between the key it represents and the previous key.
 %
-We call this number a \emph{delta}, alluding to the \emph{delta encoding} technique more commonly harnessed for performance optimization~\citep{XXX}.
+We call this number a \emph{delta}. % , alluding to the \emph{delta encoding} technique more commonly harnessed for performance optimization.
 %
 As described so far, a $0$ offset would correspond to a duplicate key.
 %
@@ -42,21 +42,29 @@ There may be an algebraic structure more general than the natural numbers which 
 %
 is easier for both the implementer and the client. In Agda, the bijection typeclass accepts a \texttt{toNat} function, as well as proofs that \texttt{toNat}
 %
-is injective and surjective, and the \texttt{fromNat} function is defined by the library using the proof of surjectivity. We demonstrate this in Agda by
+is injective and surjective
+%
+\footnote{\hspace{0.01in}%
+Without surjectivity, a binding for an unmapped naturals either invalidates the \dd, violating \Total, or is ignored, in which case its presence or absence doesn't affect the semantic meaning, violating \Extensional.
+},
+%
+and the \texttt{fromNat} function is defined by the library using the proof of surjectivity.
+%
+We demonstrate this in Agda by
 %
 providing an instance of the bijection typeclass for integers ($25$ lines of code).
 
 Most types that are suitable for use as keys in the first place, especially strings and countable numeric types, can be bijected to the naturals,
 %
-though doing so may be onerous. Finite types, such as characters, are suitable as keys, but cannot be bijected to the naturals -- in these cases,
+though doing so may be onerous. Finite types, such as characters, are suitable as keys, but cannot be bijected to the naturals --
 %
-it may be best to harness the theory of finite sets \citep{FinSets}.
+simultaneously achieving \Total and \Extensional for a dictionary over finite types may require a custom-made dictionary data type.
 
 \Ddls{} are canonically ordered, but by the natural ordering of the naturals, which, depending on the choice of bijection, may correspond to an unnatural
 %
 ordering of the key type. As such, we do not expose the ordering to the client -- functions such as \texttt{destruct} and \texttt{toList} return results
 %
-in arbitrary order, and so from the client's perspective, the \dd{} is unordered.
+in arbitrary order from the client's perspective, and so from the client's perspective, the \dd{} is unordered.
 
 \subsection{Lookup, Insertion, and Destruction}
 \label{sec:DD:basics}
@@ -202,7 +210,7 @@ encapsulated in library functions. Unfortunately, this includes \emph{destructio
 normally goes through the very natural, elegant, and well-supported mechanism of pattern matching is now
 only available through a library function. The Agda definition of \verb+destruct+ is embellished with proof terms:
 
-\texttt{destruct : (V : Type) (D : dd V) $\rightarrow \\
+\texttt{destruct : (V : Set) (D : dd V) $\rightarrow \\
 \phantom{xxxxxxxxxxxxx} D = \emptyset \quad \lor \\
 \phantom{xxxxxxxxxxxxx} \exists~(k, v, D')~\left\{~ D = D' , (k, v) \quad \land \quad k \notin D' ~\right\}$}
 
@@ -220,7 +228,7 @@ of recursion on $D'$. To enable manual establishment of structural recursion, vi
 explicitly tracks the dictionary length, we provide another theorem:
 
 \texttt{dd-extend-length :\\
-\phantom{xxxxx} (V : Type) (D : dd V) (k : Key) (v : V) $\rightarrow \\
+\phantom{xxxxx} (V : Set) (D : dd V) (k : Key) (v : V) $\rightarrow \\
 \phantom{xxxxxxx} k \notin D \rightarrow \\
 \phantom{xxxxxxx} |D, (k, v)| = 1 + |D|$}
 
