@@ -5,8 +5,6 @@
 \input{fig-dd-example-all}
 
 Our implementation of delta dictionaries and corresponding proofs are formalized in Agda and available in the anonymous supplementary materials.
-%
-In the paper, we use Haskell, which is simpler and more familiar.
 
 %% \subsection{Delta Indexing}
 %% \subsection{Key Types and Deltas}
@@ -58,7 +56,7 @@ Most types that are suitable for use as keys in the first place, especially stri
 %
 though doing so may be onerous. Finite types, such as characters, are suitable as keys, but cannot be bijected to the naturals --
 %
-simultaneously achieving \Total and \Extensional for a dictionary over finite types may require a custom-made dictionary data type.
+simultaneously achieving \Total{} and \Extensional{} for a dictionary over finite types may require a custom-made dictionary data type.
 
 \Ddls{} are canonically ordered, but by the natural ordering of the naturals, which, depending on the choice of bijection, may correspond to an unnatural
 %
@@ -69,23 +67,25 @@ in arbitrary order from the client's perspective, and so from the client's persp
 \subsection{Lookup, Insertion, and Destruction}
 \label{sec:DD:basics}
 
-\input{fig-haskell}
+\input{fig-agda}
 
 \autoref{fig:dd-example-find} and \autoref{fig:dd-example-insert} illustrate example \texttt{lookup} and \texttt{insert} operations.
 %
 These proceed largely as they would for association lists, but working indirectly with keys encoded as natural numbers and, furthermore, differences between these numbers.
 
-\autoref{fig:haskell} presents concrete implementations for \texttt{lookup}, \texttt{insert}, and \texttt{destruct} in Haskell (rather than Agda) for clarity of presentation.
+\autoref{fig:agda} presents concrete implementations for \texttt{lookup}, \texttt{insert}, and \texttt{destruct} in Agda.
 %
 %Having to treat the first delta differently than the rest (literally rather than relatively) is the source of the somewhat technical---through simple---details.
 
-First, we define a helper function \verb+delta+ which computes the delta, \ie{} the offset minus $1$, between two numbers (assuming the second is larger).
+First, we define a helper function \verb+delta+ which computes the delta, \ie{} the offset minus $1$, between two distinct numbers.
 
-Given that, \verb+lookup+ is straightfoward. The \verb+insert+ function is also fairly straightforward - if the first pair is an exact match, then we simply
+Given that, \verb+lookup+ is straightfoward. The \verb+insert+ function is also fairly straightforward.
 %
-replace the old value with the new one. If the delta to insert is less than delta of the first pair, then we place the delta to insert as the first pair of the new list, and
+If the delta to insert is less than delta of the first pair, then we place the delta to insert as the first pair of the new list, and
 %
 the original first pair will be the second pair of the new list, but using the delta between its original value and the inserted delta.
+%
+If the first pair is an exact match, then we simply replace the old value with the new one.
 %
 \verb+destruct+ simply pops the head off the list, and then augments the next key by the offset.
 
