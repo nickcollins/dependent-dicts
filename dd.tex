@@ -125,51 +125,36 @@ The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \em
 
 \begin{theorem}[\SemInj]
 \label{thm:SemInj}
-
-\breakAndIndent
-%
-For any \dds~ $D_1$ and $D_2$,
-%
-if for all $k$, $D_1[k] = D_2[k]$,
-%
-then $D_1 = D_2$.
-
+\justIndent
+\begin{alltt}
+\{V : Set\} \{dd1 dd2 : DD V\} \altRArr
+  ((k : K) \altRArr dd1 \{\{ k \}\} == dd2 \{\{ k \}\}) \altRArr
+  dd1 == dd2
+\end{alltt}
 \end{theorem}
 
 \begin{theorem}[\EqDec]
 \label{thm:EqDec}
-
-\breakAndIndent
-%
-For any \dds~ $D_1$ and $D_2$ whose values are of type $V$,
-%
-given a function that decides equality for type $V$,
-%
-
 \justIndent
-%
-we can decide that either $D_1 = D_2$ or $D_1 \ne D_2$.
-
+\begin{alltt}
+\{V : Set\}
+  (dd1 dd2 : DD V) \altRArr
+  ((v1 v2 : V) \altRArr v1 == v2 \altOr v1 \altNE v2) \altRArr
+  dd1 == dd2 \altOr dd1 \altNE dd2
+\end{alltt}
 \end{theorem}
 
 %% \begin{theorem}[\EzDstr]
 \begin{theorem}[Not-So-Easy Destructibility]
 \label{thm:EzDstr}
-
-\breakAndIndent
-%
-For any \dd~ $D$,
-
-\justIndent \quad
-%
-either $D = \emptyset$ OR
-
-\justIndent \quad
-%
-there exist $D'$, $k \notin D'$, and $v$
-%
-s.t. $D = D' , (k, v)$.
-
+\justIndent
+\begin{alltt}
+\{V : Set\} \{dd : DD V\} \altRArr
+ dd == \altEmpty
+   \altOr
+ \altSum[ k \altIn K ] \altSum[ v \altIn V ] \altSum[ dd' \altIn DD V ]
+   (dd == dd' ,, (k , v) \altAnd k \altNIn dd')
+\end{alltt}
 \end{theorem}
 
 %% \subsection{Contraction and Exchange}
@@ -179,26 +164,21 @@ s.t. $D = D' , (k, v)$.
 
 \begin{theorem}[Dictionary Contraction]
 \label{thm:cont-dicts}
-
-\breakAndIndent
-%
-For any {\dd}~ $D$,
-%
-$D, (k, v'), (k, v) = D, (k, v)$.
-
+\justIndent
+\begin{alltt}
+\{V : Set\} \{dd : DD V\} \{k : K\} \{v v' : V\} \altRArr
+  dd ,, (k , v') ,, (k , v) == dd ,, (k , v)
+\end{alltt}
 \end{theorem}
 
 \begin{theorem}[Dictionary Exchange]
 \label{thm:exch-dicts}
-
-\breakAndIndent
-%
-For any {\dd}~ $D$,
-%
-if $k_1 \ne k_2$, then
-%
-$D, (k_1, v_1), (k_2, v_2) = D, (k_2, v_2), (k_1, v_1)$.
-
+\justIndent
+\begin{alltt}
+\{V : Set\} \{dd : DD V\} \{k1 k2 : K\} \{v1 v2 : V\} \altRArr
+  k1 \altNE k2 \altRArr
+  dd ,, (k1 , v1) ,, (k2 , v2) == dd ,, (k2 , v2) ,, (k1 , v1)
+\end{alltt}
 \end{theorem}
 
 \parahead{The Difficulty of Destruction}
