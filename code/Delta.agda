@@ -42,9 +42,9 @@ insert (DD dd) (k, v) =
           (hn, hv) :: ins t (delta hn<n, v)
 
 destruct
-  : \{V : Set\} \altRArr DD V \altRArr Maybe ((K \altAnd V), DD K V)
+  : \{V : Set\} \altRArr DD V \altRArr Maybe ((K \altAnd V), DD V)
 destruct (DD []) = None
 destruct (DD ((n, v) :: [])) =
   Some ((fromNat n, v), DD [])
-destruct (DD ((n, v) :: (m, v') : t)) =
+destruct (DD ((n, v) :: (m, v') :: t)) =
   Some ((fromNat n, v), DD ((n + m + 1, v') :: t))
