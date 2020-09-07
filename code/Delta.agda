@@ -2,6 +2,12 @@ module Delta (Key : Set) \{\{bij : bij Key Nat\}\} where
 
 ...
 
+data DD (V : Set) : Set where
+  DD : DL V \altRArr DD V
+
+DL : (V : Set) \altRArr Set
+DL V = List (Nat \altAnd V)
+
 delta
   : \altFAll\{n m\} \altRArr n < m \altRArr Nat
 delta n<m =
@@ -12,7 +18,7 @@ lookup
 lookup (DD dd) k =
   lkup dd (toNat k)
   where
-    lkup : \{V : Set\} \altRArr DD V \altRArr Nat \altRArr Maybe V
+    lkup : \{V : Set\} \altRArr DL V \altRArr Nat \altRArr Maybe V
     lkup [] n = None
     lkup ((hn, ha) :: t) n with <dec n hn
 \twoChars{}... | Inl n<hn       = None
@@ -24,7 +30,7 @@ insert
 insert (DD dd) (k, v) =
   DD (ins dd (toNat k, v))
   where
-    ins : \altFAll\{V\} \altRArr DD V \altRArr (Nat \altAnd V) \altRArr DD V
+    ins : \altFAll\{V\} \altRArr DL V \altRArr (Nat \altAnd V) \altRArr DD V
     ins (n, v) =
       (n, v) :: []
     ins ((hn, hv) :: t) (n, v) with <dec n hn
