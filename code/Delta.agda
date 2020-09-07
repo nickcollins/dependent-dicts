@@ -7,6 +7,18 @@ delta
 delta n<m =
   difference (n<m \altRArr 1+n\ensuremath{\leq}m n<m) -- i.e. m - n - 1
 
+lookup
+  : \{V : Set\} \altRArr DD V \altRArr K \altRArr Maybe V
+lookup (DD dd) k =
+  lkup dd (toNat k)
+  where
+    lkup : \{V : Set\} \altRArr DD V \altRArr Nat \altRArr Maybe V
+    lkup [] n = None
+    lkup ((hn, ha) :: t) n with <dec n hn
+\twoChars{}... | Inl n<hn       = None
+\twoChars{}... | Inr (Inl refl) = Some ha
+\twoChars{}... | Inr (Inr hn<n) = lkup t (delta hn<n)
+
 insert
   : \altFAll\{V\} \altRArr DD V \altRArr (K \altAnd V) \altRArr DD V
 insert (DD dd) (k, v) =
@@ -22,18 +34,6 @@ insert (DD dd) (k, v) =
           (n, v) :: t
 \twoChars{}... | Inr (Inr hn<n) =
           (hn, hv) :: ins t (delta hn<n, v)
-
-lookup
-  : \{V : Set\} \altRArr DD V \altRArr K \altRArr Maybe V
-lookup (DD dd) k =
-  lkup dd (toNat k)
-  where
-    lkup : \{V : Set\} \altRArr DD V \altRArr Nat \altRArr Maybe V
-    lkup [] n = None
-    lkup ((hn, ha) :: t) n with <dec n hn
-\twoChars{}... | Inl n<hn       = None
-\twoChars{}... | Inr (Inl refl) = Some ha
-\twoChars{}... | Inr (Inr hn<n) = lkup t (delta hn<n)
 
 destruct
   : \{V : Set\} \altRArr DD V \altRArr Maybe ((K \altAnd V), DD K V)
