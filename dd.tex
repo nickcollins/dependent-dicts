@@ -148,11 +148,11 @@ The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \em
 \label{thm:EzDstr}
 \justIndent
 \begin{alltt}
-\altFAll\{V\} \{dd : DD V\} \altRArr
- dd == \altEmpty
-   \altOr
- \altSum[ k \altIn K ] \altSum[ v \altIn V ] \altSum[ dd' \altIn DD V ]
-   (dd == dd' ,, (k , v) \altAnd k \altNIn dd')
+\altFAll\{V\} \{dd dd' : DD V\} \{k : K\} \{v : V\} \altRArr
+  (destruct dd == None \altRArr dd == \altEmpty)
+    \altAnd
+  (destruct dd == Some ((k , v) , dd') \altRArr
+    (k \altNIn dd' \altAnd dd == dd' ,, (k , v))
 \end{alltt}
 \end{theorem}
 
@@ -188,35 +188,29 @@ how the data is interpreted rather than how it's organized. The non-literal way 
 safe for client code to work with the raw data directly -- rather, all interaction with the data must be
 encapsulated in library functions. Unfortunately, this includes \emph{destruction}; an interaction which
 normally goes through the very natural, elegant, and well-supported mechanism of pattern matching is now
-only available through a library function. The Agda definition of \verb+destruct+ is embellished with proof terms:
+only available through the library function \verb+destruct+. \autoref{thm:EzDstr} proves that this function
+destructs the \dd{} in essentially the same way that a case expression destructs a list of pairs (although
+the order in which bindings are plucked away is arbitrary from the client's perspective).
 
-\texttt{destruct : (V : Set) (D : dd V) $\rightarrow \\
-\phantom{xxxxxxxxxxxxx} D = \emptyset \quad \lor \\
-\phantom{xxxxxxxxxxxxx} \exists~(k, v, D')~\left\{~ D = D' , (k, v) \quad \land \quad k \notin D' ~\right\}$}
-
-Just as a list can be destructed with a case expression whose first branch matches nil and whose second branch
-decomposes the list into a single item (particularly the head) and the remainder of the list, a \dd~ can be
-destructed by matching the result of \verb+destruct+ with a case expression whose left branch handles the
-nil dictionary and whose right branch is provided a single item from the dictionary (the mapping $(k, v)$)
-and the remainder of the dictionary ($D'$), as well as a proof that $D'$ really is $D$ minus the $(k, v)$
-mapping.
-
-This function achieves the same purpose as typical pattern matching (albeit more awkwardly), but because it
+\verb+destruct+ achieves the same purpose as typical pattern matching (albeit more awkwardly), but because it
 doesn't harness the primitive notions of pattern matching and structure, it doesn't establish structural
 decrease on the dictionary object, which may break out-of-the-box structural recursion in the likely case
-of recursion on $D'$. To enable manual establishment of structural recursion, via an extra parameter that
+of recursion on $dd'$. To enable manual establishment of structural recursion, via an extra parameter that
 explicitly tracks the dictionary length, we provide another theorem:
 
-\texttt{dd-extend-length :\\
-\phantom{xxxxx} (V : Set) (D : dd V) (k : Key) (v : V) $\rightarrow \\
-\phantom{xxxxxxx} k \notin D \rightarrow \\
-\phantom{xxxxxxx} |D, (k, v)| = 1 + |D|$}
+\begin{alltt}
+dd-extend-length :
+  \altFAll\{V\} \{dd : DD V\} \{k : K\} \{v : V\} \altRArr
+    k \altNIn dd \altRArr
+    || dd ,, (k , v) || = 1 + || D ||
+\end{alltt}
 
 Although possible, manually establishing termination is painful, especially given that it's not necessary
 for {\sal}s or {\cal}s. Thus \dds~ fail at \EzDstr, although they are still better than {\fpf}s in this
-regard, seeing as it's not only hard but impossible to destruct {\fpf}s. Is it possible to have a data
-structure that possesses all four properties? Not likely - as mentioned above, the combination of
-\SemInj~ and \SemTot~ essentially
+regard, seeing as it's not only hard but impossible to destruct {\fpf}s.
+
+Is it possible to have a data structure that possesses all four properties?
+Not likely - as mentioned above, the combination of \SemInj{} and \SemTot{} essentially
 necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
 makes it dangerous for client code to mess with the raw data. As such, we believe we've uncovered an
 inherent trade-off between desirable properties. In cases where \SemTot{} and \EqDec{} are critical,
