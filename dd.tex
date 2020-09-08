@@ -69,17 +69,17 @@ in arbitrary order from the client's perspective, and so from the client's persp
 
 \input{fig-agda}
 
-\autoref{fig:dd-example-find} and \autoref{fig:dd-example-insert} illustrate example \texttt{lookup} and \texttt{insert} operations.
+\autoref{fig:dd-example-find} and \autoref{fig:dd-example-insert} illustrate example lookup and insert operations.
 %
 These proceed largely as they would for association lists, but working indirectly with keys encoded as natural numbers and, furthermore, differences between these numbers.
 
-\autoref{fig:agda} presents concrete implementations for \texttt{lookup}, \texttt{insert}, and \texttt{destruct} in Agda.
+\autoref{fig:agda} presents concrete implementations for lookup (\ie{} \texttt{\_\altLAng\_\altRAng}), insert (\ie{} \texttt{\_,,\_}), and \texttt{destruct} in Agda.
 %
 %Having to treat the first delta differently than the rest (literally rather than relatively) is the source of the somewhat technical---through simple---details.
 
 First, we define a helper function \verb+delta+ which computes the delta, \ie{} the offset minus $1$, between two distinct numbers.
 
-Given that, \verb+lookup+ is straightfoward. The \verb+insert+ function is also fairly straightforward.
+Given that, lookup is straightfoward. The insert function is also fairly straightforward.
 %
 If the delta to insert is less than delta of the first pair, then we place the delta to insert as the first pair of the new list, and
 %
@@ -91,7 +91,7 @@ If the first pair is an exact match, then we simply replace the old value with t
 
 %% \cite[Facts about weak maps]{FMapFacts}
 %
-The Coq Standard \citet[Facts about weak maps]{FMapFacts} lists key metatheory about dictionaries, including that for \verb+lookup+, \verb+insert+, and \verb+destruct+.
+The Coq Standard \citet[Facts about weak maps]{FMapFacts} lists key metatheory about dictionaries, including that for lookup, insert, and \verb+destruct+.
 %
 Our Agda mechanization proves the relevant subset of this metatheory. Some of the metatheory in the Coq treatment involves concepts not relevant to our treatment,
 %
@@ -126,10 +126,9 @@ The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \em
 \begin{theorem}[\SemInj]
 \label{thm:SemInj}
 \justIndent
-  %% ((k : K) \altRArr dd1 \{\{ k \}\} == dd2 \{\{ k \}\}) \altRArr
 \begin{alltt}
-\{V : Set\} \{dd1 dd2 : DD V\} \altRArr
-  ((k : K) \altRArr lookup dd1 k == lookup dd2 k) \altRArr
+\altFAll\{V\} \{dd1 dd2 : DD V\} \altRArr
+  ((k : K) \altRArr dd1 \altLAng k \altRAng == dd2 \altLAng k \altRAng) \altRArr
   dd1 == dd2
 \end{alltt}
 \end{theorem}
@@ -138,8 +137,7 @@ The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \em
 \label{thm:EqDec}
 \justIndent
 \begin{alltt}
-\{V : Set\}
-  (dd1 dd2 : DD V) \altRArr
+\altFAll\{V\} (dd1 dd2 : DD V) \altRArr
   ((v1 v2 : V) \altRArr v1 == v2 \altOr v1 \altNE v2) \altRArr
   dd1 == dd2 \altOr dd1 \altNE dd2
 \end{alltt}
@@ -150,13 +148,12 @@ The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \em
 \label{thm:EzDstr}
 \justIndent
 \begin{alltt}
-\{V : Set\} \{dd : DD V\} \altRArr
+\altFAll\{V\} \{dd : DD V\} \altRArr
  dd == \altEmpty
    \altOr
  \altSum[ k \altIn K ] \altSum[ v \altIn V ] \altSum[ dd' \altIn DD V ]
-   (dd == insert dd' (k, v) \altAnd k \altNIn dd')
+   (dd == dd' ,, (k , v) \altAnd k \altNIn dd')
 \end{alltt}
-   %% (dd == dd' ,, (k , v) \altAnd k \altNIn dd')
 \end{theorem}
 
 %% \subsection{Contraction and Exchange}
@@ -168,23 +165,20 @@ The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \em
 \label{thm:cont-dicts}
 \justIndent
 \begin{alltt}
-\{V : Set\} \{dd : DD V\} \{k : K\} \{v v' : V\} \altRArr
-  insert (insert dd (k, v')) (k, v)
-    == insert dd (k, v)
+\altFAll\{V\} \{dd : DD V\} \{k : K\} \{v v' : V\} \altRArr
+  dd ,, (k , v') ,, (k , v) == dd ,, (k , v)
 \end{alltt}
-  %% dd ,, (k , v') ,, (k , v) == dd ,, (k , v)
 \end{theorem}
 
 \begin{theorem}[Dictionary Exchange]
 \label{thm:exch-dicts}
 \justIndent
 \begin{alltt}
-\{V : Set\} \{dd : DD V\} \{k1 k2 : K\} \{v1 v2 : V\} \altRArr
+\altFAll\{V\} \{dd : DD V\} \{k1 k2 : K\} \{v1 v2 : V\} \altRArr
   k1 \altNE k2 \altRArr
-  insert (insert dd (k1, v1)) (k2, v2)
-    == insert (insert dd (k2, v2)) (k1, v1)
+  dd ,, (k1 , v1) ,, (k2 , v2) ==
+  dd ,, (k2 , v2) ,, (k1 , v1)
 \end{alltt}
-  %% dd ,, (k1 , v1) ,, (k2 , v2) == dd ,, (k2 , v2) ,, (k1 , v1)
 \end{theorem}
 
 \parahead{The Difficulty of Destruction}
