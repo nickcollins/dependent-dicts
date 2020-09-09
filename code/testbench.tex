@@ -1,0 +1,43 @@
+\_env : Set \altRArr Set
+V env = ?
+
+data stlc : Set where
+  Var\_ : string \altRArr stlc
+  \altCdot\altLamb\_\altCdot\_ : string \altRArr stlc \altRArr stlc
+  \_\altCirc\_ : stlc \altRArr stlc \altRArr stlc
+  \_::\_ : stlc \altRArr typ \altRArr stlc
+  nat_ : Nat \altRArr stlc
+  assert[\_==\_] : stlc \altRArr stlc \altRArr stlc
+
+data stlc-rslt : Set where
+  [\_]\altLamb\_\altCdot\_ : stlc-rslt env \altRArr string \altRArr stlc \altRArr stlc-rslt
+  nat_ : Nat \altRArr stlc-rslt
+  Err : stlc-rslt
+
+data \_\altVdash\_\altRARR\_ : stlc-rslt env \altRArr stlc \altRArr stlc-rslt \altRArr Set where
+  ... standard definitions for the standard constructs ...
+  EvalAsrtEq : \altFAll\{E e1 r1 e2 r2\} \altRArr
+                 \altEval{e1}{r1} \altRArr
+                 \altEval{e2}{r2} \altRArr
+                 r1 == r2 \altRArr
+                 \altEval{assert[ e1 == e2 ]}{r1}
+  EvalAsrtNE : \altFAll\{E e1 r1 e2 r2\} \altRArr
+                 \altEval{e1}{r1} \altRArr
+                 \altEval{e2}{r2} \altRArr
+                 r1 \altNE r2 \altRArr
+                 \altEval{assert[ e1 == e2 ]}{Err}
+  EvalApErr1 : \altFAll\{E a b\} \altRArr \altEval{a}{Err} \altRArr \altEval{a \altCirc b}{Err}
+  EvalApErr2 : \altFAll\{E a b\} \altRArr \altEval{b}{Err} \altRArr \altEval{a \altCirc b}{Err}
+
+contraction : \{E : stlc-rslt env\} \{x : string\} \{e : stlc\} \{v v' r : stlc-rslt\} \altRArr
+               \altEvalEnv{(E ,, (x , v') ,, (x , v))}{e}{r} \altRArr
+               \altEvalEnv{(E ,, (x , v))}{e}{r}
+
+exchange : \{E : stlc-rslt env\} \{x1 x2 : string\} \{e : stlc\} \{v1 v2 r : stlc-rslt\} \altRArr
+            x1 \altNE x2 \altRArr
+            \altEvalEnv{(E ,, (x1 , v1) ,, (x2 , v2))}{e}{r} \altRArr
+            \altEvalEnv{(E ,, (x2 , v2) ,, (x1 , v1))}{e}{r}
+
+strong-norm : \altFAll\{\altGam e t\} \altRArr
+                \altGam \altVdash e :: t \altRArr
+                \altSum[ r \altIn stlc-rslt ] (\altEval{e}{r})
