@@ -8,9 +8,26 @@ Conventionally, the design of data structures and algorithms is chiefly focused 
 %
 As such, proof assistants often use entirely different data structures than those of conventional settings, with a focus on simplicity or useful proof-theoretic properties.
 
-Consider dictionaries, which---among a broad range of purposes---are often used for implementing type contexts and evaluation environments.
+Consider dictionaries, which---among a broad range of purposes---are often
+used for implementing type contexts and evaluation environments. The
+contexts resulting from the selection of data structure to implement
+dictionaries will be used to define judgements that must admit standard
+structural properties, usually a subset of \emph{weakening},
+\emph{exchange}, and \emph{contraction} depending on the details of the
+theory in question. Proving that the judgements enjoy the right properties
+is both a matter of good housekeeping and necessity: they are the standard
+things to consider because they arise very naturally in any other
+interesting metatheory. The choice of implementation of the dictionaries is
+paramount because it effects both how arduous it is to prove these
+properties and indeed if it is possible at all. A careful choice of
+implementation can allow the proofs of at least exchange and contraction to
+be ``once and for all'' and then lifted to every judgement where the
+context is used, as well as greatly effecting the difficulty of the usually
+more judgement specific proof of weakening.
+
 %
-The most basic representation for a dictionary, an \emph{\sal}, comprises a list of key-value pairs~\citep[Lists]{Pierce:SF1}.
+The most basic representation for a dictionary, an \emph{\sal}, comprises a
+list of key-value pairs~\citep[Lists]{Pierce:SF1}.
 %
 Association lists are simple to create, manipulate, and reason about.
 %
