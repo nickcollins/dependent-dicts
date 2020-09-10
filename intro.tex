@@ -41,10 +41,17 @@ A third conventional solution is to represent dictionaries as finite partial fun
 %
 The third line of \autoref{fig:intro-example} depicts a nested lambda-expression that serves as the ``lookup table.''
 %
-Assuming the additional postulate of \emph{functional extensionality}~\cite[Logic]{Pierce:SF1}, this representation allows for the use of built-in equality for semantic equivalence.
+Assuming the additional postulate of \emph{functional
+extensionality}~\cite[Logic]{Pierce:SF1}, this representation allows for
+the use of built-in equality for semantic equivalence.\todo{find the right
+  citations for the footnote}
 \footnote{\hspace{0.01in}%
 %
-This postulate is consistent with the constructive calculi underlying most popular proof assistants~\cite[Logic]{Pierce:SF1}.
+This postulate is consistent with the constructive calculi underlying most
+popular proof assistants~\cite[Logic]{Pierce:SF1}. In other newer proof
+assistants built on a cubical logical framework, such as \texttt{redtt} and
+cubical Agda, function extensionality is indeed a theorem, which presents
+authors of work in those languages with a wider design space.
 %
 }
 %
@@ -52,7 +59,12 @@ However, a plain function type does not rule out the possibility of the term bei
 %
 This often isn't a problem in practice -- in cases where the dictionary is not iterated or otherwise destructed, an infinite dictionary will generally work just as well as a finite one,
 %
-so it's not actually necessary to retain a proof that the dictionary is finite.
+so it's not actually necessary to retain a proof that the dictionary is
+finite. Additionally, even if the type of the dictionary admits infinitary
+values, in practice traversing a finite program text will not actually
+create them; omitting the adornments to the type that restrict it to finite
+functions in that setting is a convenience to the prover, not a profound
+change.
 %
 }
 %
@@ -65,7 +77,7 @@ In some cases, the aforementioned drawbacks are minor or can be worked around.
 But developing large proofs is challenging, so any stumbling block---the inability to use built-in equality to establish semantic equivalence of two objects, or the awkwardness of packaging proof terms with data (noting the difficulties that arise from proof relevance)---can cause exorbitant increases in verbosity, time, effort, and accidental complexity.
 
 %% Because the representations of semantically equivalent dictionaries are not necessarily equal, proofs involving association lists may not use a built-in equality to distinguish them.
-%% 
+%%
 %% - are typically implemented in one of the following manners: (TODO source for each)
 
 %% The \sal~ (\SAL) solution is perhaps the most common, being trivially simple. Furthermore:
@@ -214,15 +226,15 @@ Finally, we conclude in \autoref{sec:Discussion} with a discussion of related wo
 
 
 %% {\color{gray}
-%% 
+%%
 %% \subsection{\rkc{Grab Bag of Text}}
-%% 
+%%
 %% %% \section{Problem}
 %% %% \subsection{Problem}
 %% %% \label{sec:Problem}
-%% 
+%%
 %% \rkc{1}
-%% 
+%%
 %% Data structures can possess or lack a wide range of properties that make them easier or harder to work with
 %% when proving metatheory. Naturally, when possible, data structures should be chosen that posess those
 %% properties which make the task at hand easier. Achieving this requires identifying the valuable properties,
@@ -233,47 +245,47 @@ Finally, we conclude in \autoref{sec:Discussion} with a discussion of related wo
 %% discriminating properties that a dictionary implementation may or may not possess:
 %% TODO there's a good chance some of these properties have been named somewhere else. We should make sure we
 %% don't try and coin terms for anything that's already been defined somewhere.
-%% 
+%%
 %% % TODO we may decide that the conceptual and practical benefits of decidable equality are so obvious or
 %% % self-evident that we don't need any further discussion of that property
-%% 
+%%
 %% %% \subsection{Conceptual Importance}
 %% %% \label{sec:Problem:concept}
-%% 
+%%
 %% \rkc{2}
-%% 
+%%
 %% In \autoref{sec:Problem:pract}, we illustrate practical problems and benefits under the particular context
 %% of choosing an implementation for dictionaries. But first, it's worth exploring conceptual aspects that
 %% apply to the general case. These conceptual aspects capture the spirit of practical considerations and
 %% motivate the search for solutions that are not merely serviceable but elegant, moral, and insightful.
-%% 
+%%
 %% \subsubsection{\SemTot}
 %% \label{sec:Problem:concept:SemTot}
 %% TODO something something "making impossible states impossible", i think allusion to the right parts out of that
 %% video will suffice to make the point here
-%% 
+%%
 %% \subsubsection{\SemInj}
 %% \label{sec:Problem:concept:SemInj}
 %% TODO something something it yields arbitrariness, which is not always wrong but which is unaesthetic and, when
 %% avoidable, undesirable. It also allows for a semantic meaning to be represented by a concrete thing that is
 %% needlessly verbose and complicated.
-%% 
+%%
 %% \subsubsection{\EqDec}
 %% \label{sec:Problem:concept:EqDec}
 %% The languages of proof assistants generally pride themselves on being total and constructive, on emphasizing
 %% the knowable and demonstrable over the mysterious and hypothetical.
-%% 
+%%
 %% \subsubsection{\EzDstr}
 %% \label{sec:Problem:concept:EzDstr}
 %% TODO We need to clearly explain what we're talking about here, and clarify stuff like "facilitate inspection"
 %% and "unrestricted non-additive manipulation". Aside from these clarifications, we won't say much else - in
 %% this case the conceptual value largely boils down to the practical value.
-%% 
+%%
 %% %Finally, because they guarantee the \emph{structural properties} \emph{contraction} and
 %% %\emph{exchange}, \dds~ are inherently inappropriate for substructural logics/judgments that reject one or
 %% %both of those properties. In these cases, the naive solution's sensitivity to duplication and/or ordering is
 %% %a feature, not a bug, and that solution becomes not only the natural solution but the morally correct one.
 %% %Future work could explore the possibility of data structures that uphold one of these properties but not the
 %% %other.
-%% 
+%%
 %% }
