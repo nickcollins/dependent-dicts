@@ -60,3 +60,15 @@ so as to test consistency or partially extensional equality instead of purely in
 it would require environments that are destructible.
 Scenarios which require destructibility but not \EqDec{} lead to the same conclusions,
 seeing as these columns are identical in \autoref{fig:prop-summary}.
+
+In addition to breaking strict positivity, refinement proofs can be the source of less severe pain points in
+a broader range of circumstances.
+The ability to refine ordinary types with proofs of validity is one of the most interesting and useful benefits of
+dependently-typed languages, and this power should be appreciated. However, refining with proof terms can
+come at a practical cost, so even in dependently-typed languages, there is high value in avoiding refinements
+whenever possible (or at least whenever profitable). The practical cost of refinements is that proof terms
+don't possess the properties \SemInj~ or \EqDec: due to \emph{proof relevance} (TODO source), two proofs of
+the same property may be unequal, and due to the fact that proof terms may contain functions, proof terms do not
+possess \EqDec~ in the general case. Thus \SemTot, which obviates the need for refinement, has
+a lot of practical value in many general cases beyond those where it is absolutely necessary to appease the
+positivity checker.
