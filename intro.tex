@@ -26,7 +26,7 @@ are two ways (among many others) to represent a dictionary with three particular
 
 \input{fig-summary} %% here to force layout on p.2
 
-To establish a one-to-one correspondence between association lists and semantic mappings, one solution~\citep{FMapList} is to maintain a \emph{canonical}
+To establish a one-to-one correspondence between association lists and semantic mappings, one solution~\citep{FMapList} is to maintain a \emph{canonical}%
 %
 \footnote{
   Some treatments, including the Coq standard library \citep{FMapInterface}, describe unordered but deduplicated \sal{}s as ``weak'', implying that \cal{}s are ``strong''.
@@ -41,7 +41,7 @@ A third conventional solution is to represent dictionaries as finite partial fun
 %
 The third line of \autoref{fig:intro-example} depicts a nested lambda-expression that serves as the ``lookup table.''
 %
-Assuming the additional postulate of \emph{functional extensionality}~\cite[Logic]{Pierce:SF1}, this representation allows for the use of built-in equality for semantic equivalence.
+Assuming the additional postulate of \emph{functional extensionality}~\cite[Logic]{Pierce:SF1}, this representation allows for the use of built-in equality for semantic equivalence.%
 \footnote{\hspace{0.01in}%
 %
 This postulate is consistent with the constructive calculi underlying most popular proof assistants~\cite[Logic]{Pierce:SF1}.
@@ -56,13 +56,15 @@ so it's not actually necessary to retain a proof that the dictionary is finite.
 %
 }
 %
-Worse is the fact that, unlike either association list representation, partial functions lack decidable equality.
+Worse is the fact that, unlike either association list representation, partial functions lack decidable equality and cannot be destructed.
 %
 The function type could be refined with its domain---\ie{}~a canonical list of keys---but would then suffer the drawbacks of manipulating validity proofs \`{a} la canonical association lists while being needlessly complicated.
 
 In some cases, the aforementioned drawbacks are minor or can be worked around.
 %
 But developing large proofs is challenging, so any stumbling block---the inability to use built-in equality to establish semantic equivalence of two objects, or the awkwardness of packaging proof terms with data (noting the difficulties that arise from proof relevance)---can cause exorbitant increases in verbosity, time, effort, and accidental complexity.
+%
+Furthermore, as shown in \autoref{sec:CaseStudy}, there are cases where these drawbacks make a mechanization task not merely difficult, but outright impossible.
 
 %% Because the representations of semantically equivalent dictionaries are not necessarily equal, proofs involving association lists may not use a built-in equality to distinguish them.
 %% 
@@ -175,7 +177,7 @@ Every unique \dd{} represents a unique semantic mapping, thus built-in equality 
 %
 %% there is a bijection between \dd{} terms and finite maps,
 %
-Furthermore, we can (and do) define a function which determines whether or not two \dds{} are equal (\EqDec).
+Furthermore, we define a function which determines whether or not two \dds{} are equal (\EqDec), and a \texttt{destruct} function, which permits destruction albeit in a more awkward manner than standard pattern matching.
 
 As summarized in \autoref{fig:prop-summary}, delta dictionaries strike a new balance in this design space.
 %
@@ -206,7 +208,7 @@ Lastly, though not a concern from a client's perspective, the implementation of 
 %
 Next, we describe the core operations for delta dictionaries and the relevant metatheory in \autoref{sec:DD}.
 %
-In \autoref{sec:CaseStudy}, we describe a small case study in proof development that motivated the design of delta dictionaries.
+In \autoref{sec:CaseStudy}, we describe a small case study in proof development that demonstrates the necessity of delta dictionaries.
 %
 Finally, we conclude in \autoref{sec:Discussion} with a discussion of related work.
 %
