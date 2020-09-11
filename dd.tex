@@ -199,7 +199,7 @@ of recursion on $dd'$. To enable manual establishment of structural recursion, v
 explicitly tracks the dictionary length, we provide another theorem:
 
 \begin{alltt}
-dd-extend-length :
+extend-size :
   \altFAll\{V\} \{dd : DD V\} \{k : K\} \{v : V\} \altRArr
     k \altNIn dd \altRArr
     || dd ,, (k , v) || = 1 + || D ||
