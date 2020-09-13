@@ -52,15 +52,17 @@ providing an instance of the bijection typeclass for integers ($25$ lines of cod
 
 Most types that are suitable for use as keys in the first place, especially strings and countable numeric types, can be bijected to the naturals,
 %
-though doing so may be onerous. Finite types, such as characters, are suitable as keys, but cannot be bijected to the naturals --
+though doing so may be onerous. Finite types, such as characters, are suitable as keys, but cannot be bijected to the naturals---%
 %
 simultaneously achieving \Total{} and \Extensional{} for a dictionary over finite types may require a custom-made dictionary data type.
 
 \Ddls{} are canonically ordered, but by the natural ordering of the naturals, which, depending on the choice of bijection, may correspond to an unnatural
 %
-ordering of the key type. As such, we do not expose the ordering to the client -- functions such as \texttt{destruct} and \texttt{toList} return results
+ordering of the key type. As such, we do not expose the ordering to the client---functions such as \texttt{destruct} and \texttt{toList} produce results
 %
-in arbitrary order from the client's perspective, and so from the client's perspective, the \dd{} is unordered.
+that are in arbitrary order from the client's perspective.
+
+%%, and so from the client's perspective, the \dd{} is unordered.
 
 \subsection{Lookup, Insertion, and Destruction}
 \label{sec:DD:basics}
