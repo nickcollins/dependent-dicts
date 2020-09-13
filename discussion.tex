@@ -10,7 +10,7 @@
 %
 Due to their simplicity, {\sal}s are perhaps the most typical implementation for dictionaries.
 %
-But because \SemInj{} is so important in simplifying proofs, {\FPF}s also see significant use---in key works such as \emph{Software Foundations}~\cite[Maps]{Pierce:SF1}---despite requiring a bit of extra overhead.
+But because \SemInj{} is so important in simplifying proofs, {\fpf}s also see significant use---in key works such as \emph{Software Foundations}~\cite[Maps]{Pierce:SF1}---despite requiring a bit of extra overhead.
 
 %% TODO macro?
 
@@ -20,8 +20,8 @@ But because \SemInj{} is so important in simplifying proofs, {\FPF}s also see si
 %
 whereas a search for \texttt{FMapAVL} shows $474$ results, suggesting that {\cal}s have been found to be less useful than high-performance implementations.
 %
-A search for \texttt{FunctionalExtensionality} \citep{FunExt}, on the other hand, turns up $4916$ results, though most of these are probably unrelated to dictionaries.
-\footnote{
+A search for \texttt{FunctionalExtensionality} \citep{FunExt}, on the other hand, turns up $4916$ results, though most of these are probably unrelated to dictionaries.%
+\footnote{\hspace{0.01in}%
 %
 These searches and can be reproduced by URLs of the form:
 \url{https://github.com/search?l=\&p=3\&q=FMapList+language\%3ACoq\&ref=advsearch\&type=Code },
@@ -49,7 +49,7 @@ When the order of bindings does not matter, dictionaries are a natural choice fo
 %
 But if types defined ``later,'' or in inner scopes, can refer to types defined ``earlier,'' or in outer scopes, then order-insensitive dictionaries are inherently inappropriate.
 %
-This is the case for languages that support subtyping (notably, the subject of the POPLMark challenge~\citep{XXX}).
+This is the case for languages that support subtyping---notably, the subject of the POPLmark Challenge~\citep{POPLmark}.
 %
 Linear logics, on the other hand, require sensitivity to duplicate insertions, so duplication-insensitive dictionaries are inappropriate for them as well.
 %
@@ -75,7 +75,7 @@ even greater concern than it is today. In cases where there is no extraction ste
 %
 there may be no choice but to use implementations that are high-performance but theoretically unwieldy. However, it seems more appropriate, especially with
 %
-fundamental utilities such as dictionaries, to either extract or transpile the mechanization into an implementation language that defines these utilities natively
+fundamental utilities such as dictionaries, to either extract or translate the mechanization into an implementation language that defines these utilities natively
 %
 by way of highly efficient implementations such as hashtables or red-black trees. This extraction may not be completely fidelitous, since it will be using a
 %
