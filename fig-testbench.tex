@@ -1,9 +1,20 @@
 \newcommand{\altEval}[2]{E \altVdash~#1 \altRARR~#2}
 \newcommand{\altEvalEnv}[3]{#1 \altVdash~#2 \altRARR~#3}
-\begin{figure*}[t]
+\begin{figure}[t]
+%% \begin{figure*}[t]
+%% \input{code/testbench.tex}
+
+%% testbenchnarrow.tex TOO TALL WITH THIS...
+%%
+%% \_env : Set \altRArr Set
+%% V env = ?
+%%
 \begin{alltt}
-\input{code/testbench.tex}
+\input{code/testbenchnarrow.tex}
 \end{alltt}
-\caption{Example mechanization scenario that requires \dds{} (type, type context, and type-checking definitions elided).}
+\caption{Mechanization requiring \dds{}.}
+%% (environment, type, type context, and type-checking elided).}
+%% \caption{Example mechanization scenario that requires \dds{} (type, type context, and type-checking definitions elided).}
 \label{fig:testbench}
-\end{figure*}
+\end{figure}
+%% \end{figure*}
