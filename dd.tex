@@ -26,7 +26,7 @@ As described so far, a $0$ offset would correspond to a duplicate key.
 %
 To prevent duplicate keys from being represented, a delta is actually the offset minus $1$: a delta of $0$ indicates an offset (from the previous key) of $1$, a delta of $2$ indicates an offset of $3$, and so on.
 %
-The head of the list, however, does not follow the "minus $1$" rule: so the first ``delta'' is interpreted literally, \ie{}~it represents the key value exactly.
+The head of the list, however, does not follow the ``minus $1$'' rule: so the first ``delta'' is interpreted literally, \ie{}~it represents the key value exactly.
 
 \autoref{fig:dd-example} depicts the \dd{} corresponding to the example from \autoref{sec:Introduction}.
 
@@ -40,13 +40,11 @@ There may be an algebraic structure more general than the natural numbers which 
 %
 is easier for both the implementer and the client. In Agda, the bijection typeclass accepts a \texttt{toNat} function, as well as proofs that \texttt{toNat}
 %
-is injective and surjective
+is injective and surjective, and the \texttt{fromNat} function is defined by the library using the proof of surjectivity.\footnote{\hspace{0.01in}%
 %
-\footnote{\hspace{0.01in}%
-Without surjectivity, a binding for an unmapped naturals either invalidates the \dd, violating \Total, or is ignored, in which case its presence or absence doesn't affect the semantic meaning, violating \Extensional.
-},
+Without surjectivity, a binding for an unmapped natural either invalidates the \dd---violating \Total---or is ignored, in which case its presence or absence does not affect the semantic meaning---violating \Extensional.
 %
-and the \texttt{fromNat} function is defined by the library using the proof of surjectivity.
+}
 %
 We demonstrate this in Agda by
 %
@@ -75,13 +73,15 @@ These proceed largely as they would for association lists, but working indirectl
 
 \autoref{fig:agda} presents concrete implementations for lookup (\ie{} \texttt{\_\altLAng\_\altRAng}), insert (\ie{} \texttt{\_,,\_}), and \texttt{destruct} in Agda.
 %
+Notice that we choose to parameterize the \texttt{Delta} module by key type \verb+K+ and bijection \verb+bij+ to the naturals; the operations are parameterized by value-binding type \verb+V+.
+%
 %Having to treat the first delta differently than the rest (literally rather than relatively) is the source of the somewhat technical---through simple---details.
 
-First, we define a helper function \verb+delta+ which computes the delta, \ie{} the offset minus $1$, between two distinct numbers.
-
-Given that, lookup is straightfoward. The insert function is also fairly straightforward.
+The helper function \verb+delta+ computes the delta, \ie{} the offset minus $1$, between two distinct numbers.
 %
-If the delta to insert is less than delta of the first pair, then we place the delta to insert as the first pair of the new list, and
+Given that, lookup is straightforward. The insert function is also fairly straightforward.
+%
+If the delta to insert is less than the delta of the first pair, then we place the delta to insert as the first pair of the new list, and
 %
 the original first pair will be the second pair of the new list, but using the delta between its original value and the inserted delta.
 %
@@ -91,11 +91,11 @@ If the first pair is an exact match, then we simply replace the old value with t
 
 %% \cite[Facts about weak maps]{FMapFacts}
 %
-The Coq Standard \citet[Facts about weak maps]{FMapFacts} lists key metatheory about dictionaries, including that for lookup, insert, and \verb+destruct+.
+The Coq Standard \citet[Facts about weak maps]{FMapFacts} describes key metatheory about dictionaries, including that for lookup, insert, and \verb+destruct+.
 %
 Our Agda mechanization proves the relevant subset of this metatheory. Some of the metatheory in the Coq treatment involves concepts not relevant to our treatment,
 %
-especially multiple distinct notions of equality. Also, since we don't expose mapping order to the client via our interface,
+especially multiple distinct notions of equality. Also, since we do not expose mapping order to the client via our interface,
 %
 we do not prove any of the theorems pertaining to ordering (\ie{} those that are not ``weak'').
 
@@ -112,7 +112,13 @@ with appropriate metatheory (not reproduced here).
 \subsection{Properties}
 \label{sec:DD:props}
 
-The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \emph{structural properties} \emph{contraction} and \emph{exchange} are defined below, and proven in Agda.
+We now consider properties about delta dictionaries, starting with the four design goals identified in \autoref{sec:Introduction}.
+%
+Theorems below are proven in Agda.
+%
+Recall that key type \verb+K+ is a module parameter and is implicitly bound in the type \verb+DD V+.
+
+% The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \emph{structural properties} \emph{contraction} and \emph{exchange} are defined below, and proven in Agda.
 
 %% \subsection{Design Goals}
 %% \parahead{Design Goals}
@@ -161,6 +167,14 @@ The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \em
 
 %\rkc{Two common properties for PL metatheory.}
 
+\noindent
+%
+We discuss why destruction is ``not-so-easy'' in detail below.
+
+Lastly, we prove analogs to the \emph{structural properties} \emph{contraction} and \emph{exchange}.
+
+% The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \emph{structural properties} \emph{contraction} and \emph{exchange} are defined below, and proven in Agda.
+
 \begin{theorem}[Dictionary Contraction]
 \label{thm:cont-dicts}
 \justIndent
@@ -184,35 +198,37 @@ The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \em
 \parahead{The Difficulty of Destruction}
 
 \SemInj{} requires canonical ordering and deduplication, and \SemTot{} means that the canonical order and deduplication have to come from
-how the data is interpreted rather than how it's organized. The non-literal way in which key data is interpreted means that it's not
-safe for client code to work with the raw data directly -- rather, all interaction with the data must be
-encapsulated in library functions. Unfortunately, this includes \emph{destruction}; an interaction which
+how the data is interpreted rather than how it is organized. The non-literal way in which key data is interpreted means that it is not
+safe for client code to work with the raw data directly---rather, all interaction with the data must be
+encapsulated in library functions.
+
+Unfortunately, this includes \emph{destruction}; an interaction which
 normally goes through the very natural, elegant, and well-supported mechanism of pattern matching is now
 only available through the library function \verb+destruct+. \autoref{thm:EzDstr} proves that this function
 destructs the \dd{} in essentially the same way that a case expression destructs a list of pairs (although
 the order in which bindings are plucked away is arbitrary from the client's perspective).
 
 \verb+destruct+ achieves the same purpose as typical pattern matching (albeit more awkwardly), but because it
-doesn't harness the primitive notions of pattern matching and structure, it doesn't establish structural
+does not harness the primitive notions of pattern matching and structure, it does not establish structural
 decrease on the dictionary object, which may break out-of-the-box structural recursion in the likely case
-of recursion on $dd'$. To enable manual establishment of structural recursion, via an extra parameter that
+of recursion on \verb+dd'+. To enable manual establishment of structural recursion, via an extra parameter that
 explicitly tracks the dictionary length, we provide another theorem:
 
 \begin{alltt}
 extend-size :
   \altFAll\{V\} \{dd : DD V\} \{k : K\} \{v : V\} \altRArr
     k \altNIn dd \altRArr
-    || dd ,, (k , v) || = 1 + || D ||
+    || dd ,, (k , v) || = 1 + || dd ||
 \end{alltt}
 
-Although possible, manually establishing termination is painful, especially given that it's not necessary
+Although possible, manually establishing termination is painful, especially given that it is not necessary
 for {\sal}s or {\cal}s. Thus \dds~ fail at \EzDstr, although they are still better than {\fpf}s in this
-regard, seeing as it's not only hard but impossible to destruct {\fpf}s.
+regard, seeing as it is not only hard but impossible to destruct {\fpf}s.
 
 Is it possible to have a data structure that possesses all four properties?
 Not likely - as mentioned above, the combination of \SemInj{} and \SemTot{} essentially
 necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
-makes it dangerous for client code to mess with the raw data. As such, we believe we've uncovered an
+makes it dangerous for client code to mess with the raw data. As such, we believe we have uncovered an
 inherent trade-off between desirable properties. In cases where \SemTot{} and \EqDec{} are critical,
 and there is little to no need to destruct dictionaries, \dds{} seem to be a clear winner over
 the conventional solutions. But in cases where \SemTot{} is not so important,
