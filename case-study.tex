@@ -3,7 +3,7 @@
 \section{Case Study}
 \label{sec:CaseStudy}
 
-To illustrate the practical importance of the four core properties, we consider a simply typed lambda calculus
+To illustrate the practical importance of the four core properties, we consider a simply-typed lambda calculus
 augmented with an \texttt{assert} operator -- see \autoref{fig:testbench}.
 \texttt{assert} takes two arguments; if their evaluation results are exactly equal, \texttt{assert} evaluates to the first,
 otherwise it evaluates to an \texttt{Err} result. We wish to define an environment-based (as opposed to substitution-based)
@@ -15,6 +15,7 @@ In this section we show that \dds{} are a suitable choice, but that all the conv
 
 \input{fig-testbench}
 
+\rkc{Formatting:}
 For \sal{}s, \emph{contraction} is false --
 \altEvalEnv{\hbox{E ,, (n , v') ,, (n , v)}}{\hbox{$\cdot\lambda x \cdot e$}}{\hbox{[E ,, (n , v') ,, (n , v)]$\lambda x \cdot e$}}
 while \altEvalEnv{E ,, (n , v)}{\hbox{$\cdot\lambda x \cdot e$}}{\hbox{[E ,, (n , v)]$\lambda x \cdot e$}}, yet
@@ -30,29 +31,31 @@ so \texttt{utlc-result} is also in negative position, violating strict positivit
 As such, results cannot contain validity proofs, so for any system that uses dictionaries as data,
 the dictionaries must be \total.
 
-Because \fpf{}s do not have \EqDec, it's not possible to decide which \texttt{EvalAsrt} constructor would
-apply to an \texttt{assert} of two \fpf{}s. As such, it's not possible to constructively prove strong normalization.
+Because \fpf{}s do not have \EqDec, it is not possible to decide which \texttt{EvalAsrt} constructor would
+apply to an \texttt{assert} of two \fpf{}s. As such, it is not possible to constructively prove strong normalization.
 
 Because \dds, uniquely amongst the surveyed solutions, possess \SemTot, \SemInj, and \EqDec,
 they are a suitable choice for implementing environments, enabling proofs of \emph{contraction},
 \emph{exchange}, and strong normalization.
 \parahead{Generality}
 This scenario may seem contrived, but it is actually a simplification of a real task faced by the authors.
-The task was to mechanize the formalization of Smyth\citep{smyth}, a program synthesis technique which uses
+The task was to mechanize the formalization of Smyth~\citep{smyth}, a program synthesis technique which uses
 natural semantics (\ie{} big-step environment-based evaluation) and which requires assertions.
 Although this mechanization has not been completed, challenges (related to the aforementioned issues)
 faced during its development necessitated the invention of \dds.
+\rkc{Provide URL to GitHub commit? Say omitted due for review?}
+\rkc{Do we need to anonymize the Smyth name and reference for review?}
 
 Perhaps, instead of using \dds, these issues could be worked around, by changing or dropping some of our criteria?
-In many cases, substitution can be used to avoid environments -- however, environments are often preferred because
-they allow the formalization to more closely resemble the implementation \nick{TODO source}. Furthermore,
+In many cases, substitution can be used to avoid environments---however, environments are often preferred because
+they allow the formalization to more closely resemble the implementation~(\eg{}~\citep{Ancona:2014})\rkc{Reference okay?}. Furthermore,
 Smyth has hole closures in addition to lambda closures, so closing over environments would be necessary regardless.
 
-\emph{Contraction} and \emph{exchange} are not always necessary properties for program foundation judgments --
-rather, substructural logics, by definition, deliberately violate one or both of these properties%
-\footnote{Technically, they could retain these properties but instead violate \emph{weakening}.}.
+\emph{Contraction} and \emph{exchange} are not always necessary properties for program foundation judgments---%
+rather, substructural logics, by definition, deliberately violate one or both of these properties.%
+\footnote{\hspace{0.01in}Technically, these properties could be retained at the expense of \emph{weakening}.}
 That said, languages should generally uphold the \emph{structural properties} unless there is a strong and explicit
-reason not to. In most cases, the inability to prove the \emph{structural properties} would raise a large red flag,
+reason not to. In most cases, the inability to prove the structural properties would raise a large red flag,
 suggesting that there may be a bug in the language definition.
 
 It may not seem useful to assert that two functions are intensionally identical, but if assertion is relaxed,
@@ -67,8 +70,8 @@ The ability to refine ordinary types with proofs of validity is one of the most 
 dependently-typed languages, and this power should be appreciated. However, refining with proof terms can
 come at a practical cost, so even in dependently-typed languages, there is high value in avoiding refinements
 whenever possible (or at least whenever profitable). The practical cost of refinements is that proof terms
-don't possess the properties \SemInj~ or \EqDec: due to \emph{proof relevance} (TODO source), two proofs of
+do not possess the properties \SemInj~ or \EqDec: due to \emph{proof relevance} (TODO source), two proofs of
 the same property may be unequal, and due to the fact that proof terms may contain functions, proof terms do not
-possess \EqDec~ in the general case. Thus \SemTot, which obviates the need for refinement, has
+possess \EqDec~ in the general case. Thus, \SemTot---which obviates the need for refinement---has
 a lot of practical value in many general cases beyond those where it is absolutely necessary to appease the
 positivity checker.
