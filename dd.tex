@@ -133,9 +133,9 @@ Recall that key type \verb+K+ is a module parameter and is implicitly bound in t
 \label{thm:SemInj}
 \justIndent
 \begin{alltt}
-\altFAll\{V\} \{dd1 dd2 : DD V\} \altRArr
-  ((k : K) \altRArr dd1 \altLAng k \altRAng == dd2 \altLAng k \altRAng) \altRArr
-  dd1 == dd2
+  \altFAll\{V\} \{dd1 dd2 : DD V\} \altRArr
+    ((k : K) \altRArr dd1 \altLAng k \altRAng == dd2 \altLAng k \altRAng) \altRArr
+    dd1 == dd2
 \end{alltt}
 \end{theorem}
 
@@ -143,9 +143,9 @@ Recall that key type \verb+K+ is a module parameter and is implicitly bound in t
 \label{thm:EqDec}
 \justIndent
 \begin{alltt}
-\altFAll\{V\} (dd1 dd2 : DD V) \altRArr
-  ((v1 v2 : V) \altRArr v1 == v2 \altOr v1 \altNE v2) \altRArr
-  dd1 == dd2 \altOr dd1 \altNE dd2
+  \altFAll\{V\} (dd1 dd2 : DD V) \altRArr
+    ((v1 v2 : V) \altRArr v1 == v2 \altOr v1 \altNE v2) \altRArr
+    dd1 == dd2 \altOr dd1 \altNE dd2
 \end{alltt}
 \end{theorem}
 
@@ -154,11 +154,11 @@ Recall that key type \verb+K+ is a module parameter and is implicitly bound in t
 \label{thm:EzDstr}
 \justIndent
 \begin{alltt}
-\altFAll\{V\} \{dd dd' : DD V\} \{k : K\} \{v : V\} \altRArr
-  (destruct dd == None \altRArr dd == \altEmpty)
-    \altAnd
-  (destruct dd == Some ((k , v) , dd') \altRArr
-    (k \altNIn dd' \altAnd dd == dd' ,, (k , v))
+  \altFAll\{V\} \{dd dd' : DD V\} \{k : K\} \{v : V\} \altRArr
+    (destruct dd == None \altRArr dd == \altEmpty)
+      \altAnd
+    (destruct dd == Some ((k , v) , dd') \altRArr
+      (k \altNIn dd' \altAnd dd == dd' ,, (k , v))
 \end{alltt}
 \end{theorem}
 
@@ -179,8 +179,8 @@ Lastly, we prove analogs to the \emph{structural properties} \emph{contraction} 
 \label{thm:cont-dicts}
 \justIndent
 \begin{alltt}
-\altFAll\{V\} \{dd : DD V\} \{k : K\} \{v v' : V\} \altRArr
-  dd ,, (k , v') ,, (k , v) == dd ,, (k , v)
+  \altFAll\{V\} \{dd : DD V\} \{k : K\} \{v v' : V\} \altRArr
+    dd ,, (k , v') ,, (k , v) == dd ,, (k , v)
 \end{alltt}
 \end{theorem}
 
@@ -188,10 +188,10 @@ Lastly, we prove analogs to the \emph{structural properties} \emph{contraction} 
 \label{thm:exch-dicts}
 \justIndent
 \begin{alltt}
-\altFAll\{V\} \{dd : DD V\} \{k1 k2 : K\} \{v1 v2 : V\} \altRArr
-  k1 \altNE k2 \altRArr
-  dd ,, (k1 , v1) ,, (k2 , v2) ==
-  dd ,, (k2 , v2) ,, (k1 , v1)
+  \altFAll\{V\} \{dd : DD V\} \{k1 k2 : K\} \{v1 v2 : V\} \altRArr
+    k1 \altNE k2 \altRArr
+    dd ,, (k1 , v1) ,, (k2 , v2) ==
+    dd ,, (k2 , v2) ,, (k1 , v1)
 \end{alltt}
 \end{theorem}
 
@@ -215,10 +215,10 @@ of recursion on \verb+dd'+. To enable manual establishment of structural recursi
 explicitly tracks the dictionary length, we provide another theorem:
 
 \begin{alltt}
-extend-size :
-  \altFAll\{V\} \{dd : DD V\} \{k : K\} \{v : V\} \altRArr
-    k \altNIn dd \altRArr
-    || dd ,, (k , v) || = 1 + || dd ||
+  extend-size :
+    \altFAll\{V\} \{dd : DD V\} \{k : K\} \{v : V\} \altRArr
+      k \altNIn dd \altRArr
+      || dd ,, (k , v) || = 1 + || dd ||
 \end{alltt}
 
 Although possible, manually establishing termination is painful, especially given that it is not necessary
@@ -226,10 +226,10 @@ for {\sal}s or {\cal}s. Thus \dds~ fail at \EzDstr, although they are still bett
 regard, seeing as it is not only hard but impossible to destruct {\fpf}s.
 
 Is it possible to have a data structure that possesses all four properties?
-Not likely - as mentioned above, the combination of \SemInj{} and \SemTot{} essentially
+Not likely. As mentioned above, the combination of \SemInj{} and \SemTot{} essentially
 necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
 makes it dangerous for client code to mess with the raw data. As such, we believe we have uncovered an
 inherent trade-off between desirable properties. In cases where \SemTot{} and \EqDec{} are critical,
 and there is little to no need to destruct dictionaries, \dds{} seem to be a clear winner over
 the conventional solutions. But in cases where \SemTot{} is not so important,
-but inspection or destruction are, {\CAL}s may be a preferable.
+but inspection or destruction are, {\cal}s may be a preferable.
