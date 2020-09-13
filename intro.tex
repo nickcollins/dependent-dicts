@@ -16,22 +16,25 @@ Association lists are simple to create, manipulate, and reason about.
 %
 But because they allow duplicate bindings for the same key and they are sensitive to the order of insertions, many distinct \sal{}s represent the same semantic mapping.
 %
-For example, the association lists on the first two lines of \autoref{fig:intro-example}
+For example, first two lines of \autoref{fig:intro-example}
 %
 %% ---and illustrated below in \autoref{fig:uneq}---
 %
-are two ways (among many others) to represent a dictionary with three particular bindings.
+show two distinct association lists (among others) to represent a dictionary with three particular bindings.
 
 %% \input{fig-unequal}
 
 \input{fig-summary} %% here to force layout on p.2
 
-To establish a one-to-one correspondence between association lists and semantic mappings, one solution~\citep{FMapList} is to maintain a \emph{canonical}%
+To establish a one-to-one correspondence between association lists and semantic mappings, one solution~\citep{FMapList} is to maintain a \emph{canonical}
 %
-\footnote{
-  Some treatments, including the Coq standard library \citep{FMapInterface}, describe unordered but deduplicated \sal{}s as ``weak'', implying that \cal{}s are ``strong''.
+form that is semantically valid and unique, namely, a list in which there are no duplicate keys and, furthermore, where keys are in sorted order.%
+%
+\footnote{\hspace{0.01in}%
+%
+Some treatments, including the Coq standard library~\citep{FMapInterface}, describe unordered but deduplicated \sal{}s as ``weak,'' implying that \cal{}s are ``strong.''
+%
 }
-form that is semantically valid and unique, namely, a list in which there are no duplicate keys and, furthermore, where keys are in sorted order.
 %
 The second association list described in \autoref{fig:intro-example} is one such example.
 %
@@ -39,24 +42,23 @@ This approach allows proofs with canonical association lists to use built-in equ
 
 A third conventional solution is to represent dictionaries as finite partial functions~\cite[Maps]{Pierce:SF1}.
 %
-The third line of \autoref{fig:intro-example} depicts a nested lambda-expression that serves as the ``lookup table.''
+The third line of \autoref{fig:intro-example} depicts a nested lambda-expression that serves as the ``lookup table'' (we omit the ``Some'' constructors for space).
 %
-Assuming the additional postulate of \emph{functional extensionality}~\cite[Logic]{Pierce:SF1}, this representation allows for the use of built-in equality for semantic equivalence.%
-\footnote{\hspace{0.01in}%
+%% ``lookup table.''
 %
-This postulate is consistent with the constructive calculi underlying most popular proof assistants~\cite[Logic]{Pierce:SF1}.
+Assuming the additional postulate of \emph{functional extensionality}~\mbox{\cite[Logic]{Pierce:SF1}}---consistent with the constructive calculi underlying most popular proof assistants---this representation allows for the use of built-in equality for semantic equivalence.
+%
+However, a plain function type does not rule out terms that are \emph{non-}finite maps, possibly requiring additional proofs of validity as with canonical association lists.\footnote{\hspace{0.01in}%
+%
+This is often not a problem in practice:
+%
+if not iterated or otherwise destructed, an infinite dictionary will generally work just as well---%
+%
+a finiteness proof is unnecessary.
 %
 }
 %
-However, a plain function type does not rule out the possibility of the term being a \emph{non-}finite map, possibly requiring additional proofs of validity as with canonical association lists.\footnote{\hspace{0.01in}%
-%
-This often isn't a problem in practice -- in cases where the dictionary is not iterated or otherwise destructed, an infinite dictionary will generally work just as well as a finite one,
-%
-so it's not actually necessary to retain a proof that the dictionary is finite.
-%
-}
-%
-Worse is the fact that, unlike either association list representation, partial functions lack decidable equality and cannot be destructed.
+Worse are the facts that, unlike either association list representation, partial functions lack decidable equality and cannot be destructed.
 %
 The function type could be refined with its domain---\ie{}~a canonical list of keys---but would then suffer the drawbacks of manipulating validity proofs \`{a} la canonical association lists while being needlessly complicated.
 
@@ -121,13 +123,13 @@ Built-in equality corresponds to semantic equivalence, \ie{} two unequal terms h
 %
 \designGoal{\EqDec}
 %
-Built-in equality is decidable for the type.
+Built-in equality is decidable for the representation type.
 
 \end{enumerate}
 
 Furthermore, in addition to properties about the external interface of the data structure, it is often useful to retain the ability to inspect, iterate, and manipulate sub-dictionaries.
 %
-Thus, our final design goal:
+%% Thus, our final design goal:
 
 \begin{enumerate}
 
@@ -135,15 +137,15 @@ Thus, our final design goal:
 %
 \designGoal{\EzDstr}
 %
-The ability to decompose a data structure into atomic parts, to facilitate inspection or unrestricted non-additive manipulation, in a sufficiently convenient manner.
+The ability to decompose a data structure into atomic parts, for inspection or unrestricted non-additive manipulation, in a convenient manner.
+
+%% to facilitate
+
+%% sufficiently
 
 \end{enumerate}
 
-\autoref{fig:prop-summary} summarizes the preceding discussion along these dimensions; note that all conventional representations except partial functions can be easily destructed.
-%
-%% None of the conventional representations satisfies both \SemTot{} and \SemInj{}, let alone the additional properties.
-%
-%% None of the conventional representations satisfies more than three of the four properties.
+\autoref{fig:prop-summary} summarizes the preceding discussion along these dimensions; note that, unlike the association list representations, partial functions cannot be easily destructed.
 %
 None of the conventional representations satisfies both \SemTot{} and \SemInj{}, nor more than three of the four properties.
 
