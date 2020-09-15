@@ -43,7 +43,7 @@ Some treatments, including the Coq standard library~\citep{FMapInterface}, descr
 %
 The second association list described in \autoref{fig:intro-example} is one such example.
 %
-This approach allows proofs with canonical association lists to use built-in equality for semantic equivalence, at the expense of extending the underlying list type---which allows arbitrary, possibly invalid lists---with a proof of validity that refines the coarser type. The downsides of having to use validity proofs are discussed further in \autoref{sec:CaseStudy}.
+This approach is \emph{\extensional} -- \ie{} it permits using built-in equality for semantic equivalence. However, it requires extending the underlying list type---which allows arbitrary, possibly invalid lists---with a proof of validity that refines the coarser type. The downsides of having to use validity proofs are discussed further in \autoref{sec:CaseStudy}.
 
 A third conventional solution is to represent dictionaries as finite partial functions~\cite[Maps]{Pierce:SF1}.
 %
@@ -57,26 +57,26 @@ In some newer proof assistants built on a cubical logical framework, such as \te
 cubical Agda, \emph{functional extensionality} is a theorem, which presents
 authors of work in those languages with a wider design space.
 }
-of \emph{functional extensionality}~\mbox{\cite[Logic]{Pierce:SF1}}---consistent with the constructive calculi underlying Coq and Agda---this representation allows for the use of built-in equality for semantic equivalence.
+of \emph{functional extensionality}~\mbox{\cite[Logic]{Pierce:SF1}}---consistent with the constructive calculi underlying Coq and Agda---this representation is also \emph{\extensional}.
 %
 However, a plain function type does not rule out terms that are \emph{non-}finite maps, possibly requiring additional proofs of validity as with canonical association lists.\footnote{\hspace{0.01in}%
 %
 This is often not a problem in practice:
 %
-if not iterated or otherwise destructed, an infinite dictionary will generally work just as well---%
+if not iterated or destructed, an infinite dictionary will work just as well,
 %
-a finiteness proof is unnecessary.
+so a finiteness proof is unnecessary.
 %
-Additionally, traversing a finite program text will create only a finite number of mappings.
+%Additionally, traversing a finite program text will create only a finite number of mappings.
 }
 %
 Worse are the facts that, unlike either association list representation, partial functions lack decidable equality and cannot be destructed.
 %
-The function type could be refined with its domain---\ie{}~a canonical list of keys---but would then suffer the drawbacks of manipulating validity proofs \`{a} la canonical association lists while being needlessly complicated.
+The function type could be refined with its domain---\ie{}~a canonical list of keys---but would then suffer the same drawbacks of validity proofs \`{a} la canonical association lists.
 
 In some cases, the aforementioned drawbacks are minor or can be worked around.
 %
-But developing large proofs is challenging, so any stumbling block---the inability to use built-in equality to establish semantic equivalence of two objects, or the awkwardness of packaging proof terms with data (noting the difficulties that arise from proof relevance)---can cause exorbitant increases in verbosity, time, effort, and accidental complexity.
+But developing large proofs is challenging, so any stumbling block can cause exorbitant increases in verbosity, time, effort, and accidental complexity.
 %
 Furthermore, as shown in \autoref{sec:CaseStudy}, there are cases where these drawbacks make a mechanization task not merely difficult, but outright impossible.
 
@@ -149,7 +149,7 @@ Furthermore, in addition to properties about the external interface of the data 
 %
 \designGoal{\EzDstr}
 %
-The ability to decompose a data structure into atomic parts, for inspection or unrestricted non-additive manipulation, in a convenient manner.
+The ability to decompose a data structure into atomic subparts in a convenient manner.
 
 %% to facilitate
 
