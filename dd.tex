@@ -38,9 +38,9 @@ In our implementation, each key is represented by a natural number, so that we c
 %
 There may be an algebraic structure more general than the natural numbers which satisfies these requirements, but for practical purposes, working with naturals
 %
-is easier for both the implementer and the client. In Agda, the bijection typeclass accepts a \texttt{toNat} function, as well as proofs that \texttt{toNat}
+is easier for both the implementer and the client. In Agda, the bijection typeclass accepts a \texttt{convert} function, as well as proofs that \texttt{convert}
 %
-is injective and surjective, and the \texttt{fromNat} function is defined by the library using the proof of surjectivity.\footnote{\hspace{0.01in}%
+is injective and surjective, and the inverse function is defined by the library using the proof of surjectivity.\footnote{\hspace{0.01in}%
 %
 Without surjectivity, a binding for an unmapped natural either invalidates the \dd---violating \Total---or is ignored, in which case its presence or absence does not affect the semantic meaning---violating \Extensional.
 %

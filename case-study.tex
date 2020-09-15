@@ -52,8 +52,8 @@ they allow the formalization to more closely resemble the implementation~(\eg{}~
 Smyth has hole closures in addition to lambda closures, so closing over environments would be necessary regardless.
 
 \emph{Contraction} and \emph{exchange} are not always necessary properties for program foundation judgments---%
-rather, substructural logics, by definition, deliberately violate one or both of these properties.%
-\footnote{\hspace{0.01in}Technically, these properties could be retained at the expense of \emph{weakening}.}
+rather, substructural type systems, by definition, deliberately violate one or both of these properties.%
+\footnote{\hspace{0.01in}Technically, some substructural type systems (\eg{} \emph{relevant} type systems) uphold \emph{contraction} and \emph{exchange} but violate \emph{weakening}.}
 That said, languages should generally uphold the \emph{structural properties} unless there is a strong and explicit
 reason not to. In most cases, the inability to prove the structural properties would raise a large red flag,
 suggesting that there may be a bug in the language definition.
