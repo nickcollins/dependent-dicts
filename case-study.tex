@@ -54,9 +54,15 @@ Smyth has hole closures in addition to lambda closures, so closing over environm
 \emph{Contraction} and \emph{exchange} are not always necessary properties for program foundation judgments---%
 rather, substructural type systems, by definition, deliberately violate one or both of these properties.%
 \footnote{\hspace{0.01in}Technically, some substructural type systems (\eg{} \emph{relevant} type systems) uphold \emph{contraction} and \emph{exchange} but violate \emph{weakening}.}
-That said, languages should generally uphold the \emph{structural properties} unless there is a strong and explicit
-reason not to. In most cases, the inability to prove the structural properties would raise a large red flag,
-suggesting that there may be a bug in the language definition.
+That said, a judgment should generally uphold the \emph{structural properties} unless there is a strong and explicit
+reason not to. Proving the right properties
+is both a matter of good housekeeping and necessity: they are standard
+considerations because they arise very naturally in any other
+interesting metatheory, and the inability to prove them is often a large red flag indicating a bug in the judgment's definition.
+Because \emph{contraction} and \emph{exchange} are properties of \dds{} themselves,
+the proofs of these properties for one or many judgments come ``for free''.
+Additionally, the useful properties of \dds{} may greatly reduce the difficulty of the usually
+more judgement-specific proof of \emph{weakening}.
 
 It may not seem useful to assert that two functions are intensionally identical, but if assertion is relaxed,
 so as to test consistency or partially extensional equality instead of purely intensional equality,

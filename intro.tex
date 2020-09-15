@@ -21,6 +21,11 @@ For example, first two lines of \autoref{fig:intro-example}
 %% ---and illustrated below in \autoref{fig:uneq}---
 %
 show two distinct association lists (among others) to represent a dictionary with three particular bindings.
+%
+This lack of \emph{\Extensional} can make proofs more difficult~\cite[Maps]{Pierce:SF1} or impossible, esp. when it comes to proving \emph{contraction} and \emph{exchange}%
+\citep{StructProp}
+%
+(discussed further in \autoref{sec:CaseStudy}).
 
 %% \input{fig-unequal}
 
@@ -46,7 +51,13 @@ The third line of \autoref{fig:intro-example} depicts a nested lambda-expression
 %
 %% ``lookup table.''
 %
-Assuming the additional postulate of \emph{functional extensionality}~\mbox{\cite[Logic]{Pierce:SF1}}---consistent with the constructive calculi underlying most popular proof assistants---this representation allows for the use of built-in equality for semantic equivalence.
+Assuming the additional postulate%
+\footnote{\hspace{0.01in}%
+In some newer proof assistants built on a cubical logical framework, such as \texttt{redtt} and
+cubical Agda, \emph{functional extensionality} is a theorem, which presents
+authors of work in those languages with a wider design space.
+}
+of \emph{functional extensionality}~\mbox{\cite[Logic]{Pierce:SF1}}---consistent with the constructive calculi underlying Coq and Agda---this representation allows for the use of built-in equality for semantic equivalence.
 %
 However, a plain function type does not rule out terms that are \emph{non-}finite maps, possibly requiring additional proofs of validity as with canonical association lists.\footnote{\hspace{0.01in}%
 %
@@ -56,6 +67,7 @@ if not iterated or otherwise destructed, an infinite dictionary will generally w
 %
 a finiteness proof is unnecessary.
 %
+Additionally, traversing a finite program text will create only a finite number of mappings.
 }
 %
 Worse are the facts that, unlike either association list representation, partial functions lack decidable equality and cannot be destructed.
