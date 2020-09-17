@@ -78,6 +78,8 @@ These proceed largely as they would for association lists, but working indirectl
 Notice that we choose to parameterize the \texttt{Delta} module by key type \verb+K+ and bijection \verb+bij+ to the naturals; the operations are parameterized by value-binding type \verb+V+.
 %
 %Having to treat the first delta differently than the rest (literally rather than relatively) is the source of the somewhat technical---through simple---details.
+%
+The type \verb+DL+ describes the raw ``delta lists'' used internally, which are wrapped by the \verb+DD+ datatype exposed to clients.
 
 The helper function \verb+delta+ computes the delta, \ie{} the offset minus $1$, between two distinct numbers.
 %
@@ -171,11 +173,13 @@ Recall that key type \verb+K+ is a module parameter and is implicitly bound in t
 
 \noindent
 %
-We discuss why destruction is ``not-so-easy'' in detail in \autoref{sec:Tradeoffs}.
+We discuss why destruction is ``not-so-easy'' in \autoref{sec:Tradeoffs}.
 
 Lastly, we prove analogs to the \emph{structural properties} \emph{contraction} and \emph{exchange}.
 
 % The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \emph{structural properties} \emph{contraction} and \emph{exchange} are defined below, and proven in Agda.
+
+%% \pagebreak %% SPACING HACK: TODO check whether this is needed after final edits
 
 \begin{theorem}[Dictionary Contraction]
 \label{thm:cont-dicts}
