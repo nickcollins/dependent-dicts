@@ -1,45 +1,98 @@
-\section{Discussion and Related Work}
+%% \section{Discussion and Related Work}
+\section{Discussion}
 \label{sec:Discussion}
+
+We conclude with a broader discussion of the design space, as well as related
+and future work.
 
 \vspace{0.05in} %% SPACE HACK
 
-%% \parahead{Association Lists and Partial Functions}
-%% \parahead{Conventional Dictionary Representations}
+\subsection{Design Tradeoffs}
+\label{sec:Tradeoffs}
 
-\parahead{Conventional Representations}
-%
-Due to their simplicity, {\sal}s are perhaps the most typical implementation for dictionaries.
-%
-But because \SemInj{} is so important in simplifying proofs, {\fpf}s also see significant use---in key works such as \emph{Software Foundations}~\cite[Maps]{Pierce:SF1}---despite requiring a bit of extra overhead.
+\parahead{The Difficulty of Destruction}
 
-%% TODO macro?
+\SemInj{} requires canonical ordering and deduplication, and \SemTot{} means that the canonical order and deduplication have to come from
+how the data is interpreted rather than how it is organized. The non-literal way in which key data is interpreted means that it is not
+safe for client code to work with the raw data directly---rather, all interaction with the data must be
+encapsulated in library functions.
 
-\Cals{} seem to get little use, perhaps because working with refinement proofs might add more hassle than \SemInj{} alleviates.
-%
-\Cals{} are defined in the Coq standard library as \texttt{FMapList} \citep{FMapList}; a GitHub search for \texttt{FMapList} shows $304$ results,
-%
-whereas a search for \texttt{FMapAVL} shows $474$ results, suggesting that {\cal}s have been found to be less useful than high-performance implementations.
-%
-A search for \texttt{FunctionalExtensionality} \citep{FunExt}, on the other hand, turns up $4916$ results, though most of these are probably unrelated to dictionaries.%
-\footnote{\hspace{0.01in}%
-%
-These searches and can be reproduced by URLs of the form:
-\url{https://github.com/search?l=\&p=3\&q=FMapList+language\%3ACoq\&ref=advsearch\&type=Code },
-replacing \texttt{FMapList} with \texttt{FMapAVL} and \texttt{FunctionalExtensionality}.
-%
-Accessed August 23, 2020.
-%
-}
-%
-\citet{Amorim:fmap} provides a more comprehensive treatment of {\cal}s, augmenting them with a functional interface so that the client can
-%
-use them as though they were {\fpf}s (note that this is different from having a \fpf{} augmented with keys).
+Unfortunately, this includes \emph{destruction}; an interaction which
+normally goes through the very natural, elegant, and well-supported mechanism of pattern matching is now
+only available through the library function \verb+destruct+. \autoref{thm:EzDstr} proves that this function
+destructs the \dd{} in essentially the same way that a case expression destructs a list of pairs (although
+the order in which bindings are plucked away is arbitrary from the client's perspective).
 
-% github searches
-% funext        : 4916
-% FMapInterface : 504
-% FMapAVL       : 474
-% FMapList      : 304
+\verb+destruct+ achieves the same purpose as typical pattern matching (albeit more awkwardly), but because it
+does not harness the primitive notions of pattern matching and structure, it does not establish structural
+decrease on the dictionary object, which may break out-of-the-box structural recursion in the likely case
+of recursion on \verb+dd'+. To enable manual establishment of structural recursion, via an extra parameter that
+explicitly tracks the dictionary length, we provide another theorem:
+
+\begin{alltt}
+  extend-size :
+    \altFAll\{V\} \{dd : DD V\} \{k : K\} \{v : V\} \altRArr
+      k \altNIn dd \altRArr
+      || dd ,, (k , v) || = 1 + || dd ||
+\end{alltt}
+
+Although possible, manually establishing termination is painful, especially given that it is not necessary
+for {\sal}s or {\cal}s. Thus \dds~ fail at \EzDstr, although they are still better than {\fpf}s in this
+regard, seeing as it is not only hard but impossible to destruct {\fpf}s.
+
+Is it possible to have a data structure that possesses all four properties?
+Not likely. As mentioned above, the combination of \SemInj{} and \SemTot{} essentially
+necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
+makes it dangerous for client code to mess with the raw data. As such, we believe we have uncovered an
+inherent trade-off between desirable properties. In cases where \SemTot{} and \EqDec{} are critical,
+and there is little to no need to destruct dictionaries, \dds{} seem to be a clear winner over
+the conventional solutions. But in cases where \SemTot{} is not so important,
+but inspection or destruction are, {\cal}s may be a preferable.
+
+\parahead{Generality}
+This scenario may seem contrived, but it is actually a simplification of a real task faced by the authors.
+The task was to mechanize the formalization of Smyth~\citep{smyth}, a program synthesis technique which uses
+natural semantics (\ie{} big-step environment-based evaluation) and which requires assertions.
+Although this mechanization has not been completed, challenges (related to the aforementioned issues)
+faced during its development necessitated the invention of \dds.
+\rkc{Provide URL to GitHub commit? Say omitted due for review?}
+\rkc{Do we need to anonymize the Smyth name and reference for review?}
+
+Perhaps, instead of using \dds, these issues could be worked around, by changing or dropping some of our criteria?
+In many cases, substitution can be used to avoid environments---however, environments are often preferred because
+they allow the formalization to more closely resemble the implementation~(\eg{}~\citep{Ancona:2014})\rkc{Reference okay?}. Furthermore,
+Smyth has hole closures in addition to lambda closures, so closing over environments would be necessary regardless.
+
+\emph{Contraction} and \emph{exchange} are not always necessary properties for program foundation judgments---%
+rather, substructural type systems, by definition, deliberately violate one or both of these properties.%
+\footnote{\hspace{0.01in}Technically, some substructural type systems (\eg{} \emph{relevant} type systems) uphold \emph{contraction} and \emph{exchange} but violate \emph{weakening}.}
+That said, a judgment should generally uphold the \emph{structural properties} unless there is a strong and explicit
+reason not to. Proving the right properties
+is both a matter of good housekeeping and necessity: they are standard
+considerations because they arise very naturally in any other
+interesting metatheory, and the inability to prove them is often a large red flag indicating a bug in the judgment's definition.
+Because \emph{contraction} and \emph{exchange} are properties of \dds{} themselves,
+the proofs of these properties for one or many judgments come ``for free''.
+Additionally, the useful properties of \dds{} may greatly reduce the difficulty of the usually
+more judgement-specific proof of \emph{weakening}.
+
+It may not seem useful to assert that two functions are intensionally identical, but if assertion is relaxed,
+so as to test consistency or partially extensional equality instead of purely intensional equality,
+it would require environments that are destructible.
+Scenarios which require destructibility but not \EqDec{} lead to the same conclusions,
+seeing as these columns are identical in \autoref{fig:prop-summary}.
+
+In addition to breaking strict positivity, refinement proofs can be the source of less severe pain points in
+a broader range of circumstances.
+The ability to refine ordinary types with proofs of validity is one of the most interesting and useful benefits of
+dependently-typed languages, and this power should be appreciated. However, refining with proof terms can
+come at a practical cost, so even in dependently-typed languages, there is high value in avoiding refinements
+whenever possible (or at least whenever profitable). The practical cost of refinements is that proof terms
+do not possess the properties \SemInj~ or \EqDec: due to \emph{proof relevance} (TODO source), two proofs of
+the same property may be unequal, and due to the fact that proof terms may contain functions, proof terms do not
+possess \EqDec~ in the general case. Thus, \SemTot---which obviates the need for refinement---has
+a lot of practical value in many general cases beyond those where it is absolutely necessary to appease the
+positivity checker.
 
 \parahead{Dictionaries vs. Custom Datatypes}
 
@@ -85,10 +138,47 @@ and its definition of equality is, at least for fundamental utilities such as di
 %
 cannot be used for code that will be run, they may be useful for parts of the code which are only used for proofs and will not be executed.
 
-\parahead{Future Work}
+\subsection{Related Work}
+
+\parahead{Conventional Representations}
+%
+Due to their simplicity, {\sal}s are perhaps the most typical implementation for dictionaries.
+%
+But because \SemInj{} is so important in simplifying proofs, {\fpf}s also see significant use---in key works such as \emph{Software Foundations}~\cite[Maps]{Pierce:SF1}---despite requiring a bit of extra overhead.
+
+%% TODO macro?
+
+\Cals{} seem to get little use, perhaps because working with refinement proofs might add more hassle than \SemInj{} alleviates.
+%
+\Cals{} are defined in the Coq standard library as \texttt{FMapList} \citep{FMapList}; a GitHub search for \texttt{FMapList} shows $304$ results,
+%
+whereas a search for \texttt{FMapAVL} shows $474$ results, suggesting that {\cal}s have been found to be less useful than high-performance implementations.
+%
+A search for \texttt{FunctionalExtensionality} \citep{FunExt}, on the other hand, turns up $4916$ results, though most of these are probably unrelated to dictionaries.%
+\footnote{\hspace{0.01in}%
+%
+These searches and can be reproduced by URLs of the form:
+\url{https://github.com/search?l=\&p=3\&q=FMapList+language\%3ACoq\&ref=advsearch\&type=Code },
+replacing \texttt{FMapList} with \texttt{FMapAVL} and \texttt{FunctionalExtensionality}.
+%
+Accessed August 23, 2020.
+%
+}
+%
+\citet{Amorim:fmap} provides a more comprehensive treatment of {\cal}s, augmenting them with a functional interface so that the client can
+%
+use them as though they were {\fpf}s (note that this is different from having a \fpf{} augmented with keys).
+
+% github searches
+% funext        : 4916
+% FMapInterface : 504
+% FMapAVL       : 474
+% FMapList      : 304
+
+\subsection{Conclusion and Future Work}
 %
 This paper discusses the important properties \SemTot, \SemInj, \EqDec, and \EzDstr, and offers an implementation for dictionaries that (mostly) fulfills these properties.
-%
+
 Future work could consider implementations for other key utilities, such as trees or graphs, that satisfy these properties.
 %
 Doing so could be far more challenging.

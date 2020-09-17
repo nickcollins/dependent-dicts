@@ -3,6 +3,8 @@
 \section{Case Study}
 \label{sec:CaseStudy}
 
+\input{fig-testbench}
+
 To illustrate the practical importance of the four core properties, we consider a simply-typed lambda calculus
 augmented with an \texttt{assert} operator -- see \autoref{fig:testbench}.
 \texttt{assert} takes two arguments; if their evaluation results are exactly equal, \texttt{assert} evaluates to the first,
@@ -12,8 +14,6 @@ evaluation judgment, and prove that this judgment is strongly normalizing and th
 we need to choose some dictionary implementation to use for environments,
 which will be used as a parameter to the evaluation judgment and as a data component in closure results.
 In this section we show that \dds{} are a suitable choice, but that all the conventional solutions fail.
-
-\input{fig-testbench}
 
 \rkc{Formatting:}
 For \sal{}s, \emph{contraction} is false --
@@ -37,47 +37,4 @@ apply to an \texttt{assert} of two \fpf{}s. As such, it is not possible to const
 Because \dds, uniquely amongst the surveyed solutions, possess \SemTot, \SemInj, and \EqDec,
 they are a suitable choice for implementing environments, enabling proofs of \emph{contraction},
 \emph{exchange}, and strong normalization.
-\parahead{Generality}
-This scenario may seem contrived, but it is actually a simplification of a real task faced by the authors.
-The task was to mechanize the formalization of Smyth~\citep{smyth}, a program synthesis technique which uses
-natural semantics (\ie{} big-step environment-based evaluation) and which requires assertions.
-Although this mechanization has not been completed, challenges (related to the aforementioned issues)
-faced during its development necessitated the invention of \dds.
-\rkc{Provide URL to GitHub commit? Say omitted due for review?}
-\rkc{Do we need to anonymize the Smyth name and reference for review?}
 
-Perhaps, instead of using \dds, these issues could be worked around, by changing or dropping some of our criteria?
-In many cases, substitution can be used to avoid environments---however, environments are often preferred because
-they allow the formalization to more closely resemble the implementation~(\eg{}~\citep{Ancona:2014})\rkc{Reference okay?}. Furthermore,
-Smyth has hole closures in addition to lambda closures, so closing over environments would be necessary regardless.
-
-\emph{Contraction} and \emph{exchange} are not always necessary properties for program foundation judgments---%
-rather, substructural type systems, by definition, deliberately violate one or both of these properties.%
-\footnote{\hspace{0.01in}Technically, some substructural type systems (\eg{} \emph{relevant} type systems) uphold \emph{contraction} and \emph{exchange} but violate \emph{weakening}.}
-That said, a judgment should generally uphold the \emph{structural properties} unless there is a strong and explicit
-reason not to. Proving the right properties
-is both a matter of good housekeeping and necessity: they are standard
-considerations because they arise very naturally in any other
-interesting metatheory, and the inability to prove them is often a large red flag indicating a bug in the judgment's definition.
-Because \emph{contraction} and \emph{exchange} are properties of \dds{} themselves,
-the proofs of these properties for one or many judgments come ``for free''.
-Additionally, the useful properties of \dds{} may greatly reduce the difficulty of the usually
-more judgement-specific proof of \emph{weakening}.
-
-It may not seem useful to assert that two functions are intensionally identical, but if assertion is relaxed,
-so as to test consistency or partially extensional equality instead of purely intensional equality,
-it would require environments that are destructible.
-Scenarios which require destructibility but not \EqDec{} lead to the same conclusions,
-seeing as these columns are identical in \autoref{fig:prop-summary}.
-
-In addition to breaking strict positivity, refinement proofs can be the source of less severe pain points in
-a broader range of circumstances.
-The ability to refine ordinary types with proofs of validity is one of the most interesting and useful benefits of
-dependently-typed languages, and this power should be appreciated. However, refining with proof terms can
-come at a practical cost, so even in dependently-typed languages, there is high value in avoiding refinements
-whenever possible (or at least whenever profitable). The practical cost of refinements is that proof terms
-do not possess the properties \SemInj~ or \EqDec: due to \emph{proof relevance} (TODO source), two proofs of
-the same property may be unequal, and due to the fact that proof terms may contain functions, proof terms do not
-possess \EqDec~ in the general case. Thus, \SemTot---which obviates the need for refinement---has
-a lot of practical value in many general cases beyond those where it is absolutely necessary to appease the
-positivity checker.

@@ -171,7 +171,7 @@ Recall that key type \verb+K+ is a module parameter and is implicitly bound in t
 
 \noindent
 %
-We discuss why destruction is ``not-so-easy'' in detail below.
+We discuss why destruction is ``not-so-easy'' in detail in \autoref{sec:Tradeoffs}.
 
 Lastly, we prove analogs to the \emph{structural properties} \emph{contraction} and \emph{exchange}.
 
@@ -196,42 +196,3 @@ Lastly, we prove analogs to the \emph{structural properties} \emph{contraction} 
     dd ,, (k2 , v2) ,, (k1 , v1)
 \end{alltt}
 \end{theorem}
-
-\parahead{The Difficulty of Destruction}
-
-\SemInj{} requires canonical ordering and deduplication, and \SemTot{} means that the canonical order and deduplication have to come from
-how the data is interpreted rather than how it is organized. The non-literal way in which key data is interpreted means that it is not
-safe for client code to work with the raw data directly---rather, all interaction with the data must be
-encapsulated in library functions.
-
-Unfortunately, this includes \emph{destruction}; an interaction which
-normally goes through the very natural, elegant, and well-supported mechanism of pattern matching is now
-only available through the library function \verb+destruct+. \autoref{thm:EzDstr} proves that this function
-destructs the \dd{} in essentially the same way that a case expression destructs a list of pairs (although
-the order in which bindings are plucked away is arbitrary from the client's perspective).
-
-\verb+destruct+ achieves the same purpose as typical pattern matching (albeit more awkwardly), but because it
-does not harness the primitive notions of pattern matching and structure, it does not establish structural
-decrease on the dictionary object, which may break out-of-the-box structural recursion in the likely case
-of recursion on \verb+dd'+. To enable manual establishment of structural recursion, via an extra parameter that
-explicitly tracks the dictionary length, we provide another theorem:
-
-\begin{alltt}
-  extend-size :
-    \altFAll\{V\} \{dd : DD V\} \{k : K\} \{v : V\} \altRArr
-      k \altNIn dd \altRArr
-      || dd ,, (k , v) || = 1 + || dd ||
-\end{alltt}
-
-Although possible, manually establishing termination is painful, especially given that it is not necessary
-for {\sal}s or {\cal}s. Thus \dds~ fail at \EzDstr, although they are still better than {\fpf}s in this
-regard, seeing as it is not only hard but impossible to destruct {\fpf}s.
-
-Is it possible to have a data structure that possesses all four properties?
-Not likely. As mentioned above, the combination of \SemInj{} and \SemTot{} essentially
-necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
-makes it dangerous for client code to mess with the raw data. As such, we believe we have uncovered an
-inherent trade-off between desirable properties. In cases where \SemTot{} and \EqDec{} are critical,
-and there is little to no need to destruct dictionaries, \dds{} seem to be a clear winner over
-the conventional solutions. But in cases where \SemTot{} is not so important,
-but inspection or destruction are, {\cal}s may be a preferable.
