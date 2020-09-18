@@ -37,8 +37,7 @@ contraction :
 
 exchange :
   \{E : res env\} \{x1 x2 : string\}
-  \{e : exp\} \{v1 v2 r : res\} \altRArr
-   x1 \altNE x2 \altRArr
+  \{e : exp\} \{v1 v2 r : res\} \altRArr x1 \altNE x2 \altRArr
    \altEvalEnv{(E ,, (x1 , v1) ,, (x2 , v2))}{e}{r} \altRArr
    \altEvalEnv{(E ,, (x2 , v2) ,, (x1 , v1))}{e}{r}
 
