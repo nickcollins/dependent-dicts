@@ -5,16 +5,20 @@
 We conclude with a broader discussion of the design space, as well as related
 and future work.
 
-\vspace{0.05in} %% SPACE HACK
-
 \subsection{Design Tradeoffs}
 \label{sec:Tradeoffs}
 
-\parahead{The Difficulty of Destruction}
+Is it possible to have a data structure that possesses all four properties?
+%
+Not likely.
 
-\SemInj{} requires canonical ordering and deduplication, and \SemTot{} means that the canonical order and deduplication have to come from
-how the data is interpreted rather than how it is organized. The non-literal way in which key data is interpreted means that it is not
-safe for client code to work with the raw data directly---rather, all interaction with the data must be
+\SemInj{} requires canonical ordering and deduplication, and \SemTot{} means that the canonical order and deduplication have to come from how the data is interpreted rather than how it is organized.
+
+%% \parahead{The Difficulty of Destruction}
+
+\parahead{Not-So-Easy Destruction}
+%
+The non-literal way in which key data is interpreted for delta dictionaries means that it is not safe for client code to work with the raw data directly---rather, all interaction with the data must be
 encapsulated in library functions.
 
 Unfortunately, this includes \emph{destruction}; an interaction which
@@ -40,39 +44,52 @@ Although possible, manually establishing termination is painful, especially give
 for {\sal}s or {\cal}s. Thus \dds~ fail at \EzDstr, although they are still better than {\fpf}s in this
 regard, seeing as it is not only hard but impossible to destruct {\fpf}s.
 
-Is it possible to have a data structure that possesses all four properties?
-Not likely. As mentioned above, the combination of \SemInj{} and \SemTot{} essentially
-necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
-makes it dangerous for client code to mess with the raw data. As such, we believe we have uncovered an
+%% Is it possible to have a data structure that possesses all four properties?
+%% Not likely. As mentioned above, the combination of \SemInj{} and \SemTot{} essentially
+%% necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
+%% makes it dangerous for client code to manipulate the raw data.
+
+%% As such,
+
+Because satisfying all four properties seems unattainable,
+we believe we have uncovered an
 inherent trade-off between desirable properties. In cases where \SemTot{} and \EqDec{} are critical,
 and there is little to no need to destruct dictionaries, \dds{} seem to be a clear winner over
 the conventional solutions. But in cases where \SemTot{} is not so important,
 but inspection or destruction are, {\cal}s may be a preferable.
 
-\parahead{Generality}
-This scenario may seem contrived, but it is actually a simplification of a real task faced by the authors.
-The task was to mechanize the formalization of Smyth~\citep{smyth}, a program synthesis technique which uses
-natural semantics (\ie{} big-step environment-based evaluation) and which requires assertions.
-Although this mechanization has not been completed, challenges (related to the aforementioned issues)
-faced during its development necessitated the invention of \dds.
-\rkc{Provide URL to GitHub commit? Say omitted due for review?}
-\rkc{Do we need to anonymize the Smyth name and reference for review?}
+\subsection{Potential Practical Applications}
+
+Next, we provide additional discussion about the use of dictionaries in our case study, as well as programming language metatheory in general.
+
+%% \parahead{Generality}
+
+\parahead{Generality of Case Study}
+
+The scenario in \autoref{sec:CaseStudy} may seem contrived, but it is actually a simplification of a real task faced by the authors:
+%
+to mechanize the formalization of AnonymousSystem~\citep{AnonymousSystem}, a program synthesis technique which uses
+natural semantics (\ie{} big-step, environment-based evaluation) and which requires assertions.
+%
+The development in \autoref{sec:CaseStudy} captures the essence of our much larger mechanization~\citep{AnonymousURL} for AnonymousSystem.
+%
+Although that mechanization has not been completed, the challenges faced during its development---described in \autoref{sec:CaseStudy}---necessitated the invention of \dds.
 
 Perhaps, instead of using \dds, these issues could be worked around, by changing or dropping some of our criteria?
-In many cases, substitution can be used to avoid environments---however, environments are often preferred because
-they allow the formalization to more closely resemble the implementation~(\eg{}~\citep{Ancona:2014})\rkc{Reference okay?}. Furthermore,
-Smyth has hole closures in addition to lambda closures, so closing over environments would be necessary regardless.
+In many cases, substitution can be used to avoid environments. However, environments are often preferred because
+they allow the formalization to more closely resemble the implementation~(\eg{}~\citep{Ancona:2014}). Furthermore,
+AnonymousSystem has hole closures in addition to lambda closures, so closing over environments would be necessary regardless.
 
-\emph{Contraction} and \emph{exchange} are not always necessary properties for program foundation judgments---%
+Contraction and exchange are not always necessary properties for program foundation judgments---%
 rather, substructural type systems, by definition, deliberately violate one or both of these properties.%
-\footnote{\hspace{0.01in}Technically, some substructural type systems (\eg{} \emph{relevant} type systems) uphold \emph{contraction} and \emph{exchange} but violate \emph{weakening}.}
-That said, a judgment should generally uphold the \emph{structural properties} unless there is a strong and explicit
+\footnote{\hspace{0.01in}Technically, some substructural type systems (\eg{} \emph{relevant} type systems) uphold contraction and exchange but violate \emph{weakening}.}
+That said, a judgment should generally uphold the structural properties unless there is a strong and explicit
 reason not to. Proving the right properties
 is both a matter of good housekeeping and necessity: they are standard
 considerations because they arise very naturally in any other
 interesting metatheory, and the inability to prove them is often a large red flag indicating a bug in the judgment's definition.
-Because \emph{contraction} and \emph{exchange} are properties of \dds{} themselves,
-the proofs of these properties for one or many judgments come ``for free''.
+Because contraction and exchange are properties of \dds{} themselves,
+the proofs of these properties for one or many judgments come ``for free.''
 Additionally, the useful properties of \dds{} may greatly reduce the difficulty of the usually
 more judgement-specific proof of \emph{weakening}.
 
@@ -88,7 +105,7 @@ The ability to refine ordinary types with proofs of validity is one of the most 
 dependently-typed languages, and this power should be appreciated. However, refining with proof terms can
 come at a practical cost, so even in dependently-typed languages, there is high value in avoiding refinements
 whenever possible (or at least whenever profitable). The practical cost of refinements is that proof terms
-do not possess the properties \SemInj~ or \EqDec: due to \emph{proof relevance} (TODO source), two proofs of
+do not possess the properties \SemInj~ or \EqDec: due to \emph{proof relevance} (\nick{TODO source}), two proofs of
 the same property may be unequal, and due to the fact that proof terms may contain functions, proof terms do not
 possess \EqDec~ in the general case. Thus, \SemTot---which obviates the need for refinement---has
 a lot of practical value in many general cases beyond those where it is absolutely necessary to appease the
@@ -110,7 +127,7 @@ Though {\sal}s remain the most natural choice in these cases, future work could 
 
 The use of dictionaries is furthermore avoided in many systems that use substitution rather than environments
 %
-in defining the dynamic semantics of a language, as well as the many systems that avoid named variables altogether by using De Bruijn indices \cite{XXX,XXX,XXX} or comparable techniques.
+in defining the dynamic semantics of a language, as well as the many systems that avoid named variables altogether by using De Bruijn indices or comparable techniques---see \emph{Certified Programming with Dependent Types}~\cite[Library Firstorder]{cpdt} for an introduction.
 
 For these reasons, many existing mechanizations make little use of order-and-duplication-insensitive dictionaries. 
 %
@@ -121,6 +138,8 @@ it seems inevitable that a programming utility as fundamental as dictionaries wi
 best implementations at our disposal.
 
 \subsection{Related Work}
+
+How are often are different dictionary representations used?
 
 \parahead{Conventional Representations}
 %
@@ -163,7 +182,9 @@ It was noted above that AVL implementations are apparently more popular than {\c
 %
 even greater concern than it is today. In cases where there is no extraction step, and the proof language is also the language that will be executed,
 %
-there may be no choice but to use implementations that are high-performance but theoretically unwieldy. However, it seems more appropriate, especially with
+there may be no choice but to use implementations that are high-performance but theoretically unwieldy.
+
+However, it seems more appropriate, especially with
 %
 fundamental utilities such as dictionaries, to either extract or translate the mechanization into an implementation language that defines these utilities natively
 %
@@ -171,7 +192,9 @@ by way of highly efficient implementations such as hashtables or red-black trees
 %
 different data structure in the implementation than was used in the proofs, but presumably the implementation's version of dictionaries is well-tested and bug-free,
 %
-and its definition of equality is, at least for fundamental utilities such as dictionaries, extensional and decidable. Regardless, even if unperformant implementations
+and its definition of equality is, at least for fundamental utilities such as dictionaries, extensional and decidable.
+
+Regardless, even if unperformant implementations
 %
 cannot be used for code that will be run, they may be useful for parts of the code which are only used for proofs and will not be executed.
 

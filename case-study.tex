@@ -5,36 +5,60 @@
 
 \input{fig-testbench}
 
-To illustrate the practical importance of the four core properties, we consider a simply-typed lambda calculus
-augmented with an \texttt{assert} operator -- see \autoref{fig:testbench}.
-\texttt{assert} takes two arguments; if their evaluation results are exactly equal, \texttt{assert} evaluates to the first,
-otherwise it evaluates to an \texttt{Err} result. We wish to define an environment-based (as opposed to substitution-based)
-evaluation judgment, and prove that this judgment is strongly normalizing and that it  satisfies the
-\emph{structural properties} \emph{contraction} and \emph{exchange}. To achieve this,
-we need to choose some dictionary implementation to use for environments,
-which will be used as a parameter to the evaluation judgment and as a data component in closure results.
-In this section we show that \dds{} are a suitable choice, but that all the conventional solutions fail.
+To illustrate the practical importance of the four core properties, we consider a simply-typed $\lambda$-calculus augmented with an \texttt{assert} operator.
+%
+Suppose our goal is to formalize an environment-based (as opposed to substitution-based) evaluation semantics,
+%
+and prove that evaluation is strongly normalizing and that it satisfies the structural properties contraction and exchange.
 
-\rkc{Formatting:}
-For \sal{}s, \emph{contraction} is false --
-\altEvalEnv{\hbox{E ,, (n , v') ,, (n , v)}}{\hbox{$\cdot\lambda x \cdot e$}}{\hbox{[E ,, (n , v') ,, (n , v)]$\lambda x \cdot e$}}
-while \altEvalEnv{E ,, (n , v)}{\hbox{$\cdot\lambda x \cdot e$}}{\hbox{[E ,, (n , v)]$\lambda x \cdot e$}}, yet
-\hbox{[E ,, (n , v') ,, (n , v)]$\lambda x \cdot e$}$~\ne~$\hbox{[E ,, (n , v)]$\lambda x \cdot e$}.
-A similar problem occurs for \emph{exchange}, so it is also false.
-In order for \emph{contraction} and \emph{exchange} to be true for any system with closure results,
+\autoref{fig:testbench} shows an excerpt of this environment-based evaluation (\texttt{\_$\vdash$\_$\Rightarrow$\_}) of expressions (\texttt{exp}) to results (\texttt{res}).
+%
+The definitions of evaluation environments (\texttt{env}), types, type contexts, and typechecking are not shown; the full development is available in the supplementary materials.
+%
+\texttt{assert} takes two arguments; if their evaluation results are exactly equal, \texttt{assert} evaluates to the first,
+otherwise it evaluates to an \texttt{Err} result.
+
+What dictionary implementation should we choose to represent evaluation environments,
+which are used both as a parameter to the evaluation judgment as well as a data component of closure results?
+%
+%% Below we show that \dds{} are a suitable choice, but that all the conventional solutions fail.
+
+If we choose \sal{}s, contraction is false:
+%
+for example, given environments
+%
+$E_1=$\ \texttt{E ,, (n , v') ,, (n , v)} and
+%
+$E_2=$\ \texttt{E ,, (n , v)},
+%
+evaluation produces the closures
+%
+$\altEvalEnv{E_1}{\lambda x. e}{[E_1]\ \lambda x. e}$
+%
+and
+%
+$\altEvalEnv{E_2}{\lambda x. e}{[E_2]\ \lambda x. e}$
+%
+but
+%
+$[E_1]\ \lambda x. e \neq [E_2]\ \lambda x. e$.
+%
+A similar problem occurs for exchange, so it is also false.
+%
+In order for contraction and exchange to be true for any system with closure results,
 the dictionary implementation used for closures must be \extensional.
 
 \Cals{} must be packaged with validity proofs wherever they go, including in the closure result.
-In the validity proposition \texttt{valid : dict -> Set}, the dictionary object is in negative position,
+In the validity proposition \texttt{valid : dict -> Set} (defined in full in the supplementary materials), the dictionary object is in negative position,
 and in our case the dictionary type is dependent on the result datatype,
-so \texttt{utlc-result} is also in negative position, violating strict positivity.
+so the result is also in negative position, violating strict positivity.
 As such, results cannot contain validity proofs, so for any system that uses dictionaries as data,
 the dictionaries must be \total.
 
 Because \fpf{}s do not have \EqDec, it is not possible to decide which \texttt{EvalAsrt} constructor would
 apply to an \texttt{assert} of two \fpf{}s. As such, it is not possible to constructively prove strong normalization.
 
-Because \dds, uniquely amongst the surveyed solutions, possess \SemTot, \SemInj, and \EqDec,
-they are a suitable choice for implementing environments, enabling proofs of \emph{contraction},
-\emph{exchange}, and strong normalization.
+In contrast, \dds---uniquely amongst the surveyed solutions---possess \SemTot, \SemInj, and \EqDec.
+%
+Thus, they are a suitable choice for implementing environments, enabling proofs of contraction, exchange, and strong normalization.
 
