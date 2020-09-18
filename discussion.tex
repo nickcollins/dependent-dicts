@@ -120,24 +120,6 @@ it seems inevitable that a programming utility as fundamental as dictionaries wi
 %
 best implementations at our disposal.
 
-\parahead{Performance Concerns}
-%
-It was noted above that AVL implementations are apparently more popular than {\cal}s, and as more software is mechanized, performance is likely to become an
-%
-even greater concern than it is today. In cases where there is no extraction step, and the proof language is also the language that will be executed,
-%
-there may be no choice but to use implementations that are high-performance but theoretically unwieldy. However, it seems more appropriate, especially with
-%
-fundamental utilities such as dictionaries, to either extract or translate the mechanization into an implementation language that defines these utilities natively
-%
-by way of highly efficient implementations such as hashtables or red-black trees. This extraction may not be completely fidelitous, since it will be using a
-%
-different data structure in the implementation than was used in the proofs, but presumably the implementation's version of dictionaries is well-tested and bug-free,
-%
-and its definition of equality is, at least for fundamental utilities such as dictionaries, extensional and decidable. Regardless, even if unperformant implementations
-%
-cannot be used for code that will be run, they may be useful for parts of the code which are only used for proofs and will not be executed.
-
 \subsection{Related Work}
 
 \parahead{Conventional Representations}
@@ -174,6 +156,25 @@ use them as though they were {\fpf}s (note that this is different from having a 
 % FMapInterface : 504
 % FMapAVL       : 474
 % FMapList      : 304
+
+\parahead{Performance Concerns}
+%
+It was noted above that AVL implementations are apparently more popular than {\cal}s, and as more software is mechanized, performance is likely to become an
+%
+even greater concern than it is today. In cases where there is no extraction step, and the proof language is also the language that will be executed,
+%
+there may be no choice but to use implementations that are high-performance but theoretically unwieldy. However, it seems more appropriate, especially with
+%
+fundamental utilities such as dictionaries, to either extract or translate the mechanization into an implementation language that defines these utilities natively
+%
+by way of highly efficient implementations such as hashtables or red-black trees. This extraction may not be completely fidelitous, since it will be using a
+%
+different data structure in the implementation than was used in the proofs, but presumably the implementation's version of dictionaries is well-tested and bug-free,
+%
+and its definition of equality is, at least for fundamental utilities such as dictionaries, extensional and decidable. Regardless, even if unperformant implementations
+%
+cannot be used for code that will be run, they may be useful for parts of the code which are only used for proofs and will not be executed.
+
 
 \subsection{Conclusion and Future Work}
 %
