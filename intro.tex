@@ -47,7 +47,7 @@ This approach is \emph{\extensional} -- \ie{} it permits using built-in equality
 
 A third conventional solution is to represent dictionaries as finite partial functions~\cite[Maps]{Pierce:SF1}.
 %
-The third line of \autoref{fig:intro-example} depicts a nested lambda-expression that serves as the ``lookup table'' (we omit the ``Some'' constructors for space).
+The third line of \autoref{fig:intro-example} depicts a nested $\lambda$-expression that serves as the ``lookup table'' (we omit the ``Some'' constructors for space).
 %
 %% ``lookup table.''
 %
@@ -57,7 +57,7 @@ In some newer proof assistants built on a cubical logical framework, such as \te
 cubical Agda, \emph{functional extensionality} is a theorem, which presents
 authors of work in those languages with a wider design space.
 }
-of \emph{functional extensionality}~\mbox{\cite[Logic]{Pierce:SF1}}---consistent with the constructive calculi underlying Coq and Agda---this representation is also \emph{\extensional}.
+of \emph{functional extensionality}~\mbox{\cite[Logic]{Pierce:SF1}}---consistent with the constructive calculi of Coq and Agda---this representation is also \emph{\extensional}.
 %
 However, a plain function type does not rule out terms that are \emph{non-}finite maps, possibly requiring additional proofs of validity as with canonical association lists.\footnote{\hspace{0.01in}%
 %
