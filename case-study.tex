@@ -11,9 +11,11 @@ Suppose our goal is to formalize an environment-based (as opposed to substitutio
 %
 and prove that evaluation is strongly normalizing and that it satisfies the structural properties contraction and exchange.
 
-\autoref{fig:testbench} shows an excerpt of this environment-based evaluation (\texttt{\_$\vdash$\_$\Rightarrow$\_}) of expressions (\texttt{exp}) to results (\texttt{res}).
+\autoref{fig:testbench} shows a sketch of this environment-based evaluation (\texttt{\_$\vdash$\_$\Rightarrow$\_}) of expressions (\texttt{exp}) to results (\texttt{res}).
 %
-The definitions of evaluation environments (\texttt{env}), types, type contexts, and typechecking are not shown; the full development is available in the supplementary materials.
+The definitions of evaluation environments (\texttt{env}), types, type contexts, and typechecking are not shown.
+%
+%; the full development is available in the supplementary materials.
 %
 \texttt{assert} takes two arguments; if their evaluation results are exactly equal, \texttt{assert} evaluates to the first,
 otherwise it evaluates to an \texttt{Err} result.
@@ -49,7 +51,11 @@ In order for contraction and exchange to be true for any system with closure res
 the dictionary implementation used for closures must be \extensional.
 
 \Cals{} must be packaged with validity proofs wherever they go, including in the closure result.
-In the validity proposition \texttt{valid : dict -> Set} (defined in full in the supplementary materials), the dictionary object is in negative position,
+In such a validity proposition \texttt{valid : dict -> Set},
+%
+%% (defined in full in the supplementary materials)
+%
+the dictionary object is in negative position,
 and in our case the dictionary type is dependent on the result datatype,
 so the result is also in negative position, violating strict positivity.
 As such, results cannot contain validity proofs, so for any system that uses dictionaries as data,
