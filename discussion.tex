@@ -6,7 +6,7 @@ We conclude with a broader discussion of the design space, as well as related
 and future work.
 
 \subsection{Design Tradeoffs}
-\label{sec:Tradeoffs}
+\label{sec:Discussion:Tradeoffs}
 
 Is it possible to have a data structure that possesses all four properties?
 %
@@ -59,6 +59,7 @@ the conventional solutions. But in cases where \SemTot{} is not so important,
 but inspection or destruction are, {\cal}s may be a preferable.
 
 \subsection{Potential Practical Applications}
+\label{sec:Discussion:Generality}
 
 Next, we provide additional discussion about the use of dictionaries in our case study, as well as programming language metatheory in general.
 
@@ -121,7 +122,7 @@ But if types defined ``later,'' or in inner scopes, can refer to types defined `
 %
 This is the case for languages that support subtyping---notably, the subject of the POPLmark Challenge~\citep{POPLmark}.
 %
-Linear logics, on the other hand, require sensitivity to duplicate insertions, so duplication-insensitive dictionaries are inappropriate for them as well.
+Linear type systems, on the other hand, require sensitivity to duplicate insertions, so duplication-insensitive dictionaries are inappropriate for them as well.
 %
 Though {\sal}s remain the most natural choice in these cases, future work could explore data structures that are sensitive to ordering but not duplication, or vice versa.
 
@@ -138,6 +139,7 @@ it seems inevitable that a programming utility as fundamental as dictionaries wi
 best implementations at our disposal.
 
 \subsection{Related Work}
+\label{sec:Discussion:Related}
 
 How are often are different dictionary representations used?
 
@@ -200,6 +202,7 @@ cannot be used for code that will be run, they may be useful for parts of the co
 
 
 \subsection{Conclusion and Future Work}
+\label{sec:Discussion:Conclusion}
 %
 This paper discusses the important properties \SemTot, \SemInj, \EqDec, and \EzDstr, and offers an implementation for dictionaries that (mostly) fulfills these properties.
 
