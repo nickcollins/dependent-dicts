@@ -7,50 +7,11 @@ and future work.
 
 \vspace{0.05in} %% SPACE HACK
 
-\subsection{Design Tradeoffs}
-\label{sec:Tradeoffs}
+\subsection{Generality}
+\label{sec:Discussion:Generality}
 
-\parahead{The Difficulty of Destruction}
-
-\SemInj{} requires canonical ordering and deduplication, and \SemTot{} means that the canonical order and deduplication have to come from
-how the data is interpreted rather than how it is organized. The non-literal way in which key data is interpreted means that it is not
-safe for client code to work with the raw data directly---rather, all interaction with the data must be
-encapsulated in library functions.
-
-Unfortunately, this includes \emph{destruction}; an interaction which
-normally goes through the very natural, elegant, and well-supported mechanism of pattern matching is now
-only available through the library function \verb+destruct+. \autoref{thm:EzDstr} proves that this function
-destructs the \dd{} in essentially the same way that a case expression destructs a list of pairs (although
-the order in which bindings are plucked away is arbitrary from the client's perspective).
-
-\verb+destruct+ achieves the same purpose as typical pattern matching (albeit more awkwardly), but because it
-does not harness the primitive notions of pattern matching and structure, it does not establish structural
-decrease on the dictionary object, which may break out-of-the-box structural recursion in the likely case
-of recursion on \verb+dd'+. To enable manual establishment of structural recursion, via an extra parameter that
-explicitly tracks the dictionary length, we provide another theorem:
-
-\begin{alltt}
-  extend-size :
-    \altFAll\{V\} \{dd : DD V\} \{k : K\} \{v : V\} \altRArr
-      k \altNIn dd \altRArr
-      || dd ,, (k , v) || = 1 + || dd ||
-\end{alltt}
-
-Although possible, manually establishing termination is painful, especially given that it is not necessary
-for {\sal}s or {\cal}s. Thus \dds~ fail at \EzDstr, although they are still better than {\fpf}s in this
-regard, seeing as it is not only hard but impossible to destruct {\fpf}s.
-
-Is it possible to have a data structure that possesses all four properties?
-Not likely. As mentioned above, the combination of \SemInj{} and \SemTot{} essentially
-necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
-makes it dangerous for client code to mess with the raw data. As such, we believe we have uncovered an
-inherent trade-off between desirable properties. In cases where \SemTot{} and \EqDec{} are critical,
-and there is little to no need to destruct dictionaries, \dds{} seem to be a clear winner over
-the conventional solutions. But in cases where \SemTot{} is not so important,
-but inspection or destruction are, {\cal}s may be a preferable.
-
-\parahead{Generality}
-This scenario may seem contrived, but it is actually a simplification of a real task faced by the authors.
+\parahead{Generality of the Case Study}
+The scenario described in \autoref{sec:CaseStudy} may seem contrived, but it is actually a simplification of a real task faced by the authors.
 The task was to mechanize the formalization of Smyth~\citep{smyth}, a program synthesis technique which uses
 natural semantics (\ie{} big-step environment-based evaluation) and which requires assertions.
 Although this mechanization has not been completed, challenges (related to the aforementioned issues)
@@ -120,9 +81,51 @@ it seems inevitable that a programming utility as fundamental as dictionaries wi
 %
 best implementations at our disposal.
 
+\subsection{Design Tradeoffs}
+\label{sec:Discussion:Tradeoffs}
+
+\parahead{The Difficulty of Destruction}
+
+\SemInj{} requires canonical ordering and deduplication, and \SemTot{} means that the canonical order and deduplication have to come from
+how the data is interpreted rather than how it is organized. The non-literal way in which key data is interpreted means that it is not
+safe for client code to work with the raw data directly---rather, all interaction with the data must be
+encapsulated in library functions.
+
+Unfortunately, this includes \emph{destruction}; an interaction which
+normally goes through the very natural, elegant, and well-supported mechanism of pattern matching is now
+only available through the library function \verb+destruct+. \autoref{thm:EzDstr} proves that this function
+destructs the \dd{} in essentially the same way that a case expression destructs a list of pairs (although
+the order in which bindings are plucked away is arbitrary from the client's perspective).
+
+\verb+destruct+ achieves the same purpose as typical pattern matching (albeit more awkwardly), but because it
+does not harness the primitive notions of pattern matching and structure, it does not establish structural
+decrease on the dictionary object, which may break out-of-the-box structural recursion in the likely case
+of recursion on \verb+dd'+. To enable manual establishment of structural recursion, via an extra parameter that
+explicitly tracks the dictionary length, we provide another theorem:
+
+\begin{alltt}
+  extend-size :
+    \altFAll\{V\} \{dd : DD V\} \{k : K\} \{v : V\} \altRArr
+      k \altNIn dd \altRArr
+      || dd ,, (k , v) || = 1 + || dd ||
+\end{alltt}
+
+Although possible, manually establishing termination is painful, especially given that it is not necessary
+for {\sal}s or {\cal}s. Thus \dds~ fail at \EzDstr, although they are still better than {\fpf}s in this
+regard, seeing as it is not only hard but impossible to destruct {\fpf}s.
+
+Is it possible to have a data structure that possesses all four properties?
+Not likely. As mentioned above, the combination of \SemInj{} and \SemTot{} essentially
+necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
+makes it dangerous for client code to mess with the raw data. As such, we believe we have uncovered an
+inherent trade-off between desirable properties. In cases where \SemTot{} and \EqDec{} are critical,
+and there is little to no need to destruct dictionaries, \dds{} seem to be a clear winner over
+the conventional solutions. But in cases where \SemTot{} is not so important,
+but inspection or destruction are, {\cal}s may be a preferable.
+
 \parahead{Performance Concerns}
 %
-It was noted above that AVL implementations are apparently more popular than {\cal}s, and as more software is mechanized, performance is likely to become an
+It is noted in \autoref{sec:Discussion:Related} that AVL implementations are apparently more popular than {\cal}s, and as more software is mechanized, performance is likely to become an
 %
 even greater concern than it is today. In cases where there is no extraction step, and the proof language is also the language that will be executed,
 %
@@ -139,6 +142,7 @@ and its definition of equality is, at least for fundamental utilities such as di
 cannot be used for code that will be run, they may be useful for parts of the code which are only used for proofs and will not be executed.
 
 \subsection{Related Work}
+\label{sec:Discussion:Related}
 
 \parahead{Conventional Representations}
 %
@@ -176,6 +180,7 @@ use them as though they were {\fpf}s (note that this is different from having a 
 % FMapList      : 304
 
 \subsection{Conclusion and Future Work}
+\label{sec:Discussion:Conclusion}
 %
 This paper discusses the important properties \SemTot, \SemInj, \EqDec, and \EzDstr, and offers an implementation for dictionaries that (mostly) fulfills these properties.
 

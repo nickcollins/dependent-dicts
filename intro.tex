@@ -25,7 +25,7 @@ show two distinct association lists (among others) to represent a dictionary wit
 This lack of \emph{\Extensional} can make proofs more difficult~\cite[Maps]{Pierce:SF1} or impossible, esp. when it comes to proving \emph{contraction} and \emph{exchange}%
 \citep{StructProp}
 %
-(discussed further in \autoref{sec:CaseStudy}).
+(discussed further in \autoref{sec:Discussion:Generality}).
 
 %% \input{fig-unequal}
 
@@ -43,7 +43,7 @@ Some treatments, including the Coq standard library~\citep{FMapInterface}, descr
 %
 The second association list described in \autoref{fig:intro-example} is one such example.
 %
-This approach is \emph{\extensional} -- \ie{} it permits using built-in equality for semantic equivalence. However, it requires extending the underlying list type---which allows arbitrary, possibly invalid lists---with a proof of validity that refines the coarser type. The downsides of having to use validity proofs are discussed further in \autoref{sec:CaseStudy}.
+This approach is \emph{\extensional} -- \ie{} it permits using built-in equality for semantic equivalence. However, it requires extending the underlying list type---which allows arbitrary, possibly invalid lists---with a proof of validity that refines the coarser type. The downsides of having to use validity proofs are discussed further in \autoref{sec:Discussion:Generality}.
 
 A third conventional solution is to represent dictionaries as finite partial functions~\cite[Maps]{Pierce:SF1}.
 %
