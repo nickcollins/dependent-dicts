@@ -106,7 +106,7 @@ The ability to refine ordinary types with proofs of validity is one of the most 
 dependently-typed languages, and this power should be appreciated. However, refining with proof terms can
 come at a practical cost, so even in dependently-typed languages, there is high value in avoiding refinements
 whenever possible (or at least whenever profitable). The practical cost of refinements is that proof terms
-do not possess the properties \SemInj~ or \EqDec: due to \emph{proof relevance} (\nick{TODO source}), two proofs of
+do not possess the properties \SemInj~ or \EqDec: due to \emph{proof relevance}, two proofs of
 the same property may be unequal, and due to the fact that proof terms may contain functions, proof terms do not
 possess \EqDec~ in the general case. Thus, \SemTot---which obviates the need for refinement---has
 a lot of practical value in many general cases beyond those where it is absolutely necessary to appease the

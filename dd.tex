@@ -18,7 +18,7 @@ In order to allow multiple key types, while relying on useful properties of natu
 %
 between the key type and the naturals, and use this bijection to convert keys to and from naturals. This is discussed further in \emph{\textbf{Bijections to Natural Numbers}}.
 
-In order to maintain canonical order, while ensuring that every natural number is valid as the first item in a pair, that number must represent the non-negative difference between the key it represents and the previous key.
+In order to maintain canonical order, while ensuring that every natural number is valid as the first item in a pair, that number must be the non-negative difference between the key it represents and the previous key.
 %
 We call this number a \emph{delta}. % , alluding to the \emph{delta encoding} technique more commonly harnessed for performance optimization.
 %
@@ -58,7 +58,7 @@ simultaneously achieving \Total{} and \Extensional{} for a dictionary over finit
 
 \Ddls{} are canonically ordered, but by the natural ordering of the naturals, which, depending on the choice of bijection, may correspond to an unnatural
 %
-ordering of the key type. As such, we do not expose the ordering to the client---functions such as \texttt{destruct} and \texttt{toList} produce results
+ordering of the key type. As such, we do not expose the ordering to the client---functions such as \texttt{destruct} and \texttt{dlt$\Rightarrow$list} produce results
 %
 that are in arbitrary order from the client's perspective.
 
@@ -75,7 +75,7 @@ These proceed largely as they would for association lists, but working indirectl
 
 \autoref{fig:agda} presents concrete implementations for lookup (\ie{} \texttt{\_\altLAng\_\altRAng}), insert (\ie{} \texttt{\_,,\_}), and \texttt{destruct} in Agda.
 %
-Notice that we choose to parameterize the \texttt{Delta} module by key type \verb+K+ and bijection \verb+bij+ to the naturals; the operations are parameterized by value-binding type \verb+V+.
+Notice that we parameterize the \texttt{Delta} module by key type \verb+K+ and bijection \verb+bij+ to the naturals; the operations are parameterized by value-binding type \verb+V+.
 %
 %Having to treat the first delta differently than the rest (literally rather than relatively) is the source of the somewhat technical---through simple---details.
 %
