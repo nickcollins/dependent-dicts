@@ -49,7 +49,7 @@ The second association list described in \autoref{fig:intro-example} is one such
 %
 This approach is \extensional{}, that is, it permits using built-in equality for semantic equivalence.
 %
-However, the underlying list type---which allows arbitrary, possibly invalid lists---is not \firstUseGoal{Semantically Total}; a proof of validity is required to refine the coarser type.
+However, the underlying list type---which allows arbitrary, possibly invalid lists---is not \firstUseGoal{\semanticallyTotal}; a proof of validity is required to refine the coarser type.
 %
 %% However, it requires extending the underlying list type---which allows arbitrary, possibly invalid lists---with a proof of validity that refines the coarser type.
 %
@@ -72,7 +72,7 @@ so a finiteness proof is unnecessary.
 %Additionally, traversing a finite program text will create only a finite number of mappings.
 }
 %
-Worse are the facts that, unlike either association list representation, partial functions lack \firstUseGoal{\DecidableEq} and cannot be \firstUseGoal{Destructed}.
+Worse are the facts that, unlike either association list representation, partial functions lack \firstUseGoal{\DecidableEq} and cannot be \firstUseGoal{\destructed}.
 %
 The function type could be refined with its domain---\ie{}~a canonical list of keys---but would then suffer the same drawbacks of validity proofs \`{a} la canonical association lists.
 

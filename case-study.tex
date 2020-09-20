@@ -20,12 +20,14 @@ The definitions of evaluation environments (\texttt{env}), types, type contexts,
 \texttt{assert} takes two arguments; if their evaluation results are exactly equal, \texttt{assert} evaluates to the first,
 otherwise it evaluates to an \texttt{Err} result.
 
-What dictionary implementation should we choose to represent evaluation environments,
-which are used both as a parameter to the evaluation judgment as well as a data component of closure results?
+Evaluation environments are used both as a parameter to the evaluation judgment as well as a data component of closure results.
+%
+What dictionary implementation should we choose to represent environments?
+
 %
 %% Below we show that \dds{} are a suitable choice, but that all the conventional solutions fail.
 
-If we choose \sal{}s, contraction is false:
+Using \sal{}s, contraction is false:
 %
 for example, given environments
 %
@@ -59,7 +61,7 @@ the dictionary object is in negative position,
 and in our case the dictionary type is dependent on the result datatype,
 so the result is also in negative position, violating strict positivity.
 As such, results cannot contain validity proofs, so for any system that uses dictionaries as data,
-the dictionaries must be \total.
+the dictionaries must be \semanticallyTotal.
 
 Because \fpf{}s do not have \EqDec, it is not possible to decide which \texttt{EvalAsrt} constructor would
 apply to an \texttt{assert} of two \fpf{}s. As such, using \fpf{}s would make it impossible to constructively prove strong normalization.
