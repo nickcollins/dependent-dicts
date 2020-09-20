@@ -1,6 +1,11 @@
 \section{Introduction}
 \label{sec:Introduction}
 
+\newcommand{\firstUseGoal}[1]
+  %% {\emph{#1}}
+  %% {\textbf{#1}}
+  {\textbf{\emph{#1}}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% \rkc{Part 1.1: Motivation and SAL/CAL/FPF. Editing TBD.}
 
@@ -22,10 +27,9 @@ For example, first two lines of \autoref{fig:intro-example}
 %
 show two distinct association lists (among others) to represent a dictionary with three particular bindings.
 %
-This lack of \emph{\Extensional} can make proofs more difficult~\cite[Maps]{Pierce:SF1} or impossible, esp. when it comes to proving \emph{contraction} and \emph{exchange}%
-\citep{StructProp}
+This lack of \firstUseGoal{\Extensional} can make proofs more difficult~\cite[Maps]{Pierce:SF1} or impossible, especially when it comes to proving \emph{contraction} and \emph{exchange}~\citep{StructProp}
 %
-(discussed further in \autoref{sec:Discussion:Generality}).
+as discussed further in \autoref{sec:Discussion:Generality}.
 
 %% \input{fig-unequal}
 
@@ -43,13 +47,19 @@ Some treatments, including the Coq standard library~\citep{FMapInterface}, descr
 %
 The second association list described in \autoref{fig:intro-example} is one such example.
 %
-This approach is \emph{\extensional} -- \ie{} it permits using built-in equality for semantic equivalence. However, it requires extending the underlying list type---which allows arbitrary, possibly invalid lists---with a proof of validity that refines the coarser type. The downsides of having to use validity proofs are discussed further in \autoref{sec:Discussion:Generality}.
+This approach is \extensional{}, that is, it permits using built-in equality for semantic equivalence.
+%
+However, the underlying list type---which allows arbitrary, possibly invalid lists---is not \firstUseGoal{Semantically Total}; a proof of validity is required to refine the coarser type.
+%
+%% However, it requires extending the underlying list type---which allows arbitrary, possibly invalid lists---with a proof of validity that refines the coarser type.
+%
+The downsides of having to use validity proofs are discussed further in \autoref{sec:Discussion:Generality}.
 
 A third conventional solution is to represent dictionaries as finite partial functions~\cite[Maps]{Pierce:SF1}.
 %
 The third line of \autoref{fig:intro-example} depicts a nested $\lambda$-expression that serves as the ``lookup table'' (we omit the ``Some'' constructors for space).
 %
-Assuming \emph{functional extensionality}~\mbox{\cite[Logic]{Pierce:SF1}}---which can be postulated in Coq and Agda without introducing a contradiction, and is a theorem in some newer proof assistants built on a cubical logical framework---this representation is also \emph{\extensional}.
+Assuming \emph{functional extensionality}~\mbox{\cite[Logic]{Pierce:SF1}}---which can be postulated in Coq and Agda without introducing a contradiction, and is a theorem in some newer proof assistants built on a cubical logical framework---this representation is also \extensional{}.
 %
 However, a plain function type does not rule out terms that are \emph{non-}finite maps, possibly requiring additional proofs of validity as with canonical association lists.\footnote{\hspace{0.01in}%
 %
@@ -62,7 +72,7 @@ so a finiteness proof is unnecessary.
 %Additionally, traversing a finite program text will create only a finite number of mappings.
 }
 %
-Worse are the facts that, unlike either association list representation, partial functions lack decidable equality and cannot be destructed.
+Worse are the facts that, unlike either association list representation, partial functions lack \firstUseGoal{\DecidableEq} and cannot be \firstUseGoal{Destructed}.
 %
 The function type could be refined with its domain---\ie{}~a canonical list of keys---but would then suffer the same drawbacks of validity proofs \`{a} la canonical association lists.
 
