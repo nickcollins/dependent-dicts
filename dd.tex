@@ -38,7 +38,7 @@ In our implementation, each key is represented by a natural number, so that we c
 %
 There may be an algebraic structure more general than the natural numbers which satisfies these requirements, but for practical purposes, working with naturals
 %
-is easier for both the implementer and the client. In Agda, the bijection typeclass accepts a \texttt{convert} function, as well as proofs that \texttt{convert}
+is easier for both the implementer and the client. In Agda, the bijection typeclass accepts a \texttt{convert} function (for clarity, the code in this paper uses the synonym \texttt{toNat}), as well as proofs that \texttt{convert}
 %
 is injective and surjective, and the inverse function is defined by the library using the proof of surjectivity.\footnote{\hspace{0.01in}%
 %
@@ -75,7 +75,7 @@ These proceed largely as they would for association lists, but working indirectl
 
 \autoref{fig:agda} presents concrete implementations for lookup (\ie{} \texttt{\_\altLAng\_\altRAng}), insert (\ie{} \texttt{\_,,\_}), and \texttt{destruct} in Agda.
 %
-Notice that we parameterize the \texttt{Delta} module by key type \verb+K+ and bijection \verb+bij+ to the naturals; the operations are parameterized by value-binding type \verb+V+.
+Notice that we parameterize the \texttt{Delta} module by key type \verb+K+ and bijection \verb+bij+ to the naturals; the operations are parameterized by value type \verb+V+.
 %
 %Having to treat the first delta differently than the rest (literally rather than relatively) is the source of the somewhat technical---through simple---details.
 %

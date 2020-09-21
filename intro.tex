@@ -29,7 +29,7 @@ show two distinct association lists (among others) to represent a dictionary wit
 %
 This lack of \firstUseGoal{\Extensional} can make proofs more difficult~\cite[Maps]{Pierce:SF1} or impossible, especially when it comes to proving \emph{contraction} and \emph{exchange}~\citep{StructProp}
 %
-as discussed further in \autoref{sec:Discussion:Generality}.
+as discussed further in \autoref{sec:CaseStudy} and \autoref{sec:Discussion:Generality}.
 
 %% \input{fig-unequal}
 
@@ -49,11 +49,11 @@ The second association list described in \autoref{fig:intro-example} is one such
 %
 This approach is \extensional{}, that is, it permits using built-in equality for semantic equivalence.
 %
-However, the underlying list type---which allows arbitrary, possibly invalid lists---is not \firstUseGoal{\semanticallyTotal}; a proof of validity is required to refine the coarser type.
+However, this approach is not \firstUseGoal{\semanticallyTotal}; the underlying list type allows arbitrary, possibly invalid lists, so a proof of validity is required to refine the coarser type.
 %
 %% However, it requires extending the underlying list type---which allows arbitrary, possibly invalid lists---with a proof of validity that refines the coarser type.
 %
-The downsides of having to use validity proofs are discussed further in \autoref{sec:Discussion:Generality}.
+The downsides of having to use validity proofs are discussed further in \autoref{sec:CaseStudy} and \autoref{sec:Discussion:Generality}.
 
 A third conventional solution is to represent dictionaries as finite partial functions~\cite[Maps]{Pierce:SF1}.
 %
@@ -173,7 +173,7 @@ We offer a solution, dubbed \emph{\dds{}}, which achieves the first three of the
 %
 %% A \dd{} is similar to a canonical association list, but instead of storing each literal key value, it stores the \emph{difference} from the previous key, minus 1.
 %
-A \dd{} can be described as a ``canonical-by-construction'' association list: instead of storing each literal key value, it stores the \emph{difference} from the previous key, minus 1.
+A \dd{} can be described as a ``canonical-by-construction'' association list: instead of storing each literal key value, it stores the \emph{difference} from the previous key, minus 1 (details in \autoref{sec:DD}).
 %
 For example, compare the canonical association list and \dd{} for the \autoref{fig:intro-example} example:
 
@@ -197,7 +197,7 @@ Furthermore, we define a function which determines whether or not two \dds{} are
 
 As summarized in \autoref{fig:prop-summary}, delta dictionaries strike a new balance in this design space.
 %
-Compared to \cal{}s, \dds{} enjoy \SemTot{}---the lone property among those we identify which \cal{} does not.
+Compared to \cal{}s, \dds{} enjoy \SemTot{}---the lone property among those we identify which the \cal{} does not.
 %
 However, destruction and iteration for \dds{} is substantially more difficult.
 %

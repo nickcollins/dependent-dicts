@@ -5,21 +5,21 @@
 We conclude with a broader discussion of the design space, as well as related
 and future work.
 
-\subsection{Design Tradeoffs}
+\subsection{Design Tradeoffs of Difficult Destruction}
 \label{sec:Discussion:Tradeoffs}
 
 Is it possible to have a data structure that possesses all four properties?
 %
-Not likely.
+Probably not.
 
 \SemInj{} requires canonical ordering and deduplication, and \SemTot{} means that the canonical order and deduplication have to come from how the data is interpreted rather than how it is organized.
-
-%% \parahead{The Difficulty of Destruction}
-
-\parahead{Not-So-Easy Destruction}
 %
-The non-literal way in which key data is interpreted for delta dictionaries means that it is not safe for client code to work with the raw data directly---rather, all interaction with the data must be
-encapsulated in library functions.
+%The following section shows that this non-literal interpretation causes issues with ease of destruction.
+%As a result $\hdots$
+%% \parahead{The Difficulty of Destruction}
+%\parahead{Not-So-Easy Destruction}
+%
+The non-literal way in which key data is interpreted for delta dictionaries means that it is not safe for client code to work with the raw data directly---rather, all interaction with the data must be encapsulated in library functions.
 
 Unfortunately, this includes \emph{destruction}; an interaction which
 normally goes through the very natural, elegant, and well-supported mechanism of pattern matching is now
@@ -30,7 +30,7 @@ the order in which bindings are plucked away is arbitrary from the client's pers
 \verb+destruct+ achieves the same purpose as typical pattern matching (albeit more awkwardly), but because it
 does not harness the primitive notions of pattern matching and structure, it does not establish structural
 decrease on the dictionary object, which may break out-of-the-box structural recursion in the likely case
-of recursion on \verb+dd'+. To enable manual establishment of structural recursion, via an extra parameter that
+of recursion on the subdictionary \verb+dd'+. To enable manual establishment of structural recursion, via an extra parameter that
 explicitly tracks the dictionary length, we provide another theorem:
 
 \begin{alltt}
@@ -122,7 +122,7 @@ But if types defined ``later'' in inner scopes, can refer to types defined ``ear
 %
 This is the case for languages that support subtyping---notably, the subject of the POPLmark Challenge~\citep{POPLmark}.
 %
-Linear type systems, on the other hand, require sensitivity to duplicate insertions, so duplication-insensitive dictionaries are inappropriate for them as well.
+Linear type systems, on the other hand, require sensitivity to duplicate insertions, so duplication-insensitive dictionaries are inappropriate for them as well \citep{StructProp}.
 %
 Though {\sal}s remain the most natural choice in these cases, future work could explore data structures that are sensitive to ordering but not duplication, or vice versa.
 
