@@ -9,6 +9,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% \rkc{Part 1.1: Motivation and SAL/CAL/FPF. Editing TBD.}
 
+In most programming contexts, the design of data structures and algorithms is chiefly focused on performance, but in \emph{dependently-typed proof assistants}, evaluation performance is often unimportant since checking a proof requires type-checking but not actual evaluation.
+%
+As such, proof assistants often use entirely different data structures than those of conventional settings, with a focus on simplicity or useful proof-theoretic properties.
+
+This paper considers the implementation of \emph{dictionaries}, \ie{} finite mappings from keys to values.
+%
+The dictionary is a fundamental utility in most programming contexts and serves a broad range of purposes, so the choice of implementation is very important.
+%
+In conventional languages, dictionaries are implemented with auto-balanced trees or hashtables, which are highly performant, but also very complicated.
+%
+This paper discusses four alternatives ---three conventional and one novel--- that are often better suited to proof development.
+
 \subsection{Background}
 
 This paper assumes familiarity with statically typed functional languages (\eg{} Haskell, OCaml), and relevant concepts such as Hindley-Milner type systems, pattern-matching, data types, and product types.
@@ -20,16 +32,6 @@ A \emph{proof assistant} is a programming language with first-class support for 
 Many popular proof languages, including Coq and Agda, are founded on \emph{dependent types}, in which a type can be parameterized by concrete values such as numbers, lists, or functions,
 %
 and in which theorems are types, proofs are functions (or other concrete values), and type checking subsumes proof checking.
-
-In most programming contexts, the design of data structures and algorithms is chiefly focused on performance, but in dependently-typed proof assistants, evaluation performance is often unimportant since checking a proof requires type-checking but not actual evaluation.
-%
-As such, proof assistants often use entirely different data structures than those of conventional settings, with a focus on simplicity or useful proof-theoretic properties.
-
-This paper considers several approaches to implementing \emph{dictionaries}, \ie{} finite mappings from keys to values.
-%
-The dictionary is a fundamental utility in most programming contexts and serves a broad range of purposes, so the choice of implementation is very important.
-%
-In conventional languages, dictionaries are implemented with auto-balanced trees or hashtables, which are highly performant, but also very complicated.
 
 \subsection{Conventional Solutions}
 
