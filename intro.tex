@@ -33,6 +33,8 @@ In conventional languages, dictionaries are implemented with auto-balanced trees
 
 \subsection{Conventional Solutions}
 
+\input{fig-intro-example}
+
 \parahead{\Sal{}s}
 
 The simplest representation for a dictionary, an \emph{\sal}, is merely a list of key-value pairs~\citep[Lists]{Pierce:SF1}.
@@ -241,6 +243,11 @@ The ability to decompose a data structure into atomic subparts in a convenient m
 \end{enumerate}
 
 \input{fig-summary}
+\footnotetext{\hspace{0.01in}%
+%
+As aformentioned, this is often not a problem in practice, so for many practical intents and purposes, this may as well be a \cmark.
+%
+}
 
 \autoref{fig:prop-summary} summarizes the preceding discussion along these dimensions; note that the association list representations can be easily destructed, but destruction is not possible for \fpf{}s.
 %
