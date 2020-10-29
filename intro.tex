@@ -43,17 +43,17 @@ Insertion and destruction are trivially achieved by the cons operator and patter
 %
 Lookup is only slightly more involved:
 %
-\begin{alltt}
+\begin{lstlisting}
   -- assumes that the key type K is fixed
-  -- \altFAll\{V\} is an implicit type parameter
-  assoc-list-lookup : \altFAll\{V\} \altRArr List (K \altTimes V) \altRArr K \altRArr Maybe V
-  assoc-list-lookup [] \_ = None
+  -- $\forall${V} is an implicit type parameter
+  assoc-list-lookup : $\forall${V} $\rightarrow$ List (K $\times$ V) $\rightarrow$ K $\rightarrow$ Maybe V
+  assoc-list-lookup [] _ = None
   assoc-list-lookup ((k1 , v1) :: l) k =
     -- eq-dec-K returns Inl if its args are equal, Inr otherwise
     with eq-dec-K k k1
-  ... | Inl \_ = Some v1
-  ... | Inr \_ = assoc-list-lookup l k
-\end{alltt}
+  ... | Inl _ = Some v1
+  ... | Inr _ = assoc-list-lookup l k
+\end{lstlisting}
 
 Though easy to work with and reason about, \sal{}s have a drawback which can cause difficulty during proof development:
 %
@@ -69,6 +69,7 @@ as discussed further in \autoref{sec:CaseStudy} and \autoref{sec:Discussion:Gene
 
 %% \input{fig-unequal}
 
+\newpage % awkward, but seems necessary
 \parahead{\Cals}
 
 To establish a one-to-one correspondence between association lists and semantic mappings, one solution~\citep{FMapList} is to maintain a \emph{canonical}
@@ -84,34 +85,37 @@ The Coq standard library~\citep{FMapInterface}, describes unordered but deduplic
 The second association list shown in \autoref{fig:intro-example} is one such example.
 %
 This approach requires a more sophisticated \texttt{insert} function than that of the naive \sal{} approach:
-\begin{alltt}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}
   -- assumes that the key type K is fixed
-  cal-insert : \altFAll\{V\} \altRArr List (K \altTimes V) \altRArr (K \altTimes V) \altRArr List (K \altTimes V)
+  cal-insert : $\forall${V} $\rightarrow$ List (K $\times$ V) $\rightarrow$ (K $\times$ V) $\rightarrow$ List (K $\times$ V)
   cal-insert [] (k , v) = (k , v) :: []
   cal-insert ((k1 , v1) :: l) (k , v) =
     with ord-dec-K k k1
-  ... | Inl \_       = (k , v) :: (k1 , v1) :: l         -- k < k1
-  ... | Inr (Inl \_) = (k , v) :: l                      -- k == k1
-  ... | Inr (Inr \_) = (k1 , v1) :: cal-insert l (k , v) -- k > k1
-\end{alltt}
+  ... | Inl _       = (k , v) :: (k1 , v1) :: l         -- k < k1
+  ... | Inr (Inl _) = (k , v) :: l                      -- k == k1
+  ... | Inr (Inr _) = (k1 , v1) :: cal-insert l (k , v) -- k > k1
+\end{lstlisting}
+\end{minipage}
 
 Despite being a bit more complicated, this approach has the benefit of being \extensional{}, in that if any two valid lists are not identical, they must have distinct semantic meanings.
 %
 The property of \SemInj{} is important for several reasons - in particular it permits the use of the built-in equality proposition to establish semantic equivalence.
 %
 Proof languages such as Agda have built-in support for \emph{reflexive equality}, which judges two values (of the same type) as being equal if and only if they are precisely identical:
-\begin{alltt}
+\begin{lstlisting}
   -- In Agda, 'Set' is (roughly) the type of all types (incl. propositions).
-  -- \_==\_ means that == is infix and binary.
+  -- _==_ means that == is infix and binary.
   -- The first explicit arg is named x and is of type T,
   -- the second explicit arg is also of type T but is unnamed.
   -- Because == is a proposition, the "return type" is Set.
-  data \_==\_ \{T : Set\} (x : T) : T \altRArr Set where
+  data _==_ {T : Set} (x : T) : T $\rightarrow$ Set where
     -- A constructor of a proposition is a proof of that proposition.
     -- refl is the only constructor - for any x, refl is a proof that x == x.
     refl : x == x
     -- There's no way to establish equality of two arbitrary values x and y.
-\end{alltt}
+\end{lstlisting}
 
 The built-in equality proposition is a common and intuitive way to judge the equality of two values.
 %
@@ -120,22 +124,24 @@ Furthermore, proof assistants have special features for working with it, which c
 As such, it's very useful to be able to use this proposition, rather than to define a custom proposition that judges the semantic equivalence of two dictionaries.
 
 Although the \cal{} approach is \extensional, it has another drawback; the list-of-pairs type allows arbitrary, possibly invalid lists, so each \cal{} must be packaged with a proof of validity:
-\begin{alltt}
+\begin{minipage}{\linewidth}
+\begin{lstlisting}
   -- assumes that the key type K is fixed
-  data \_valid-cal \altFAll\{V\} (List (K \altTimes V)) : Set
+  data _valid-cal $\forall${V} (List (K $\times$ V)) : Set
     EmptyVal  : [] valid-cal
-    SingleVal : \altFAll\{k v\} \altRArr ((k , v) :: []) valid-cal
+    SingleVal : $\forall${k v} $\rightarrow$ ((k , v) :: []) valid-cal
     -- For any k1, k2, v1, v2, and l, if k1 < k2, and (k2 , v2) :: l is valid,
     -- then ManyVal stands as a proof that (k1 , v1) :: (k2 , v2) :: l is valid.
-    ManyVal   : \altFAll\{k1 k2 v1 v2 l\} \altRArr
-                  k1 < k2 \altRArr
-                  ((k2 , v2) :: l) valid-cal \altRArr
+    ManyVal   : $\forall${k1 k2 v1 v2 l} $\rightarrow$
+                  k1 < k2 $\rightarrow$
+                  ((k2 , v2) :: l) valid-cal $\rightarrow$
                   ((k1 , v1) :: (k2 , v2) :: l) valid-cal
 
-  cal : \altFAll\{V\} \altRArr Set
-  -- '\altSum[ x \altIn T ] (p x)' packages x (of type T) with a proof that it satisfies p
-  cal \{V\} = \altSum[ l \altIn List (K \altTimes V) ] (l valid-cal)
-\end{alltt}
+  cal : $\forall${V} $\rightarrow$ Set
+  -- '$\sum$[ x $\in$ T ] (p x)' packages x (of type T) with a proof that it satisfies p
+  cal {V} = $\sum$[ l $\in$ List (K $\times$ V) ] (l valid-cal)
+\end{lstlisting}
+\end{minipage}
 
 This paper coins the term \firstUseGoal{\semanticallyTotal} to describe any data structure whose type is free of proof terms and yet contains no invalid members -
 %
@@ -166,11 +172,11 @@ The more serious problem is that, unlike either association list approach, funct
 While a proof that $x == y$ establishes the truth that $x$ and $y$ are equal, the \texttt{==} proposition is not capable of \emph{deciding} whether or not two arbitrary values are equal.
 %
 To \emph{decide} this question, we need to define a function that accepts two arguments (of the same type) and returns either a proof that they are equal or a proof that they are not equal:
-\begin{alltt}
-  -- 'P \altRArr \altBot' means that P is false.
-  eq-dec-K : (x y : K) \altRArr ((x == y) \altOr (x == y \altRArr \altBot))
+\begin{lstlisting}
+  -- 'P $\rightarrow \bot$' means that P is false.
+  eq-dec-K : (x y : K) $\rightarrow$ ((x == y) $\lor$ (x == y $\rightarrow \bot$))
   eq-dec-K x y = ?  --  the implementation will depend on the type K
-\end{alltt}
+\end{lstlisting}
 
 Note that proof languages like Coq and Agda are \emph{constructive}; they elide the \emph{law of the excluded middle}, so it's possible for a proposition to be neither provably true nor provably false.
 %
