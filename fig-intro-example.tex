@@ -11,7 +11,7 @@
 \begin{tabular}{ l l }
  %% \Sal{} (\SAL) & [(3, "b"), (1, "a"), {\color{gray} (3, "q")}, (6, "c")] \\
  \Sal{} & [(3, \str{b}), (1, \str{a}), {\color{gray} (3, \str{q})}, (6, \str{c})] \\
- \Cal{} & [(1, \str{a}), (3, \str{b}), (6, \str{c}] \\ %% \quad (insert function dedupes and preserves canonical order)
+ \Cal{} & [(1, \str{a}), (3, \str{b}), (6, \str{c})] \\ %% \quad (insert function dedupes and preserves canonical order)
  \Fpf{} & \lameq{3} ? \some{\str{b}} : (\lameq{1} ? \some{\str{a}} : (\lameq{3} ? {\color{gray} \some{\str{q}}} : (\lameq{6} ? \some{\str{c}} : \none{}) $x$) $x$) $x$ \\
  %% \Fpfk{} & ((\lameq{3} ? "b" : (\lameq{1} ? "a" : (\lameq{3} ? {\color{gray} "q"} : (\lameq{6} ? "c" : $\bot$) $x$) $x$) $x$), [1, 3, 6])  \\
  \Dd{}  & [(1, \str{a}), (1, \str{b}), (2, \str{c})]
