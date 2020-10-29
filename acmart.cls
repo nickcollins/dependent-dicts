@@ -2730,7 +2730,7 @@
   \parindent\z@}
 \def\@secfont{\sffamily\bfseries\section@raggedright\MakeTextUppercase}
 \def\@subsecfont{\sffamily\bfseries\section@raggedright}
-\def\@subsubsecfont{\sffamily\itshape}
+\def\@subsubsecfont{\sffamily\itshape\bfseries}
 \def\@parfont{\itshape}
 \setcounter{secnumdepth}{3}
 \ifcase\ACM@format@nr
