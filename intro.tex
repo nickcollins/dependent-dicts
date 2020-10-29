@@ -51,10 +51,9 @@ Lookup is only slightly more involved:
   assoc-list-lookup : $\forall${V} $\rightarrow$ List (K $\times$ V) $\rightarrow$ K $\rightarrow$ Maybe V
   assoc-list-lookup [] _ = None
   assoc-list-lookup ((k1 , v1) :: l) k =
-    -- eq-dec-K returns Inl if its args are equal, Inr otherwise
-    with eq-dec-K k k1
-  ... | Inl _ = Some v1
-  ... | Inr _ = assoc-list-lookup l k
+    with eq-dec-K k k1                 -- 'eq-dec-K k k1' checks whether k == k1 ...
+  ... | Inl _ = Some v1                -- if k == k1, then 'eq-dec-K k k1' evals to 'Inl _'
+  ... | Inr _ = assoc-list-lookup l k  -- otherwise, 'eq-dec-K k k1' evals to 'Inr _'
 \end{lstlisting}
 
 Though easy to work with and reason about, \sal{}s have a drawback which can cause difficulty during proof development:
