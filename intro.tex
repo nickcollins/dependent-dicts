@@ -301,20 +301,7 @@ Furthermore, unlike all of the conventional approaches, \dds{} require a bijecti
 %
 Lastly, though not a concern from a client's perspective, the implementation of delta dictionaries is considerably more involved than the conventional approaches.
 
-%% than it is with the {\SAL}s or {\CAL}s, for which these operations are trivial ({\FPF}s cannot be properly destructed at all).
-
-%% Naturally, \dds~ have some drawbacks as well.
-
-%% Although most types that are suitable for use as keys in the first place can be bijected to the
-%% naturals, for some types defining this bijection may be too awkward or cumbersome, in which case \dds~ may
-%% be a poor choice.
-
-%% As with the drawbacks of the other solutions, this one is
-%% discussed further in the \nameref{sec:Problem} section.
-
 \subsection{Outline}
-%
-%% Next, we describe the core operations for delta dictionaries in \autoref{sec:DD} and the relevant metatheory in \autoref{sec:DD:props}.
 %
 Next, we describe the core operations for delta dictionaries and the relevant metatheory in \autoref{sec:DD}.
 %
@@ -323,69 +310,3 @@ In \autoref{sec:CaseStudy}, we describe a small case study in proof development 
 Finally, we conclude in \autoref{sec:Discussion} with a discussion. %% of related work.
 %
 %% Our implementation and proofs are formalized in Agda and available in the anonymous supplementary materials.
-
-
-%% {\color{gray}
-%% 
-%% \subsection{\rkc{Grab Bag of Text}}
-%% 
-%% %% \section{Problem}
-%% %% \subsection{Problem}
-%% %% \label{sec:Problem}
-%% 
-%% \rkc{1}
-%% 
-%% Data structures can possess or lack a wide range of properties that make them easier or harder to work with
-%% when proving metatheory. Naturally, when possible, data structures should be chosen that posess those
-%% properties which make the task at hand easier. Achieving this requires identifying the valuable properties,
-%% what it is that makes them valuable, and finding or inventing data structures which possess those properties.
-%% We hold that this is a broad topic of
-%% research, which we illustrate in the particular context of choosing an implementation for a dictionary. In
-%% this context, we identify, according to both conceptual and practical considerations, four important and
-%% discriminating properties that a dictionary implementation may or may not possess:
-%% TODO there's a good chance some of these properties have been named somewhere else. We should make sure we
-%% don't try and coin terms for anything that's already been defined somewhere.
-%% 
-%% % TODO we may decide that the conceptual and practical benefits of decidable equality are so obvious or
-%% % self-evident that we don't need any further discussion of that property
-%% 
-%% %% \subsection{Conceptual Importance}
-%% %% \label{sec:Problem:concept}
-%% 
-%% \rkc{2}
-%% 
-%% In \autoref{sec:Problem:pract}, we illustrate practical problems and benefits under the particular context
-%% of choosing an implementation for dictionaries. But first, it's worth exploring conceptual aspects that
-%% apply to the general case. These conceptual aspects capture the spirit of practical considerations and
-%% motivate the search for solutions that are not merely serviceable but elegant, moral, and insightful.
-%% 
-%% \subsubsection{\SemTot}
-%% \label{sec:Problem:concept:SemTot}
-%% TODO something something "making impossible states impossible", i think allusion to the right parts out of that
-%% video will suffice to make the point here
-%% 
-%% \subsubsection{\SemInj}
-%% \label{sec:Problem:concept:SemInj}
-%% TODO something something it yields arbitrariness, which is not always wrong but which is unaesthetic and, when
-%% avoidable, undesirable. It also allows for a semantic meaning to be represented by a concrete thing that is
-%% needlessly verbose and complicated.
-%% 
-%% \subsubsection{\EqDec}
-%% \label{sec:Problem:concept:EqDec}
-%% The languages of proof assistants generally pride themselves on being total and constructive, on emphasizing
-%% the knowable and demonstrable over the mysterious and hypothetical.
-%% 
-%% \subsubsection{\EzDstr}
-%% \label{sec:Problem:concept:EzDstr}
-%% TODO We need to clearly explain what we're talking about here, and clarify stuff like "facilitate inspection"
-%% and "unrestricted non-additive manipulation". Aside from these clarifications, we won't say much else - in
-%% this case the conceptual value largely boils down to the practical value.
-%% 
-%% %Finally, because they guarantee the \emph{structural properties} \emph{contraction} and
-%% %\emph{exchange}, \dds~ are inherently inappropriate for substructural logics/judgments that reject one or
-%% %both of those properties. In these cases, the naive solution's sensitivity to duplication and/or ordering is
-%% %a feature, not a bug, and that solution becomes not only the natural solution but the morally correct one.
-%% %Future work could explore the possibility of data structures that uphold one of these properties but not the
-%% %other.
-%% 
-%% }
