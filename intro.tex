@@ -56,6 +56,8 @@ Lookup is only slightly more involved:
   ... | Inr _ = assoc-list-lookup l k  -- otherwise, 'eq-dec-K k k1' evals to 'Inr _'
 \end{lstlisting}
 
+\parahead{Limitation: Lack of \Extensional}
+
 Though easy to work with and reason about, \sal{}s have a drawback which can cause difficulty during proof development:
 %
 because they allow duplicate bindings for the same key and they are sensitive to the order of insertions, many distinct \sal{}s represent the same semantic mapping.
@@ -119,6 +121,7 @@ This approach requires a more sophisticated \texttt{insert} function than that o
   ... | Inr (Inr _) = (k1 , v1) :: cal-insert l (k , v) -- k > k1
 \end{lstlisting}
 
+\parahead{Limitation: Lack of \SemTot}
 
 Although the \cal{} approach is \extensional, it has another drawback; the list-of-pairs type allows arbitrary, possibly invalid lists, so each \cal{} must be packaged with a proof of validity:
 \begin{lstlisting}
@@ -164,6 +167,8 @@ Furthermore, a dictionary built from a finite program can only have finitely man
 %
 The more serious problems are that, unlike either association list approach, functions lack \firstUseGoal{\DecidableEq} and cannot be \firstUseGoal{\destructed}.
 
+\parahead{Limitation: Lack of \DecidableEq}
+
 While a proof that $x == y$ establishes the truth that $x$ and $y$ are equal, the \texttt{==} proposition is not capable of \emph{deciding} whether or not two arbitrary values are equal.
 %
 To \emph{decide} this question, we need to define a function that accepts two arguments (of the same type) and returns either a proof that they are equal or a proof that they are not equal:
@@ -180,6 +185,8 @@ As such, the ability to decide whether some proposition (such as the equality of
 In the case of functions, it's not possible to establish that two arbitrary functions are unequal, so there is no way to establish decidability.
 %
 Naturally, deciding whether or not two dictionaries are equal is important and useful for many of the same reasons it would be in a more conventional language, so the lack of \DecidableEq{} is a substantial weakness.
+
+\parahead{Limitation: Lack of Destructibility}
 
 The inability to destruct a function is more intuitive --- destruction is essentially the same as in other functional languages, where pattern-matching is typically used to separate one element of a collection (often the \emph{head}) from the rest of the collection.
 %
