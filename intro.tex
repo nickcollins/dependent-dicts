@@ -192,7 +192,7 @@ The inability to destruct a function is more intuitive --- destruction is essent
 %
 A lambda value can't be destructed or picked apart in any way, so its values also can't be iterated or counted.
 %
-The function could be packaged with a set indicating its domain --- \ie{}~a canonical list of keys --- but would then have to include a proof that those keys are correct, violating \SemTot{} in the same troublesome way that \cal{}s do.
+The function could be packaged with a set indicating its domain ---\ie{}~a canonical list of keys--- but would then have to include a proof that those keys are correct, violating \SemTot{} in the same troublesome way that \cal{}s do.
 
 \subsection{Core Properties}
 
@@ -205,7 +205,7 @@ Furthermore, as shown in \autoref{sec:CaseStudy}, there are cases where these dr
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% \rkc{Part 1.2: Summary of Design Goals. Editing TBD.}
 
-Ideally, when working in a proof assistant, an implementation of a data structure---dictionaries in particular for this paper---would satisfy the following properties:
+Ideally, when working in a proof assistant, an implementation of a data structure ---dictionaries in particular for this paper--- would satisfy these properties:
 
 \newcommand{\designGoal}[1]
   {\textbf{\emph{#1:}}}
@@ -291,7 +291,7 @@ Furthermore, we define a function which determines whether or not two \dds{} are
 
 As summarized in \autoref{fig:prop-summary}, delta dictionaries strike a new balance in this design space.
 %
-Compared to \cal{}s, \dds{} enjoy \SemTot{}---the lone property among those we identify which the \cal{} does not.
+Compared to \cal{}s, \dds{} enjoy \SemTot{} --- the lone property among those we identify which the \cal{} does not.
 %
 However, destruction and iteration for \dds{} is substantially more difficult.
 %
