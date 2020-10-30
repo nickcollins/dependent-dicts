@@ -102,7 +102,7 @@ This approach requires a more sophisticated \texttt{insert} function than that o
 
 Despite being a bit more complicated, this approach has the benefit of being \extensional{}, in that if any two valid lists are not identical, they must have distinct semantic meanings.
 %
-The property of \SemInj{} is important for several reasons - in particular it permits the use of the built-in equality proposition to establish semantic equivalence.
+The property of \SemInj{} is important for several reasons --- in particular it permits the use of the built-in equality proposition to establish semantic equivalence.
 %
 Proof languages such as Agda have built-in support for \emph{reflexive equality}, which judges two values (of the same type) as being equal if and only if they are precisely identical:
 \begin{lstlisting}
@@ -144,7 +144,7 @@ Although the \cal{} approach is \extensional, it has another drawback; the list-
 \end{lstlisting}
 \end{minipage}
 
-This paper coins the term \firstUseGoal{\semanticallyTotal} to describe any data structure whose type is free of proof terms and yet contains no invalid members -
+This paper coins the term \firstUseGoal{\semanticallyTotal} to describe any data structure whose type is free of proof terms and yet contains no invalid members ---
 %
 \ie{} the mapping from values in the underlying type to their semantic meanings is total.
 %
@@ -164,7 +164,7 @@ This approach can be made \extensional{} by postulating \emph{functional extensi
 %
 On the other hand, this approach technically fails to satisfy \SemTot, since the function type permits \emph{non-}finite maps.
 %
-Even so, this is often not a problem in practice -- as long as the dictionary is never iterated, destructed, or counted, an infinite dictionary is indistinguishable from a finite dictionary.
+Even so, this is often not a problem in practice --- as long as the dictionary is never iterated, destructed, or counted, an infinite dictionary is indistinguishable from a finite dictionary.
 %
 Furthermore, a dictionary built from a finite program can only have finitely many mappings.
 %
@@ -181,13 +181,13 @@ To \emph{decide} this question, we need to define a function that accepts two ar
 
 Note that proof languages like Coq and Agda are \emph{constructive}; they elide the \emph{law of the excluded middle}, so it's possible for a proposition to be neither provably true nor provably false.
 %
-As such, the ability to decide whether some proposition (such as the equality of two values) is true or false cannot be taken for granted -- if this ability is needed, it must be explicitly established by defining a function such as the one above.
+As such, the ability to decide whether some proposition (such as the equality of two values) is true or false cannot be taken for granted --- if this ability is needed, it must be explicitly established by defining a function such as the one above.
 %
 In the case of functions, it's not possible to establish that two arbitrary functions are unequal, so there is no way to establish decidability.
 %
 Naturally, deciding whether or not two dictionaries are equal is important and useful for many of the same reasons it would be in a more conventional language, so the lack of \DecidableEq{} is a substantial weakness.
 
-The inability to destruct a function is more intuitive -- destruction is essentially the same as in other functional languages, where pattern-matching is typically used to separate one element of a collection (often the \emph{head}) from the rest of the collection.
+The inability to destruct a function is more intuitive --- destruction is essentially the same as in other functional languages, where pattern-matching is typically used to separate one element of a collection (often the \emph{head}) from the rest of the collection.
 %
 A lambda value can't be destructed or picked apart in any way, so its values also can't be iterated or counted.
 %
@@ -262,7 +262,7 @@ None of the conventional approaches satisfies both \SemTot{} and \SemInj{}, nor 
 
 \subsection{Novel Solution: Delta Dictionaries}
 %
-The four core properties can be (mostly) satisfied by way of \emph{\dds{}} -- although destructible, \EzDstr{} is not fully achieved because destruction of \dds{} is awkward.
+The four core properties can be (mostly) satisfied by way of \emph{\dds{}} --- although destructible, \EzDstr{} is not fully achieved because destruction of \dds{} is awkward.
 %
 %% A \dd{} is similar to a canonical association list, but instead of storing each literal key value, it stores the \emph{difference} from the previous key, minus 1.
 %
