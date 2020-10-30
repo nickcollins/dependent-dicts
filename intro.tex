@@ -64,46 +64,11 @@ For example, the first two lines of \autoref{fig:intro-example}
 %
 show two distinct association lists (among others) that represent a dictionary with three particular bindings.
 %
-This lack of \firstUseGoal{\Extensional} can make proofs more difficult~\cite[Maps]{Pierce:SF1} or impossible, especially when it comes to proving \emph{contraction} and \emph{exchange}~\citep{StructProp}
+In other words, \sal{}s lack \firstUseGoal{\Extensional}: the property that any two non-identical valid lists must have distinct semantic meanings.
 %
-as discussed further in \autoref{sec:CaseStudy} and \autoref{sec:Discussion:Generality}.
+\Extensional{} can make proofs easier ~\cite[Maps]{Pierce:SF1} and permits the use of the built-in equality proposition to establish semantic equivalence.
+%
 
-%% \input{fig-unequal}
-
-\newpage % awkward, but seems necessary
-\subsubsection{\Cal{}s}
-
-To establish a one-to-one correspondence between association lists and semantic mappings, one solution~\citep{FMapList} is to maintain a \emph{canonical}
-%
-form that is semantically valid and unique, namely, a list in which there are no duplicate keys and, furthermore, where keys are in sorted order.%
-%
-\footnote{\hspace{0.01in}%
-%
-The Coq standard library~\citep{FMapInterface}, describes unordered but deduplicated \sal{}s as ``weak,'' implying that \cal{}s are ``strong.''
-%
-}
-%
-The second association list shown in \autoref{fig:intro-example} is one such example.
-%
-This approach requires a more sophisticated \texttt{insert} function than that of the naive \sal{} approach:
-
-\begin{minipage}{\linewidth}
-\begin{lstlisting}
-  -- assumes that the key type K is fixed
-  cal-insert : $\forall${V} $\rightarrow$ List (K $\times$ V) $\rightarrow$ (K $\times$ V) $\rightarrow$ List (K $\times$ V)
-  cal-insert [] (k , v) = (k , v) :: []
-  cal-insert ((k1 , v1) :: l) (k , v) =
-    with ord-dec-K k k1
-  ... | Inl _       = (k , v) :: (k1 , v1) :: l         -- k < k1
-  ... | Inr (Inl _) = (k , v) :: l                      -- k == k1
-  ... | Inr (Inr _) = (k1 , v1) :: cal-insert l (k , v) -- k > k1
-\end{lstlisting}
-\end{minipage}
-
-Despite being a bit more complicated, this approach has the benefit of being \extensional{}, in that if any two valid lists are not identical, they must have distinct semantic meanings.
-%
-The property of \SemInj{} is important for several reasons --- in particular it permits the use of the built-in equality proposition to establish semantic equivalence.
-%
 Proof languages such as Agda have built-in support for \emph{reflexive equality}, which judges two values (of the same type) as being equal if and only if they are precisely identical:
 \begin{lstlisting}
   -- In Agda, 'Set' is (roughly) the type of all types (incl. propositions).
@@ -120,12 +85,42 @@ Proof languages such as Agda have built-in support for \emph{reflexive equality}
 
 The built-in equality proposition is a common and intuitive way to judge the equality of two values.
 %
-Furthermore, proof assistants have special features for working with it, which can be harnessed to simlify and expedite proof development.
+Furthermore, proof assistants have special features for working with it, which can be harnessed to simplify and expedite proof development.
 %
 As such, it's very useful to be able to use this proposition, rather than to define a custom proposition that judges the semantic equivalence of two dictionaries.
+%
+\autoref{sec:CaseStudy} and \autoref{sec:Discussion:Generality} further demonstrate the importance of \Extensional{} by showing that its absence can render some theorems, such as the important \emph{structural properties} \emph{contraction} and \emph{exchange}~\citep{StructProp}, false.
+
+%% \input{fig-unequal}
+
+\subsubsection{\Cal{}s}
+
+To establish a one-to-one correspondence between association lists and semantic mappings, and thus \Extensional, one solution~\citep{FMapList} is to maintain a \emph{canonical}
+%
+form that is semantically valid and unique, namely, a list in which there are no duplicate keys and, furthermore, where keys are in sorted order.%
+%
+\footnote{\hspace{0.01in}%
+%
+The Coq standard library~\citep{FMapInterface}, describes unordered but deduplicated \sal{}s as ``weak,'' implying that \cal{}s are ``strong.''
+%
+}
+%
+The second association list shown in \autoref{fig:intro-example} is one such example.
+%
+This approach requires a more sophisticated \texttt{insert} function than that of the naive \sal{} approach:
+\begin{lstlisting}
+  -- assumes that the key type K is fixed
+  cal-insert : $\forall${V} $\rightarrow$ List (K $\times$ V) $\rightarrow$ (K $\times$ V) $\rightarrow$ List (K $\times$ V)
+  cal-insert [] (k , v) = (k , v) :: []
+  cal-insert ((k1 , v1) :: l) (k , v) =
+    with ord-dec-K k k1
+  ... | Inl _       = (k , v) :: (k1 , v1) :: l         -- k < k1
+  ... | Inr (Inl _) = (k , v) :: l                      -- k == k1
+  ... | Inr (Inr _) = (k1 , v1) :: cal-insert l (k , v) -- k > k1
+\end{lstlisting}
+
 
 Although the \cal{} approach is \extensional, it has another drawback; the list-of-pairs type allows arbitrary, possibly invalid lists, so each \cal{} must be packaged with a proof of validity:
-\begin{minipage}{\linewidth}
 \begin{lstlisting}
   -- assumes that the key type K is fixed
   data _valid-cal $\forall${V} (List (K $\times$ V)) : Set
@@ -142,7 +137,6 @@ Although the \cal{} approach is \extensional, it has another drawback; the list-
   -- '$\sum$[ x $\in$ T ] (p x)' packages x (of type T) with a proof that it satisfies p
   cal {V} = $\sum$[ l $\in$ List (K $\times$ V) ] (l valid-cal)
 \end{lstlisting}
-\end{minipage}
 
 This paper coins the term \firstUseGoal{\semanticallyTotal} to describe any data structure whose type is free of proof terms and yet contains no invalid members ---
 %
@@ -152,7 +146,7 @@ To illustrate, a pair of integers is not a \semanticallyTotal{} data structure f
 %
 but a pair of an integer and a natural, where the natural represents the denominator minus $1$, \emph{is} \semanticallyTotal{} (note that neither of these data structures is \extensional).
 %
-The downsides of having to use validity proofs are discussed further in \autoref{sec:CaseStudy} and \autoref{sec:Discussion:Generality}.
+The downsides of having to use validity proofs are discussed in \autoref{sec:CaseStudy} and \autoref{sec:Discussion:Generality}.
 
 \subsubsection{\Fpf{}s}
 
@@ -168,7 +162,7 @@ Even so, this is often not a problem in practice --- as long as the dictionary i
 %
 Furthermore, a dictionary built from a finite program can only have finitely many mappings.
 %
-The more serious problem is that, unlike either association list approach, functions lack \firstUseGoal{\DecidableEq} and cannot be \firstUseGoal{\destructed}.
+The more serious problems are that, unlike either association list approach, functions lack \firstUseGoal{\DecidableEq} and cannot be \firstUseGoal{\destructed}.
 
 While a proof that $x == y$ establishes the truth that $x$ and $y$ are equal, the \texttt{==} proposition is not capable of \emph{deciding} whether or not two arbitrary values are equal.
 %
