@@ -263,9 +263,7 @@ None of the conventional approaches satisfies both \SemTot{} and \SemInj{}, nor 
 
 \subsection{Novel Solution: Delta Dictionaries}
 %
-The four core properties can be (mostly) satisfied by way of \emph{\dds{}} --- although destructible, \EzDstr{} is not fully achieved because destruction of \dds{} is awkward.
-%
-%% A \dd{} is similar to a canonical association list, but instead of storing each literal key value, it stores the \emph{difference} from the previous key, minus 1.
+The four core properties can be (mostly) satisfied by way of \emph{\dds{}}.
 %
 A \dd{} can be described as a ``canonical-by-construction'' association list: instead of storing each literal key value, it stores the \emph{difference} from the previous key, minus 1 (details in \autoref{sec:DD}).
 %
@@ -287,7 +285,7 @@ Every unique \dd{} represents a unique semantic mapping, thus built-in equality 
 %
 %% there is a bijection between \dd{} terms and finite maps,
 %
-Furthermore, we define a function which determines whether or not two \dds{} are equal (\EqDec), and a \texttt{destruct} function, which permits destruction albeit in a more awkward manner than standard pattern matching.
+Furthermore, we define a function which determines whether or not two \dds{} are equal (\EqDec), and a \texttt{destruct} function, which permits destruction albeit in a more awkward manner than standard pattern matching (not-so-easy Destructibility).
 
 As summarized in \autoref{fig:prop-summary}, delta dictionaries strike a new balance in this design space.
 %
