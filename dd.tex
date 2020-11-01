@@ -4,7 +4,7 @@
 
 \input{fig-dd-example-all}
 
-Our implementation of delta dictionaries and corresponding proofs are formalized in Agda and available in the anonymous supplementary materials.
+This section covers the Agda implementation of the core functionality of \dds, and also defines the key theorems. Additional theorems and functionality, as well as the Agda proofs of the theorems, are not included but are available at \url{https://github.com/nickcollins/dependent-dicts-agda} \nick{TODO probably should turn this into a citation}.
 
 %% \subsection{Delta Indexing}
 %% \subsection{Key Types and Deltas}
@@ -20,7 +20,7 @@ between the key type and the naturals, and use this bijection to convert keys to
 
 In order to maintain canonical order, while ensuring that every natural number is valid as the first item in a pair, that number must be the non-negative difference between the key it represents and the previous key.
 %
-We call this number a \emph{delta}. % , alluding to the \emph{delta encoding} technique more commonly harnessed for performance optimization.
+This number is called a \emph{delta}. % , alluding to the \emph{delta encoding} technique more commonly harnessed for performance optimization.
 %
 As described so far, a $0$ offset would correspond to a duplicate key.
 %
@@ -34,7 +34,7 @@ The head of the list, however, does not follow the ``minus $1$'' rule: so the fi
 %% \label{sec:DD:bij}
 \parahead{Bijections to Natural Numbers}
 
-In our implementation, each key is represented by a natural number, so that we can use addition, subtraction, and successor operations in order to define deltas.
+In this implementation, each key is represented by a natural number, permitting the use of addition, subtraction, and successor\footnote{The successor of $n$ is $n+1$.} operations for defining deltas.
 %
 There may be an algebraic structure more general than the natural numbers which satisfies these requirements, but for practical purposes, working with naturals
 %
@@ -42,23 +42,21 @@ is easier for both the implementer and the client. In Agda, the bijection typecl
 %
 is injective and surjective, and the inverse function is defined by the library using the proof of surjectivity.\footnote{\hspace{0.01in}%
 %
-Without surjectivity, a binding for an unmapped natural either invalidates the \dd---violating \Total---or is ignored, in which case its presence or absence does not affect the semantic meaning---violating \Extensional.
+Without surjectivity, a binding for an unmapped natural either invalidates the \dd, violating \Total, or is ignored, in which case its presence or absence does not affect the semantic meaning, violating \Extensional.
 %
 }
 %
-We demonstrate this in Agda by
-%
-providing an instance of the bijection typeclass for integers ($25$ lines of code).
+The github repo \nick{TODO citation?} demonstrates this by providing an instance of the bijection typeclass for integers ($25$ lines of code).
 
-Most types that are suitable for use as keys in the first place, especially strings and countable numeric types, can be bijected to the naturals,
+Most types that are suitable for use as keys in the first place, especially strings and numeric types, can be bijected to the naturals,
 %
-though doing so may be onerous. Finite types, such as characters, are suitable as keys, but cannot be bijected to the naturals---%
+though doing so may be onerous. Finite types, such as characters, are suitable as keys, but cannot be bijected to the naturals ---
 %
 simultaneously achieving \Total{} and \Extensional{} for a dictionary over finite types may require a custom-made dictionary data type.
 
 \Ddls{} are canonically ordered, but by the natural ordering of the naturals, which, depending on the choice of bijection, may correspond to an unnatural
 %
-ordering of the key type. As such, we do not expose the ordering to the client---functions such as \texttt{destruct} and \texttt{dlt$\Rightarrow$list} produce results
+ordering of the key type. As such, the ordering is not exposed to the client --- functions such as \texttt{destruct} and \texttt{dlt$\Rightarrow$list} produce results
 %
 that are in arbitrary order from the client's perspective.
 
@@ -75,7 +73,9 @@ These proceed largely as they would for association lists, but working indirectl
 
 \autoref{fig:agda} presents concrete implementations for lookup (\ie{} \texttt{\_\altLAng\_\altRAng}), insert (\ie{} \texttt{\_,,\_}), and \texttt{destruct} in Agda.
 %
-Notice that we parameterize the \texttt{Delta} module by key type \verb+K+ and bijection \verb+bij+ to the naturals; the operations are parameterized by value type \verb+V+.
+Note that the lookup function \texttt{\_\altLAng\_\altRAng} takes two args, dictionary \texttt{d} and key \texttt{k}, with the syntax \texttt{d \altLAng{} k \altRAng}.
+%
+Also note that the \texttt{Delta} module is parameterized by key type \verb+K+ and bijection \verb+bij+ to the naturals, while the operations are parameterized by value type \verb+V+.
 %
 %Having to treat the first delta differently than the rest (literally rather than relatively) is the source of the somewhat technical---through simple---details.
 %
@@ -95,41 +95,31 @@ If the first pair is an exact match, then we simply replace the old value with t
 
 %% \cite[Facts about weak maps]{FMapFacts}
 %
-The Coq Standard Library~\citep{FMapInterface,FMapFacts} describes key metatheory about dictionaries, including that for lookup and insert (it does not define \verb+destruct+).
+The Coq Standard Library~\citep{FMapInterface,FMapFacts} describes key theorems about dictionaries, including those for lookup and insert (it does not define \verb+destruct+).
 %
-Our Agda mechanization proves the relevant subset of this metatheory. Some of the metatheory in the Coq treatment involves concepts not relevant to our treatment,
+The github repo \nick{TODO citation?} proves the relevant subset of these theorems. Some of the theorems in the Coq treatment involves concepts not relevant to this treatment,
 %
-especially multiple distinct notions of equality. Also, since we do not expose mapping order to the client via our interface,
+especially multiple distinct notions of equality. Also, since this interface does not expose mapping order to the client,
 %
-we do not prove any of the theorems pertaining to ordering (\ie{} those that are not ``weak'').
+there are no proofs of any of the theorems pertaining to ordering (\ie{} those that are not ``weak'').
 
 
 \subsection{Additional Operations}
 
-Our Agda mechanization also defines key deletion, union, map, and to/from-list operations, along
-with appropriate metatheory (not reproduced here).
+The github repo \nick{TODO citation?} also defines key deletion, union, map, and to/from-list operations, along with appropriate theorems (not reproduced here).
 
-
-
-%% \subsection{Core properties}
-%% \section{Properties}
 \subsection{Properties}
 \label{sec:DD:props}
 
-We now consider properties about delta dictionaries, starting with the four design goals identified in \autoref{sec:Introduction}.
+Below are definitions of the four properties identified in \autoref{sec:Introduction:props}, as well as two important consequences of \Extensional{} that will be discussed further in \autoref{sec:CaseStudy}.
 %
-Theorems below are proven in Agda.
+The proofs of these theorems can be found in the github repo \nick{TODO citation?}.
 %
 Recall that key type \verb+K+ is a module parameter and is implicitly bound in the type \verb+DD V+.
 
-% The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \emph{structural properties} \emph{contraction} and \emph{exchange} are defined below, and proven in Agda.
-
-%% \subsection{Design Goals}
-%% \parahead{Design Goals}
-
 \begin{remark}[\SemTot]
 %
-\textnormal{This property cannot be formally defined---rather its truth is apparent from the fact that the other theorems do not require their \dd~ arguments to be refined with validity premises.}
+\textnormal{This property cannot be formally defined --- rather its truth is apparent from the fact that the other theorems do not require their \dd~ arguments to be packaged with validity proofs.}
 %
 \end{remark}
 
@@ -153,7 +143,6 @@ Recall that key type \verb+K+ is a module parameter and is implicitly bound in t
 \end{alltt}
 \end{theorem}
 
-%% \begin{theorem}[\EzDstr]
 \begin{theorem}[Not-So-Easy Destructibility]
 \label{thm:EzDstr}
 \justIndent
@@ -166,20 +155,7 @@ Recall that key type \verb+K+ is a module parameter and is implicitly bound in t
 \end{alltt}
 \end{theorem}
 
-%% \subsection{Contraction and Exchange}
-%% \parahead{Contraction and Exchange for Dictionaries}
-
-%\rkc{Two common properties for PL metatheory.}
-
-\noindent
-%
-We discuss why destruction is ``not-so-easy'' in \autoref{sec:Discussion:Tradeoffs}.
-
-Lastly, we prove analogs to the \emph{structural properties} \emph{contraction} and \emph{exchange}.
-
-% The \SemInj~ and \EqDec~ theorems, a destruction theorem, and analogs to the \emph{structural properties} \emph{contraction} and \emph{exchange} are defined below, and proven in Agda.
-
-\pagebreak %% SPACING HACK: TODO check whether this is needed after final edits
+% \pagebreak %% SPACING HACK: TODO check whether this is needed after final edits
 
 \begin{theorem}[Dictionary Contraction]
 \label{thm:cont-dicts}
