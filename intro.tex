@@ -155,7 +155,7 @@ The downsides of having to use validity proofs are discussed in \autoref{sec:Cas
 
 A third conventional solution is to represent dictionaries as finite partial functions~\cite[Maps]{Pierce:SF1} (\ie{} functions that return \texttt{None} for all but finitely many inputs).
 %
-The third line of \autoref{fig:intro-example} depicts a nested $\lambda$-expression that serves as the ``lookup table'' (we omit the \texttt{Some} constructors for space).
+The third line of \autoref{fig:intro-example} depicts a nested $\lambda$-expression that serves as the ``lookup table'' (the \texttt{Some} constructors are omitted for space).
 %
 This approach can be made \extensional{} by postulating \emph{functional extensionality}~\mbox{\cite[Logic]{Pierce:SF1}}, which axiomatically asserts that $(\forall x, f(x) == g(x)) \Rightarrow f == g$.
 %
@@ -195,6 +195,7 @@ A lambda value can't be destructed or picked apart in any way, so its values als
 The function could be packaged with a set indicating its domain ---\ie{}~a canonical list of keys--- but would then have to include a proof that those keys are correct, violating \SemTot{} in the same troublesome way that \cal{}s do.
 
 \subsection{Core Properties}
+\label{sec:Introduction:props}
 
 In some cases, the aforementioned drawbacks are minor or can be worked around.
 %
@@ -285,11 +286,11 @@ Every unique \dd{} represents a unique semantic mapping, thus built-in equality 
 %
 %% there is a bijection between \dd{} terms and finite maps,
 %
-Furthermore, we define a function which determines whether or not two \dds{} are equal (\EqDec), and a \texttt{destruct} function, which permits destruction albeit in a more awkward manner than standard pattern matching (not-so-easy Destructibility).
+Furthermore, this paper defines a function which determines whether or not two \dds{} are equal (\EqDec), and a \texttt{destruct} function, which permits destruction albeit in a more awkward manner than standard pattern matching (not-so-easy Destructibility).
 
 As summarized in \autoref{fig:prop-summary}, delta dictionaries strike a new balance in this design space.
 %
-Compared to \cal{}s, \dds{} enjoy \SemTot{} --- the lone property among those we identify which the \cal{} does not.
+Compared to \cal{}s, \dds{} enjoy \SemTot{} --- the only one of these properties that the \cal{} does not.
 %
 However, destruction and iteration for \dds{} is substantially more difficult.
 %
@@ -301,10 +302,10 @@ Lastly, though not a concern from a client's perspective, the implementation of 
 
 \parahead{Outline}
 %
-Next, we describe the core operations for delta dictionaries and the relevant metatheory in \autoref{sec:DD}.
+\autoref{sec:DD} describes the core operations for delta dictionaries and the relevant theorems.
 %
-In \autoref{sec:CaseStudy}, we describe a small case study in proof development that demonstrates the necessity of delta dictionaries.
+\autoref{sec:CaseStudy} describes a small case study in proof development that demonstrates the necessity of delta dictionaries.
 %
-Finally, we conclude in \autoref{sec:Discussion} with a discussion. %% of related work.
+Finally, \autoref{sec:Discussion} concludes with a discussion.
 %
 %% Our implementation and proofs are formalized in Agda and available in the anonymous supplementary materials.
