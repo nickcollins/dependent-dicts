@@ -2,9 +2,10 @@
   %% {No}
   %% {}
   {\color{lightgray}\phantom{$^*$}\xmark\phantom{$^*$}}
+\stepcounter{footnote}
 \newcommand{\noIO}
   %% {\color{lightgray}\phantom{$^*$}\xmark$^*$}
-  {{\color{lightgray}\phantom{$^*$}\xmark}\footnotemark[1]} % 1 is hard-coded, but I see no other way
+  {{\color{lightgray}\phantom{$^*$}\xmark}\footnotemark[\value{footnote}]}
 \newcommand{\yes}
   %% {Yes}
   %% {\phantom{*}\cmark\phantom{*}}
