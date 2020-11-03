@@ -1,0 +1,82 @@
+\begin{figure}[b]
+\centering
+
+\begin{remark}[\SemTot]
+%
+\textnormal{This property cannot be formally defined --- rather its truth is apparent from the fact that the other theorems do not require their \dd~ arguments to be packaged with validity proofs.}
+%
+\end{remark}
+\vspace{0.25in}
+
+\begin{subfigure}[t]{0.5\textwidth}
+\centering
+\begin{theorem}[\SemInj]
+\label{thm:SemInj}
+\justIndent
+\begin{alltt}
+  \altFAll\{V\} \{dd1 dd2 : DD V\} \altRArr
+    ((k : K) \altRArr dd1 \altLAng k \altRAng == dd2 \altLAng k \altRAng) \altRArr
+    dd1 == dd2
+\end{alltt}
+\end{theorem}
+\end{subfigure}
+~
+\begin{subfigure}[t]{0.5\textwidth}
+\centering
+\begin{theorem}[\EqDec]
+\label{thm:EqDec}
+\justIndent
+\begin{alltt}
+  \altFAll\{V\} (dd1 dd2 : DD V) \altRArr
+    ((v1 v2 : V) \altRArr v1 == v2 \altOr v1 \altNE v2) \altRArr
+    dd1 == dd2 \altOr dd1 \altNE dd2
+\end{alltt}
+\end{theorem}
+\end{subfigure}
+\vspace{0.25in}
+
+\begin{subfigure}[t]{0.5\textwidth}
+\centering
+\begin{theorem}[Not-So-Easy Destructibility]
+\label{thm:EzDstr}
+\justIndent
+\begin{alltt}
+  \altFAll\{V\} \{dd dd' : DD V\} \{k : K\} \{v : V\} \altRArr
+    (destruct dd == None \altRArr dd == \altEmpty)
+      \altAnd
+    (destruct dd == Some ((k , v) , dd') \altRArr
+      (k \altNIn dd' \altAnd dd == dd' ,, (k , v))
+\end{alltt}
+\end{theorem}
+\end{subfigure}
+\vspace{0.35in}
+
+\begin{subfigure}[t]{0.4\textwidth}
+\centering
+\begin{theorem}[Dictionary Contraction]
+\label{thm:cont-dicts}
+\justIndent
+\begin{alltt}
+  \altFAll\{V\} \{dd : DD V\} \{k : K\} \{v v' : V\} \altRArr
+    dd ,, (k , v') ,, (k , v) == dd ,, (k , v)
+\end{alltt}
+\end{theorem}
+\end{subfigure}
+\quad\quad\quad\quad
+\begin{subfigure}[t]{0.5\textwidth}
+\centering
+\begin{theorem}[Dictionary Exchange]
+\label{thm:exch-dicts}
+\justIndent
+\begin{alltt}
+  \altFAll\{V\} \{dd : DD V\} \{k1 k2 : K\} \{v1 v2 : V\} \altRArr
+    k1 \altNE k2 \altRArr
+    dd ,, (k1 , v1) ,, (k2 , v2) ==
+    dd ,, (k2 , v2) ,, (k1 , v1)
+\end{alltt}
+\end{theorem}
+\end{subfigure}
+
+\caption{Core properties.}
+\label{fig:properties}
+\end{figure}
