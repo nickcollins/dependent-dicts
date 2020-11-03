@@ -4,7 +4,7 @@
 
 \input{fig-dd-example-all}
 
-This section covers the Agda implementation of the core functionality of \dds, and also defines the key theorems. Additional theorems and functionality, as well as the Agda proofs of the theorems, are not included but are available at \url{https://github.com/nickcollins/dependent-dicts-agda} \nick{TODO probably should turn this into a citation}.
+This section covers the Agda implementation of the core functionality of \dds, and also defines the key theorems. Additional theorems and functionality, as well as the Agda proofs of the theorems, are not included but are available on github at \citep{github:agda}.
 
 %% \subsection{Delta Indexing}
 %% \subsection{Key Types and Deltas}
@@ -46,7 +46,7 @@ Without surjectivity, a binding for an unmapped natural either invalidates the \
 %
 }
 %
-The github repo \nick{TODO citation?} demonstrates this by providing an instance of the bijection typeclass for integers ($25$ lines of code).
+The github repo \citep{github:agda} demonstrates this by providing an instance of the bijection typeclass for integers ($25$ lines of code).
 
 Most types that are suitable for use as keys in the first place, especially strings and numeric types, can be bijected to the naturals,
 %
@@ -97,7 +97,7 @@ If the first pair is an exact match, then we simply replace the old value with t
 %
 The Coq Standard Library~\citep{FMapInterface,FMapFacts} describes key theorems about dictionaries, including those for lookup and insert (it does not define \verb+destruct+).
 %
-The github repo \nick{TODO citation?} proves the relevant subset of these theorems. Some of the theorems in the Coq treatment involves concepts not relevant to this treatment,
+The github repo \citep{github:agda} proves the relevant subset of these theorems. Some of the theorems in the Coq treatment involves concepts not relevant to this treatment,
 %
 especially multiple distinct notions of equality. Also, since this interface does not expose mapping order to the client,
 %
@@ -106,14 +106,14 @@ there are no proofs of any of the theorems pertaining to ordering (\ie{} those t
 
 \subsection{Additional Operations}
 
-The github repo \nick{TODO citation?} also defines key deletion, union, map, and to/from-list operations, along with appropriate theorems (not reproduced here).
+The github repo \citep{github:agda} also defines key deletion, union, map, and to/from-list operations, along with appropriate theorems (not reproduced here).
 
 \subsection{Properties}
 \label{sec:DD:props}
 
 Below are definitions of the four properties identified in \autoref{sec:Introduction:props}, as well as two important consequences of \Extensional{} that will be discussed further in \autoref{sec:CaseStudy}.
 %
-The proofs of these theorems can be found in the github repo \nick{TODO citation?}.
+The proofs of these theorems can be found in the github repo \citep{github:agda}.
 %
 Recall that key type \verb+K+ is a module parameter and is implicitly bound in the type \verb+DD V+.
 
