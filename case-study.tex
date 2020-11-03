@@ -5,15 +5,17 @@
 
 \input{fig-testbench}
 
-To illustrate the practical importance of the four core properties, we consider a simply-typed $\lambda$-calculus augmented with an \texttt{assert} operator.
+To illustrate the practical importance of the four core properties, consider a simply-typed $\lambda$-calculus augmented with an \texttt{assert} operator.
 %
 Suppose our goal is to formalize an environment-based (as opposed to substitution-based) evaluation semantics,
 %
-and prove that evaluation is strongly normalizing and that it satisfies the structural properties contraction and exchange.
+and prove that evaluation is strongly normalizing and that it satisfies the structural properties \emph{contraction} and \emph{exchange}.
+%
+Contraction and exchange hold that evaluation is insensitive to duplicated and reordered bindings in the environment, respectively.
 
 \autoref{fig:testbench} shows a sketch of this environment-based evaluation (\texttt{\_$\vdash$\_$\Rightarrow$\_}) of expressions (\texttt{exp}) to results (\texttt{res}).
 %
-The definitions of evaluation environments (\texttt{env}), types, type contexts, and typechecking are not shown.
+The definitions of evaluation environments (\texttt{env}, \texttt{E}), types (\texttt{typ}, \texttt{t}), type contexts ($\Gamma$), and typechecking (\texttt{\_$\vdash$\_::\_}) are not shown.
 %
 %; the full development is available in the supplementary materials.
 %
@@ -53,20 +55,27 @@ In order for contraction and exchange to be true for any system with closure res
 the dictionary implementation used for closures must be \extensional.
 
 \Cals{} must be packaged with validity proofs wherever they go, including in the closure result.
-In such a validity proposition \texttt{valid : dict -> Set},
+In a validity proposition \texttt{valid : dict -> Set},
 %
 %% (defined in full in the supplementary materials)
 %
-the dictionary object is in negative position,
+the dictionary object is in \emph{negative position},
 and in our case the dictionary type is dependent on the result datatype,
-so the result is also in negative position, violating strict positivity.
+so the result is also in negative position, violating strict positivity.%
+\footnote{
+\emph{Strict positivity} is a requirement of datatype constructors in proof languages like Agda and Coq, so as to avoid logical contradictions.
+%
+It disallows an argument of a constructor from being a function whose argument types (which are in "negative positions") refer to the datatype.
+%
+For more information, see \citep{positivity}.
+}
 As such, results cannot contain validity proofs, so for any system that uses dictionaries as data,
 the dictionaries must be \semanticallyTotal.
 
 Because \fpf{}s do not have \EqDec, it is not possible to decide which \texttt{EvalAsrt} constructor would
 apply to an \texttt{assert} of two \fpf{}s. As such, using \fpf{}s would make it impossible to constructively prove strong normalization.
 
-In contrast, \dds---uniquely amongst the surveyed solutions---possess \SemTot, \SemInj, and \EqDec.
+In contrast, \dds{} ---uniquely amongst the surveyed solutions--- possess \SemTot, \SemInj, and \EqDec.
 %
 Thus, they are a suitable choice for implementing environments, enabling proofs of contraction, exchange, and strong normalization.
 %

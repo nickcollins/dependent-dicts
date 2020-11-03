@@ -13,35 +13,30 @@ data res : Set where
 
 data \_\altVdash\_\altRARR\_ : res env \altRArr exp \altRArr res \altRArr Set where
   \{- Standard constructs elided... -\}
-
-  EvalAsrtEq :
-    \altFAll\{E e1 r1 e2 r2\} \altRArr
-      \altEval{e1}{r1} \altRArr \altEval{e2}{r2} \altRArr r1 == r2 \altRArr
+  EvalAsrtEq : \altFAll\{E e1 r1 e2 r2\} \altRArr
+      \altEval{e1}{r1} \altRArr
+      \altEval{e2}{r2} \altRArr
+      r1 == r2 \altRArr
       \altEval{assert[ e1 == e2 ]}{r1}
-  EvalAsrtNE :
-    \altFAll\{E e1 r1 e2 r2\} \altRArr
-      \altEval{e1}{r1} \altRArr \altEval{e2}{r2} \altRArr r1 \altNE r2 \altRArr
+  EvalAsrtNE : \altFAll\{E e1 r1 e2 r2\} \altRArr
+      \altEval{e1}{r1} \altRArr
+      \altEval{e2}{r2} \altRArr
+      r1 \altNE r2 \altRArr
       \altEval{assert[ e1 == e2 ]}{Err}
-  EvalApErr1 :
-    \altFAll\{E a b\} \altRArr
-      \altEval{a}{Err} \altRArr \altEval{a \altCirc b}{Err}
-  EvalApErr2 :
-    \altFAll\{E a b\} \altRArr
-      \altEval{b}{Err} \altRArr \altEval{a \altCirc b}{Err}
+  EvalApErr1 : \altFAll\{E a b\} \altRArr
+      \altEval{a}{Err} \altRArr
+      \altEval{a \altCirc b}{Err}
+  EvalApErr2 : \altFAll\{E a b\} \altRArr
+      \altEval{b}{Err} \altRArr
+      \altEval{a \altCirc b}{Err}
 
-contraction :
-  \{E : res env\} \{x : string\}
-  \{e : exp\} \{v v' r : res\} \altRArr
+contraction : \{E : res env\} \{x : string\} \{e : exp\} \{v v' r : res\} \altRArr
    \altEvalEnv{(E ,, (x , v') ,, (x , v))}{e}{r} \altRArr
    \altEvalEnv{(E ,, (x , v))}{e}{r}
 
-exchange :
-  \{E : res env\} \{x1 x2 : string\}
-  \{e : exp\} \{v1 v2 r : res\} \altRArr
+exchange : \{E : res env\} \{x1 x2 : string\} \{e : exp\} \{v1 v2 r : res\} \altRArr
    x1 \altNE x2 \altRArr
    \altEvalEnv{(E ,, (x1 , v1) ,, (x2 , v2))}{e}{r} \altRArr
    \altEvalEnv{(E ,, (x2 , v2) ,, (x1 , v1))}{e}{r}
 
-strong-norm :
-  \altFAll\{\altGam e t\} \altRArr
-   \altGam \altVdash e :: t \altRArr \altSum[ r \altIn res ] (\altEval{e}{r})
+strong-norm : \altFAll\{\altGam e t\} \altRArr \altGam \altVdash e :: t \altRArr \altSum[ r \altIn res ] (\altEval{e}{r})
