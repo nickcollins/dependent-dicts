@@ -38,7 +38,7 @@ In this implementation, each key is represented by a natural number, permitting 
 %
 There may be an algebraic structure more general than the natural numbers which satisfies these requirements, but for practical purposes, working with naturals
 %
-is easier for both the implementer and the client. In Agda, the bijection typeclass accepts a \texttt{convert} function (for clarity, the code in this paper uses the synonym \texttt{toNat}), as well as proofs that \texttt{convert}
+is easier for both the implementer and the client. The bijection typeclass accepts a \texttt{toNat} function, as well as proofs that \texttt{toNat}
 %
 is injective and surjective, and the inverse function is defined by the library using the proof of surjectivity.\footnote{\hspace{0.01in}%
 %
@@ -56,7 +56,7 @@ simultaneously achieving \Total{} and \Extensional{} for a dictionary over finit
 
 \Ddls{} are canonically ordered, but by the natural ordering of the naturals, which, depending on the choice of bijection, may correspond to an unnatural
 %
-ordering of the key type. As such, the ordering is not exposed to the client --- functions such as \texttt{destruct} and \texttt{dlt$\Rightarrow$list} produce results
+ordering of the key type. As such, the ordering is not exposed to the client --- functions such as \texttt{destruct} produce results
 %
 that are in arbitrary order from the client's perspective.
 

@@ -65,7 +65,7 @@ so the result is also in negative position, violating strict positivity.%
 \footnote{
 \emph{Strict positivity} is a requirement of datatype constructors in proof languages like Agda and Coq, so as to avoid logical contradictions.
 %
-It disallows an argument of a constructor from being a function whose argument types (which are in "negative positions") refer to the datatype.
+It disallows an argument of a constructor from being a function whose argument types (which are in ``negative positions'') refer to the datatype.
 %
 For more information, see \citep{positivity}.
 }
@@ -73,7 +73,7 @@ As such, results cannot contain validity proofs, so for any system that uses dic
 the dictionaries must be \semanticallyTotal.
 
 Because \fpf{}s do not have \EqDec, it is not possible to decide which \texttt{EvalAsrt} constructor would
-apply to an \texttt{assert} of two \fpf{}s. As such, using \fpf{}s would make it impossible to constructively prove strong normalization.
+apply to an \texttt{assert} of two closures. As such, using \fpf{}s would make it impossible to constructively prove strong normalization.
 
 In contrast, \dds{} ---uniquely amongst the surveyed solutions--- possess \SemTot, \SemInj, and \EqDec.
 %

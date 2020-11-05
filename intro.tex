@@ -116,9 +116,9 @@ This approach requires a more sophisticated \texttt{insert} function than that o
   cal-insert [] (k , v) = (k , v) :: []
   cal-insert ((k1 , v1) :: l) (k , v) =
     with ord-dec-K k k1
-  ... | Inl _       = (k , v) :: (k1 , v1) :: l         -- k < k1
-  ... | Inr (Inl _) = (k , v) :: l                      -- k == k1
-  ... | Inr (Inr _) = (k1 , v1) :: cal-insert l (k , v) -- k > k1
+  ... | Inl _       = (k , v) :: (k1 , v1) :: l          -- k < k1
+  ... | Inr (Inl _) = (k , v) :: l                       -- k == k1
+  ... | Inr (Inr _) = (k1 , v1) :: cal-insert l (k , v)  -- k > k1
 \end{lstlisting}
 
 \parahead{Limitation: Lack of \SemTot}
@@ -178,11 +178,11 @@ To \emph{decide} this question, we need to define a function that accepts two ar
   eq-dec-K x y = ?  --  the implementation will depend on the type K
 \end{lstlisting}
 
-Note that proof languages like Coq and Agda are \emph{constructive}; they elide the \emph{law of the excluded middle}, so it's possible for a proposition to be neither provably true nor provably false.
+Note that proof languages like Coq and Agda are \emph{constructive}; they elide the \emph{law of the excluded middle}, so it might not be possible to prove that a certain proposition is either true or false.
 %
 As such, the ability to decide whether some proposition (such as the equality of two values) is true or false cannot be taken for granted --- if this ability is needed, it must be explicitly established by defining a function such as the one above.
 %
-In the case of functions, it's not possible to establish that two arbitrary functions are unequal, so there is no way to establish decidability.
+In the case of functions, it's not possible to establish whether two arbitrary functions are extensionally equal, so there is no way to establish decidability.
 %
 Naturally, deciding whether or not two dictionaries are equal is important and useful for many of the same reasons it would be in a more conventional language, so the lack of \DecidableEq{} is a substantial weakness.
 
@@ -258,9 +258,13 @@ As aformentioned, this is often not a problem in practice, so for many practical
 %
 }
 
-\autoref{fig:prop-summary} summarizes the preceding discussion along these dimensions; note that the association list representations can be easily destructed, but destruction is not possible for \fpf{}s.
+\autoref{fig:prop-summary} summarizes the preceding discussion along these dimensions.
 %
-None of the conventional approaches satisfies both \SemTot{} and \SemInj{}, nor more than three of the four properties.
+The ``Key Type'' column indicates which propositions must be decidable for the key type.
+%
+Note that the association list representations can be easily destructed, but destruction is not possible for \fpf{}s,
+%
+and that none of the three conventional solutions are total, extensional, and have decidable equality.
 
 \subsection{Novel Solution: Delta Dictionaries}
 %
@@ -286,7 +290,7 @@ Every unique \dd{} represents a unique semantic mapping, thus built-in equality 
 %
 %% there is a bijection between \dd{} terms and finite maps,
 %
-Furthermore, this paper defines a function which determines whether or not two \dds{} are equal (\EqDec), and a \texttt{destruct} function, which permits destruction albeit in a more awkward manner than standard pattern matching (not-so-easy Destructibility).
+Furthermore, it's trivial to define a function which determines whether or not two \dds{} are equal (\EqDec), and a \texttt{destruct} function, which permits destruction albeit in a more awkward manner than standard pattern matching (Not-So-Easy Destructibility).
 
 As summarized in \autoref{fig:prop-summary}, delta dictionaries strike a new balance in this design space.
 %
