@@ -8,7 +8,7 @@
 
 Dictionaries, or finite maps, are a core data structure in any programming language.
 %
-General-purpose languages implement dictionaries with hash tables or balanced trees, but proof assistants---which favor simplicity and provability over performance---generally employ association lists or finite partial functions.
+General-purpose languages implement dictionaries with hash tables or balanced trees, but proof assistants ---which favor simplicity and provability over performance--- generally employ association lists or finite partial functions.
 %
 Though suitable for many uses, each solution has drawbacks:
 %
@@ -18,7 +18,7 @@ partial functions cannot be destructed and their equality is not decidable.
 
 This paper illustrates a novel list-based representation, called \emph{delta dictionaries}, that simultaneously achieves benefits of the conventional representations.
 %
-Delta dictionaries are \emph{total} (every type-correct list is semantically valid),
+Delta dictionaries are \emph{semantically total} (every type-correct list is semantically valid),
 %
 \emph{extensional} (there is a one-to-one correspondence between lists and semantic mappings),
 %
@@ -26,7 +26,7 @@ Delta dictionaries are \emph{total} (every type-correct list is semantically val
 %
 have \emph{decidable equality}.
 %
-Included is an implementation of delta dictionaries and relevant metatheory in Agda, and a discussion of when delta dictionaries may or may not be preferable to conventional solutions.
+Included is an implementation of delta dictionaries in Agda, and a discussion of when delta dictionaries may or may not be preferable to conventional solutions.
 
 %% Using a variant of delta-encoding, we develop a novel list-based solution that preserves
 %% canonical ordering while ensuring that every type-correct list is semantically valid, eliminating the need for refinement
