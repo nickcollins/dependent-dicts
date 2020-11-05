@@ -2,9 +2,6 @@
 \section{Discussion}
 \label{sec:Discussion}
 
-We conclude with a broader discussion of the design space, as well as related
-and future work.
-
 \subsection{Design Tradeoffs of Difficult Destruction}
 \label{sec:Discussion:Tradeoffs}
 
@@ -19,7 +16,7 @@ Probably not.
 %% \parahead{The Difficulty of Destruction}
 %\parahead{Not-So-Easy Destruction}
 %
-The non-literal way in which key data is interpreted for delta dictionaries means that it is not safe for client code to work with the raw data directly---rather, all interaction with the data must be encapsulated in library functions.
+The non-literal way in which key data is interpreted for delta dictionaries means that it is not safe for client code to work with the raw data directly --- rather, all interaction with the data must be encapsulated in library functions.
 
 Unfortunately, this includes \emph{destruction}; an interaction which
 normally goes through the very natural, elegant, and well-supported mechanism of pattern matching is now
@@ -29,9 +26,24 @@ the order in which bindings are plucked away is arbitrary from the client's pers
 
 \verb+destruct+ achieves the same purpose as typical pattern matching (albeit more awkwardly), but because it
 does not harness the primitive notions of pattern matching and structure, it does not establish structural
-decrease on the dictionary object, which may break out-of-the-box structural recursion in the likely case
-of recursion on the subdictionary \verb+dd'+. To enable manual establishment of structural recursion, via an extra parameter that
-explicitly tracks the dictionary length, we provide another theorem:
+decrease on the dictionary object, which may break out-of-the-box \emph{structural recursion} in the likely case
+of recursion on the subdictionary \texttt{dd'}.
+Structural recursion essentially means that at least one argument to any recursive call must be the direct child of the same argument to the outer call.
+For example, let's say a function \texttt{f} takes a tree \texttt{t} and a natural \texttt{n} as arguments ---
+a recursive call inside \texttt{f} would have to either be on the left or right subtree of \texttt{t}, or on \texttt{n - 1}.
+Proof languages like Agda and Coq generally require that all functions be structurally recursive in order to ensure that they terminate,
+as non-terminating functions can introduce logical contradictions.
+
+Structural recursion is often easy to establish when some argument to a function is destructed, and then recursive calls are made using the destructed subcomponents.
+In the case where destruction is done by way of a function, instead of pattern matching,
+the system has no way to assert that the output of the function is a subcomponent of one of its inputs,
+preventing out-of-the-box structural recursion.
+It may yet be possible, though, to establish structural recursion by adding an extra parameter which tracks some property of the original parameters and which decreases with every recursive call.
+In the case of dictionaries, the natural choice is the size of the dictionary --- \texttt{dd'} returned by \verb+destruct+ has size exactly one less than the input \texttt{dd}.
+Having to add another parameter, as well as a proof that it is equal to the dictionary's size, is painful, requiring a lot more effort and boilerplate than out-of-the-box structural recursion.
+However, it does mean that proving theorems about destruction and iteration of \dds{} is still \emph{possible}.
+
+The following additional theorem facilitates this awkward alternative means of establishing structural recursion:
 
 \begin{alltt}
   extend-size :
@@ -40,48 +52,36 @@ explicitly tracks the dictionary length, we provide another theorem:
       || dd ,, (k , v) || = 1 + || dd ||
 \end{alltt}
 
-Although possible, manually establishing termination is painful, especially given that it is not necessary
-for {\sal}s or {\cal}s. Thus \dds~ fail at \EzDstr, although they are still better than {\fpf}s in this
-regard, seeing as it is not only hard but impossible to destruct {\fpf}s.
-
-%% Is it possible to have a data structure that possesses all four properties?
-%% Not likely. As mentioned above, the combination of \SemInj{} and \SemTot{} essentially
-%% necessitates that the data in the data structure be interpreted in a non-literal way, which in turn
-%% makes it dangerous for client code to manipulate the raw data.
-
-%% As such,
+Because destruction of basic {\sal}s and {\cal}s can generally rely on out-of-the-box structural recursion, \dds~ fall short of \EzDstr.
+Nonetheless, they are still better than {\fpf}s in this regard, seeing as it is not only hard but impossible to destruct {\fpf}s.
 
 Because satisfying all four properties seems unattainable,
-we believe we have uncovered an
+there seems to be an
 inherent trade-off between desirable properties. In cases where \SemTot{} and \EqDec{} are critical,
 and there is little to no need to destruct dictionaries, \dds{} seem to be a clear winner over
 the conventional solutions. But in cases where \SemTot{} is not so important,
-but inspection or destruction are, {\cal}s may be a preferable.
+but inspection or destruction are, {\cal}s may be preferable.
 
 \subsection{Potential Practical Applications}
 \label{sec:Discussion:Generality}
 
-Next, we provide additional discussion about the use of dictionaries in our case study, as well as programming language metatheory in general.
-
-%% \parahead{Generality}
-
 \parahead{Generality of Case Study}
 
-The scenario in \autoref{sec:CaseStudy} may seem contrived, but it is actually a simplification of a real task faced by the authors:
+The scenario in \autoref{sec:CaseStudy} may seem contrived, but it is actually a simplification of a real task faced by the author:
 %
-to mechanize the formalization of AnonymousSystem~\citep{AnonymousSystem}, a program synthesis technique which uses
+to complete an Agda formalization of Smyth~\citep{smyth}, a program synthesis technique which uses
 natural semantics (\ie{} big-step, environment-based evaluation) and which requires assertions.
 %
-The development in \autoref{sec:CaseStudy} captures the essence of our much larger mechanization~\citep{AnonymousURL} for AnonymousSystem.
+The development in \autoref{sec:CaseStudy} captures the essence of the much larger development~\citep{github:smyth:agda} for Smyth.
 %
-Although that mechanization has not been completed, the challenges faced during its development---described in \autoref{sec:CaseStudy}---necessitated the invention of \dds.
+Although that development has not been completed, the challenges it presented ---summed up in \autoref{sec:CaseStudy}--- necessitated the invention of \dds.
 
 Perhaps, instead of using \dds, these issues could be worked around, by changing or dropping some of our criteria?
-In many cases, substitution can be used to avoid environments. However, environments are often preferred---usually in combination with big-step operational semantics---because
+In many cases, substitution can be used to avoid environments. However, environments are often preferred ---usually in combination with big-step operational semantics--- because
 they allow the formalization to more closely resemble the implementation of a simple recursive interpreter. Furthermore,
-AnonymousSystem has hole closures in addition to lambda closures, so closing over environments would be necessary regardless.
+Smyth has hole closures in addition to lambda closures, so closing over environments would be necessary regardless.
 
-Contraction and exchange are not always necessary properties for program foundation judgments---%
+Contraction and exchange are not always necessary properties for program foundation judgments ---
 rather, substructural type systems, by definition, deliberately violate one or both of these properties.%
 \footnote{\hspace{0.01in}Technically, some substructural type systems (\eg{} \emph{relevant} type systems) uphold contraction and exchange but violate \emph{weakening}.}
 That said, a judgment should generally uphold the structural properties unless there is a strong and explicit
@@ -100,27 +100,27 @@ it would require environments that are destructible.
 Scenarios which require destructibility but not \EqDec{} lead to the same conclusions,
 seeing as these columns are identical in \autoref{fig:prop-summary}.
 
-In addition to breaking strict positivity, refinement proofs can be the source of less severe pain points in
+In addition to breaking strict positivity, refinement proofs (\eg{} validity proofs that must be packaged with \cal{}s) can be the source of less severe pain points in
 a broader range of circumstances.
 The ability to refine ordinary types with proofs of validity is one of the most interesting and useful benefits of
 dependently-typed languages, and this power should be appreciated. However, refining with proof terms can
 come at a practical cost, so even in dependently-typed languages, there is high value in avoiding refinements
 whenever possible (or at least whenever profitable). The practical cost of refinements is that proof terms
-do not possess the properties \SemInj~ or \EqDec: due to \emph{proof relevance}, two proofs of
+do not possess the properties \SemInj{} or \EqDec: due to \emph{proof relevance}, two proofs of
 the same property may be unequal, and due to the fact that proof terms may contain functions, proof terms do not
-possess \EqDec~ in the general case. Thus, \SemTot---which obviates the need for refinement---has
+possess \EqDec{} in the general case. Thus, \SemTot{} ---which obviates the need for refinement--- has
 a lot of practical value in many general cases beyond those where it is absolutely necessary to appease the
 positivity checker.
 
 \parahead{Dictionaries vs. Custom Datatypes}
 
-Dictionaries are not always used to represent environments in mechanizations of programming language theory.
+Dictionaries are not always used to represent environments in formalizations of programming language theory.
 
 When the order of bindings does not matter, dictionaries are a natural choice for type contexts.
 %
 But if types defined ``later'' in inner scopes, can refer to types defined ``earlier'' in outer scopes, then order-insensitive dictionaries are inherently inappropriate.
 %
-This is the case for languages that support subtyping---notably, the subject of the POPLmark Challenge~\citep{POPLmark}.
+This is the case for languages that support subtyping --- notably, the subject of the POPLmark Challenge~\citep{POPLmark}.
 %
 Linear type systems, on the other hand, require sensitivity to duplicate insertions, so duplication-insensitive dictionaries are inappropriate for them as well \citep{StructProp}.
 %
@@ -128,11 +128,11 @@ Though {\sal}s remain the most natural choice in these cases, future work could 
 
 The use of dictionaries is furthermore avoided in many systems that use substitution rather than environments
 %
-in defining the dynamic semantics of a language, as well as the many systems that avoid named variables altogether by using De Bruijn indices or comparable techniques---see \emph{Certified Programming with Dependent Types}~\cite[Library Firstorder]{cpdt} for an introduction.
+in defining the dynamic semantics of a language, as well as the many systems that avoid named variables altogether by using De Bruijn indices or comparable techniques --- see \emph{Certified Programming with Dependent Types}~\cite[Library Firstorder]{cpdt} for an introduction.
 
-For these reasons, many existing mechanizations make little use of order-and-duplication-insensitive dictionaries. 
+For these reasons, many existing formalisms make little use of order-and-duplication-insensitive dictionaries. 
 %
-However, as mechanization becomes increasingly popular, for an ever-broadening scope of applications,
+However, as mechanized formalisms becomes increasingly popular, for an ever-broadening scope of applications,
 %
 it seems inevitable that a programming utility as fundamental as dictionaries will eventually become ubiquitous, at which point it will be important to have the
 %
@@ -145,13 +145,13 @@ How often are different dictionary representations used?
 
 \parahead{Conventional Representations}
 %
-Due to their simplicity, {\sal}s are perhaps the most typical implementation for dictionaries.
+Due to their simplicity, basic {\sal}s are perhaps the most typical implementation for dictionaries.
 %
-But because \SemInj{} is so important in simplifying proofs, {\fpf}s also see significant use---in key works such as \emph{Software Foundations}~\cite[Maps]{Pierce:SF1}---despite requiring a bit of extra overhead.
+But because \SemInj{} is so important in simplifying proofs, {\fpf}s also see significant use ---in key works such as \emph{Software Foundations}~\cite[Maps]{Pierce:SF1}--- despite requiring a bit of extra overhead.
 
 %% TODO macro?
 
-\Cals{} seem to get little use, perhaps because working with refinement proofs might add more hassle than \SemInj{} alleviates.
+\Cals{} seem to get little use, perhaps because working with validity proofs might add more hassle than \SemInj{} alleviates.
 %
 \Cals{} are defined in the Coq standard library as \texttt{FMapList} \citep{FMapList}; a GitHub search for \texttt{FMapList} shows $304$ results,
 %
@@ -180,9 +180,9 @@ use them as though they were {\fpf}s (note that this is different from having a 
 
 \parahead{Performance Concerns}
 %
-It was noted above that AVL implementations are apparently more popular than {\cal}s, and as more software is mechanized, performance is likely to become an
+It was noted above that AVL implementations are apparently more popular than {\cal}s, and as more software is mechanized (\ie{} programmatically formalized), performance is likely to become an
 %
-even greater concern than it is today. In cases where there is no extraction step, and the proof language is also the language that will be executed,
+even greater concern than it is today. In cases where there is no extraction step (which transpiles non-proof parts of a mechanization into a conventional, non-proof language), and the proof language is also the language that will be executed,
 %
 there may be no choice but to use implementations that are high-performance but theoretically unwieldy.
 
@@ -212,7 +212,7 @@ Doing so could be far more challenging.
 %
 It is relatively easy to simultaneously satisfy \SemTot{} and \SemInj{} for list-like structures such as dictionaries,
 %
-but much more awkward to do so for highly structural data such as graphs. For unlabeled graphs in particular, establishing a one-to-one correspondence between terms and
+but much more awkward to do so for highly structural data such as graphs. For unlabeled graphs in particular, establishing a one-to-one correspondence between values and
 %
 semantic meanings requires understanding of the graph isomorphism problem, which involves complex algebra.
 
