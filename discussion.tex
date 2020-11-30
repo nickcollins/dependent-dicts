@@ -74,10 +74,10 @@ natural semantics (\ie{} big-step, environment-based evaluation) and which requi
 %
 The development in \autoref{sec:CaseStudy} captures the essence of the much larger development~\citep{github:smyth:agda} for Smyth.
 %
-Although that development has not been completed, some of the challenges it presented ---summed up in \autoref{sec:CaseStudy}--- necessitated the invention of \dds.
+Although that development has not been completed, some of the challenges it presented --- summed up in \autoref{sec:CaseStudy} --- necessitated the invention of \dds.
 
 Perhaps, instead of using \dds, these issues could be worked around, by changing or dropping some of our criteria?
-In many cases, substitution can be used to avoid environments. However, environments are often preferred ---usually in combination with big-step operational semantics--- because
+In many cases, substitution can be used to avoid environments. However, environments are often preferred --- usually in combination with big-step operational semantics --- because
 they allow the formalization to more closely resemble the implementation of a simple recursive interpreter. Furthermore,
 Smyth has hole closures in addition to lambda closures, so closing over environments would be necessary regardless.
 
@@ -108,7 +108,7 @@ come at a practical cost, so even in dependently-typed languages, there is high 
 whenever possible (or at least whenever profitable). The practical cost of refinements is that proof terms
 do not possess the properties \SemInj{} or \EqDec: due to \emph{proof relevance}, two proofs of
 the same property may be unequal, and due to the fact that proof terms may contain functions, proof terms do not
-possess \EqDec{} in the general case. Thus, \SemTot{} ---which obviates the need for refinement--- has
+possess \EqDec{} in the general case. Thus, \SemTot{} --- which obviates the need for refinement --- has
 a lot of practical value in many general cases beyond those where it is absolutely necessary to appease the
 positivity checker.
 
@@ -147,7 +147,7 @@ How often are different dictionary representations used?
 %
 Due to their simplicity, basic {\sal}s are perhaps the most typical implementation for dictionaries.
 %
-But because \SemInj{} is so important in simplifying proofs, {\fpf}s also see significant use ---in key works such as \emph{Software Foundations}~\cite[Maps]{Pierce:SF1}--- despite requiring a bit of extra overhead.
+But because \SemInj{} is so important in simplifying proofs, {\fpf}s also see significant use --- in key works such as \emph{Software Foundations}~\cite[Maps]{Pierce:SF1} --- despite requiring a bit of extra overhead.
 
 %% TODO macro?
 

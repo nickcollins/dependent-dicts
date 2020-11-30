@@ -19,7 +19,7 @@ The dictionary is a fundamental utility in most programming contexts and serves 
 %
 In conventional languages, dictionaries are implemented with auto-balanced trees or hashtables, which are highly performant, but also very complicated.
 %
-This paper discusses four alternatives ---three conventional and one novel--- that are often better suited to proof development.
+This paper discusses four alternatives --- three conventional and one novel --- that are often better suited to proof development.
 
 \subsection{Background}
 
@@ -192,7 +192,7 @@ The inability to destruct a function is more intuitive --- destruction is essent
 %
 A lambda value can't be destructed or picked apart in any way, so its values also can't be iterated or counted.
 %
-The function could be packaged with a set indicating its domain ---\ie{}~a canonical list of keys--- but would then have to include a proof that those keys are correct, violating \SemTot{} in the same troublesome way that \cal{}s do.
+The function could be packaged with a set indicating its domain --- \ie{}~a canonical list of keys --- but would then have to include a proof that those keys are correct, violating \SemTot{} in the same troublesome way that \cal{}s do.
 
 \subsection{Core Properties}
 \label{sec:Introduction:props}
@@ -206,7 +206,7 @@ Furthermore, as shown in \autoref{sec:CaseStudy}, there are cases where these dr
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% \rkc{Part 1.2: Summary of Design Goals. Editing TBD.}
 
-Ideally, when working in a proof assistant, an implementation of a data structure ---dictionaries in particular for this paper--- would satisfy these properties:
+Ideally, when working in a proof assistant, an implementation of a data structure --- dictionaries in particular for this paper --- would satisfy these properties:
 
 \newcommand{\designGoal}[1]
   {\textbf{\emph{#1:}}}
