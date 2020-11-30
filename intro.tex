@@ -47,7 +47,7 @@ Lookup is only slightly more involved:
 %
 \begin{lstlisting}
   -- assumes that the key type K is fixed
-  -- $\forall${V} is an implicit type parameter
+  -- $\forall${V} means that V is an implicit type parameter - the curly braces indicate implicitness
   assoc-list-lookup : $\forall${V} $\rightarrow$ List (K $\times$ V) $\rightarrow$ K $\rightarrow$ Maybe V
   assoc-list-lookup [] _ = None
   assoc-list-lookup ((k1 , v1) :: l) k =
