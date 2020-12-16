@@ -198,6 +198,100 @@ Regardless, even if unperformant implementations
 %
 cannot be used for code that will be run, they may be useful for parts of the code which are only used for proofs and will not be executed.
 
+\subsection{When \SemTot{} Doesn't Matter}
+The spirit of \SemTot{} --- that all values of a type are valid by construction, without requiring additional overhead --- has broad utility.
+%
+However, the particular criterion that the type involve no proof terms in order to uphold validity can be arbitrary in cases where the proof type is ``\emph{\prop}''.
+%
+To be \prop, all values of the type must be equal, \ie{} for any $x,y : T$, $x = y$.
+%
+As such, a \prop{} proof type is \extensional{} and has \EqDec, so it does not suffer from the problems that can arise when using non-\prop{} proofs.
+%
+With the use of proof terms being no more cumbersome than the use of any other type, the requirement that a semantically total approach not involve any proof terms becomes useless.
+
+Owing to this observation, there is yet another approach, not yet discussed, which fulfills all the core properties, besides \SemTot, which it technically violates but fulfills in spirit.
+%
+This approach is a variant of \cal{}s, but instead of having a proof of the whole structure's correctness on the outside, an inequality proof is baked into the ``cons'' constructor.
+%
+Since it is generally easy to establish the \propity{} of less-than relations, this approach is \extensional{} and has \EqDec,
+%
+and since the data is stored literally, it's almost as trivial to destruct as \cal{}s.
+%
+Because the proofs only refer to the key type, and not the value type nor the dictionary type, there are no issues with the positivity checker,
+%
+and since the proofs are buried deep in the data structure, the client never has to worry about managing them.
+%
+Essentially, the purposes of \SemTot{} are satisfied even if its technical definition is not.
+%
+Furthermore, this approach does not require bijection to the naturals, only that the less-than relation is proven to be \prop,
+%
+and is substantially simpler to implement than \dds.
+
+There are perhaps many ways to implement this proofs-on-the-inside (POTI) \cal{} approach --- the one detailed below adds a helper parameter which indexes a list with its least key,
+%
+permitting a comparison between that list and some lesser key without inspecting the list:
+%
+\begin{lstlisting}
+data potical' (V : Set) : Maybe Nat $\rightarrow$ Set where
+  PINone : potical' V None
+  PISngl : (n : Nat) $\rightarrow$ V $\rightarrow$ potical' V (Some n)
+  PIMore : $\forall${n2} $\rightarrow$ (n1 : Nat) $\rightarrow$ V $\rightarrow$
+           n1 < n2 $\rightarrow$
+           potical' V (Some n2) $\rightarrow$
+           potical' V (Some n1)
+
+data potical (V : Set) : Set where
+  PI : $\forall${mn} $\rightarrow$ potical' V mn $\rightarrow$ potical V
+\end{lstlisting}
+
+In some sense, the POTI \cal{} approach is isomorphic to \dds.
+%
+A proof that $a < b$ might constitute a natural number $n$ along with a proof that $b = a + 1 + n$.
+%
+This $n$ corresponds to a delta in a \dd.
+%
+Effectively, a delta in a \dd{} is interpreted in a similar manner to how a less-than proof term is interpreted.
+%
+Consequently, a conversion function between this approach and \dds{} does a simple pass over the mappings, transforming deltas into less-than proofs:
+%
+\begin{lstlisting}
+convert' : $\forall${V} $\rightarrow$ (n : Nat) $\rightarrow$ V $\rightarrow$ dl V $\rightarrow$ (potical' V (Some n))
+convert' n v [] = PISngl n v
+convert' n1 v1 ((n2 , v2) :: dl)
+  = PIMore n1 v1 (n<m$\rightarrow$n<s+m n<1+n) <| convert' (n2 + 1+ n1) v2 dl
+
+convert : $\forall${V} $\rightarrow$ dl V $\rightarrow$ potical V
+convert []              = PI PINone
+convert ((n , v) :: dl) = PI <| convert' n v dl
+\end{lstlisting}
+
+The important difference, then, is that POTI \cal{}s contain redundant information, whereas \dds{} do not.
+%
+Each mapping for the POTI \cal{} approach records three items --- $n1$, $n2$, and the proof that $n1 < n2$, whereas a \dd{} mapping records only the delta.
+%
+The POTI \cal{} approach achieves the spirit of \SemTot{}, despite these redundancies, because the dependent type system is capable of ensuring invariants in redundant data.
+%
+However, in less powerful type systems, redundancy inherently opens the door to invalidity.
+%
+As such, techniques that eliminate all redundancy may be useful in weaker type systems, while dependent type systems can appropriately manage redundancy by way of \prop{} proofs.
+
+The inability to make POTI \cal{}s work without using proof-aware type-systems suggests that \dds{}, or similar techniques, may still be useful in conventional languages.
+%
+While \dds{} themselves are unperformant and thus unlikely to be a good choice in conventional settings,
+%
+the strategy that they illustrate --- of squeezing out all redundancy in order to ensure invariants --- may be applicable to more efficient data types.
+%
+This strategy may also be useful for invariants that cannot be made \prop, \eg{} implication invariants, which are represented as arrow types.
+
+Since the POTI \cal{} approach is easy to implement and effortlessly checks off all the criteria, it's surprising that it seems to see little to no practical use or textbook discussion.
+%
+As aforementioned, many tasks don't require the use of dictionaries per se, whereas those that do may not require that the implementation satisfy all four core properties.
+%
+Nonetheless, the general utility of dictionaries and the limitations suffered by implementations that fail to satisfy one of the properties suggest that this approach,
+%
+or some other suitable approach, ought to be implemented and widely used in the near future.
+%
+Further development and study of this and related approaches may be worthwhile areas for future work.
 
 \subsection{Conclusion and Future Work}
 \label{sec:Discussion:Conclusion}
