@@ -24,7 +24,11 @@ This number is called a \emph{delta}. % , alluding to the \emph{delta encoding} 
 %
 As described so far, a $0$ offset would correspond to a duplicate key.
 %
-To prevent duplicate keys from being represented, a delta is actually the offset minus $1$: a delta of $0$ indicates an offset (from the previous key) of $1$, a delta of $2$ indicates an offset of $3$, and so on.
+To prevent duplicate keys from being represented, a delta is actually the offset minus $1$: a delta of $0$ indicates an offset (from the previous key) of $1$, a delta of $2$ indicates an offset of $3$, and so on.\footnote{
+An alternative implementation might use positive integers instead of natural numbers ---
+%
+this may be simpler in languages with good support for positive integers as a separate type from 0-based naturals.
+}
 %
 The head of the list, however, does not follow the ``minus $1$'' rule: so the first ``delta'' is interpreted literally, \ie{}~it represents the key value exactly.
 
