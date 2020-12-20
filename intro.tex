@@ -89,9 +89,11 @@ The built-in equality proposition is a common and intuitive way to judge the equ
 %
 Furthermore, proof assistants have special features for working with it, which can be harnessed to simplify and expedite proof development.
 %
-As such, it's very useful to be able to use this proposition, rather than to define a custom proposition that judges the semantic equivalence of two dictionaries.
+Equivalence can be defined in other ways, and the proof assistant may provide \emph{setoid} support for using custom definitions as though they were primitive,
 %
-\autoref{sec:CaseStudy} and \autoref{sec:Discussion:Generality} further demonstrate the importance of \Extensional{} by showing that its absence can render some theorems, such as the important \emph{structural properties} \emph{contraction} and \emph{exchange}~\citep{StructProp}, false.
+but setting this up may require extra overhead or more advanced techniques than simply using built-in reflexive equality.
+%
+\autoref{sec:CaseStudy} and \autoref{sec:Discussion:Generality} further demonstrate the importance of \Extensional{}; its absence can render some theorems, such as \emph{structural properties} \emph{contraction} and \emph{exchange}~\citep{StructProp}, false.
 
 %% \input{fig-unequal}
 
