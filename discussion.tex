@@ -265,23 +265,17 @@ convert []              = PI PINone
 convert ((n , v) :: dl) = PI <| convert' n v dl
 \end{lstlisting}
 
-The important difference, then, is that POTI \cal{}s contain redundant information, whereas \dds{} do not.
-%
-Each mapping for the POTI \cal{} approach records three items --- $n1$, $n2$, and the proof that $n1 < n2$, whereas a \dd{} mapping records only the delta.
-%
-The POTI \cal{} approach achieves the spirit of \SemTot{}, despite these redundancies, because the dependent type system is capable of ensuring invariants in redundant data.
-%
-However, in less powerful type systems, redundancy inherently opens the door to invalidity.
-%
-As such, techniques that eliminate all redundancy may be useful in weaker type systems, while dependent type systems can appropriately manage redundancy by way of \prop{} proofs.
-
-The inability to make POTI \cal{}s work without using proof-aware type-systems suggests that \dds{}, or similar techniques, may still be useful in conventional languages.
+The important difference, then, is that POTI \cal{}s only work in proof-savvy type-systems, so \dds{}, or similar techniques, may still be useful in conventional languages.
 %
 While \dds{} themselves are unperformant and thus unlikely to be a good choice in conventional settings,
 %
-the strategy that they illustrate --- of squeezing out all redundancy in order to ensure invariants --- may be applicable to more efficient data types.
+the strategy that they illustrate may be applicable to more efficient data types.
 %
 This strategy may also be useful for invariants that cannot be made \prop, \eg{} implication invariants, which are represented as arrow types.
+%
+Note that a key element of this strategy involves squeezing out any information redundancies, because redundancies necessitate invariants.
+%
+Each mapping for the POTI \cal{} approach records three items ($n1$, $n2$, and the proof that $n1 < n2$) whereas a \dd{} mapping records only one degree of freedom (the delta).
 
 Since the POTI \cal{} approach is easy to implement and effortlessly checks off all the criteria, it's surprising that it seems to see little to no practical use or textbook discussion.
 %

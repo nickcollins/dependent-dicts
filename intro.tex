@@ -20,6 +20,8 @@ The dictionary is a fundamental utility in most programming contexts and serves 
 In conventional languages, dictionaries are implemented with auto-balanced trees or hashtables, which are highly performant, but also very complicated.
 %
 This paper discusses four alternatives --- three conventional and one novel --- that are often better suited to proof development.
+%
+A fifth alternative is discussed briefly toward the end as a potential avenue for future work.
 
 \subsection{Background}
 
@@ -219,7 +221,7 @@ Ideally, when working in a proof assistant, an implementation of a data structur
 %
 \designGoal{\SemTot}
 %
-Every value in the representation type is semantically valid, \ie{}~the mapping from values to their semantic meanings is total.
+Every value in the representation type is semantically valid, without requiring proof terms --- \ie{}~the mapping from values to their semantic meanings is total.
 
 \item
 %
